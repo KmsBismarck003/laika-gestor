@@ -1,0 +1,113 @@
+.laika-control-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+    pointer-events: none;
+}
+
+.laika-control-group > * {
+    pointer-events: auto;
+}
+
+.laika-agent-pill-wrapper {
+    width: 130px;
+    height: 32px;
+    background: rgba(10, 10, 10, 0.8) !important;
+    -webkit-backdrop-filter: blur(15px) saturate(1.5);
+    backdrop-filter: blur(15px) saturate(1.5) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    padding: 0 8px;
+    position: relative;
+    z-index: 10001;
+    transition: all 0.3s ease;
+    pointer-events: auto !important;
+}
+
+.laika-agent-pill-wrapper:hover {
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 0 25px rgba(255, 255, 255, 0.1);
+}
+
+.laika-pill-content {
+    display: flex;
+    direction: ltr;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+    width: 100%;
+}
+
+.laika-logo-box {
+    width: 24px;
+    height: 24px;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border: 1.5px solid rgba(255, 255, 255, 0.2);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+}
+
+.laika-mini-logo {
+    width: 16px;
+    height: 16px;
+    object-fit: contain;
+}
+
+.typing-text {
+    letter-spacing: 0.5px;
+    font-family: 'Inter', sans-serif;
+    display: inline-block;
+}
+
+.laika-typing-box {
+    display: flex;
+    direction: ltr;
+    align-items: center;
+    color: #FFFFFF;
+    font-weight: 500;
+    font-size: 0.7rem;
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+    -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+    mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+}
+
+.laika-ticker-container {
+    display: flex;
+    white-space: nowrap;
+    animation: laika-ticker-scroll 8s linear infinite;
+}
+
+.laika-ticker-container span {
+    padding-right: 30vw;
+    flex-shrink: 0;
+}
+
+@keyframes laika-ticker-scroll {
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
+}
+
+.terminal-cursor {
+    color: var(--laika-accent, var(--primary));
+    font-weight: 900;
+    animation: blink-cursor 1s step-end infinite;
+}
+
+.laika-agent-pill-wrapper.active {
+    min-width: 100px;
+    background: rgba(0, 0, 0, 0.8) !important;
+    border-color: var(--primary);
+    justify-content: center;
+}

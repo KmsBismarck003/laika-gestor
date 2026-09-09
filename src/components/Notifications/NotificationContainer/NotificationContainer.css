@@ -1,0 +1,195 @@
+/* NotificationContainer.css - Sistema de Eventos LAIKA Club - Diseño Moderno */
+
+.notification-container {
+  position: fixed;
+  top: var(--spacing-20);
+  /* Increased to avoid header overlap */
+  right: var(--spacing-8);
+  z-index: 9999;
+  /* Ensure it's above everything */
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+  max-width: 420px;
+  width: 100%;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  pointer-events: none;
+}
+
+.notification-container::-webkit-scrollbar {
+  display: none;
+}
+
+.notification-container>* {
+  pointer-events: auto;
+  /* Re-enable clicks on actual notifications */
+}
+
+.notification-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: var(--spacing-5) var(--spacing-6);
+  background: var(--gradient-card);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  box-shadow: none;
+  animation: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.notification-item::before {
+  display: none;
+}
+
+.notification-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: currentColor;
+}
+
+.notification-success {
+  border-left: 4px solid var(--success);
+  color: var(--success);
+}
+
+.notification-success::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100px;
+  height: 100px;
+  background: radial-gradient(circle,
+      rgba(0, 255, 136, 0.1) 0%,
+      transparent 70%);
+}
+
+.notification-error {
+  border-left: 4px solid var(--error);
+  color: var(--error);
+}
+
+.notification-error::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100px;
+  height: 100px;
+  background: radial-gradient(circle,
+      rgba(255, 51, 102, 0.1) 0%,
+      transparent 70%);
+}
+
+.notification-warning {
+  border-left: 4px solid var(--warning);
+  color: var(--warning);
+}
+
+.notification-warning::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100px;
+  height: 100px;
+  background: radial-gradient(circle,
+      rgba(255, 170, 0, 0.1) 0%,
+      transparent 70%);
+}
+
+.notification-info {
+  border-left: 4px solid var(--info);
+  color: var(--info);
+}
+
+.notification-info::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100px;
+  height: 100px;
+  background: radial-gradient(circle,
+      rgba(6, 182, 212, 0.1) 0%,
+      transparent 70%);
+}
+
+.notification-content {
+  flex: 1;
+  position: relative;
+  z-index: 1;
+}
+
+.notification-title {
+  font-weight: var(--font-weight-black);
+  margin-bottom: var(--spacing-2);
+  color: currentColor;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: var(--font-size-sm);
+  text-shadow: 0 0 10px currentColor;
+}
+
+.notification-message {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  line-height: var(--line-height-relaxed);
+}
+
+.notification-close {
+  background: rgba(40, 40, 40, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  font-size: var(--font-size-xl);
+  line-height: 1;
+  cursor: pointer;
+  color: var(--text-muted);
+  padding: var(--spacing-2);
+  margin-left: var(--spacing-4);
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-base);
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+}
+
+.notification-close:hover {
+  color: currentColor;
+  border-color: currentColor;
+  transform: rotate(90deg) scale(1.1);
+  box-shadow: 0 4px 15px currentColor;
+}
+
+/* notifSlideIn removed */
+
+/* notifSlideOut removed */
+
+.notification-item--removing {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .notification-container {
+    left: var(--spacing-4);
+    right: var(--spacing-4);
+    top: var(--spacing-4);
+    max-width: none;
+  }
+
+  .notification-item {
+    padding: var(--spacing-4) var(--spacing-5);
+  }
+}
