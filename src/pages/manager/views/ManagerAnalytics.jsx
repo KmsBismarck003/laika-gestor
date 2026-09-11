@@ -1,7 +1,7 @@
 import React from 'react';
 import { PermissionWall } from '../../../components';
 import BigDataVisualizer from '../../admin/Dashboard/BigDataVisualizer';
-import useAuth from '../../../hooks/useAuth';
+import { useAuth } from '../../../context/AuthContext';
 
 const ManagerAnalytics = () => {
   const { user } = useAuth();
@@ -9,8 +9,7 @@ const ManagerAnalytics = () => {
   return (
     <PermissionWall 
       permission="canViewEventAnalytics"
-      title="ANALÍTICA BLOQUEADA"
-      description="Tu cuenta no tiene permisos para ver datos financieros y tendencias. Contacta al Administrador."
+      label="ver los datos financieros y tendencias"
     >
       <div className="manager-analytics">
         {user ? (
