@@ -5,6 +5,7 @@ const Login = lazy(() => import('../pages/Login/Login'))
 
 // Dashboard de Organizador/Gestor
 const EventManagerDashboard = lazy(() => import('../pages/EventManagerDashboard/EventManagerDashboard'))
+const EventDetail = lazy(() => import('../pages/manager/EventDetail'))
 const ManagerAnalytics = lazy(() => import('../pages/manager/views/ManagerAnalytics'))
 const ManagerTransactions = lazy(() => import('../pages/manager/views/ManagerTransactions'))
 const ManagerAttendees = lazy(() => import('../pages/manager/views/ManagerAttendees'))
@@ -31,6 +32,13 @@ export const managerRoutes = [
     layout: 'dashboard',
     allowedRoles: ['gestor', 'admin'],
     title: 'Gestión de Eventos'
+  },
+  {
+    path: '/events/manage/:id',
+    element: EventDetail,
+    layout: 'dashboard',
+    allowedRoles: ['gestor', 'admin'],
+    title: 'Detalle de Evento'
   },
   {
     path: '/events/history',
