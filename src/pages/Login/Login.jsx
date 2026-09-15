@@ -7,12 +7,37 @@ import { Input, Button, LockoutOverlay, LoadingScreen } from '../../components'
 import './Login.css'
 import './LoginSocial.css'
 
-// Mapa de redirección por rol (inline para evitar dependencia circular con routes.js)
+// Mapa de puertos para aplicaciones desacopladas
+const DECOUPLED_PORTS = {
+  admin: 3010,
+  gestor: 3020,
+  operador: 3030
+}
+
+// Mapa de redirección por rol
 const roleRedirectMap = {
   admin: '/admin',
   gestor: '/events/manage',
   operador: '/staff/dashboard',
   usuario: '/user/dashboard'
+}
+
+const handleRoleRedirection = (userObj, navigate, from = null) => {
+  const userRole = userObj?.role
+  const targetPort = DECOUPLED_PORTS[userRole]
+  const currentPort = window.location.port ? parseInt(window.location.port, 10) : 80
+
+  if (targetPort && currentPort !== targetPort) {
+    const token = localStorage.getItem('token') || sessionStorage.getItem('token')
+    const b64User = btoa(encodeURIComponent(JSON.stringify(userObj)))
+    const targetPath = roleRedirectMap[userRole] || '/'
+    window.location.href = `http://localhost:${targetPort}/auth-sync?token=${token}&user=${b64User}&redirect=${encodeURIComponent(targetPath)}`
+    return true
+  }
+
+  const targetPath = from || (userRole === 'gestor' || userRole === 'admin' ? '/events/manage' : '/')
+  navigate(targetPath)
+  return false
 }
 
 const Login = () => {
@@ -59,10 +84,7 @@ const Login = () => {
   // 🚀 Redirección si ya está autenticado (evita parpadeo del login)
   useEffect(() => {
     if (!authLoading && user) {
-      const targetPath = ['admin', 'gestor', 'operador'].includes(user.role) 
-        ? roleRedirectMap[user.role] 
-        : (from || roleRedirectMap[user.role] || '/');
-      navigate(targetPath)
+      handleRoleRedirection(user, navigate, from)
     }
   }, [user, authLoading, navigate, from])
 
@@ -143,10 +165,7 @@ const Login = () => {
         
         // Fase 3: Gatillar Bienvenida Global y Redirigir
         triggerWelcomeModal()
-        const targetPath = ['admin', 'gestor', 'operador'].includes(result.user.role) 
-          ? roleRedirectMap[result.user.role] 
-          : (from || roleRedirectMap[result.user.role] || '/');
-        navigate(targetPath)
+        handleRoleRedirection(result.user, navigate, from)
       } else {
         if (result.status === 423) {
           // Bloqueado por el servidor
@@ -191,10 +210,7 @@ const Login = () => {
         
         // Fase 3: Gatillar Bienvenida Global y Redirigir
         triggerWelcomeModal()
-        const targetPath = ['admin', 'gestor', 'operador'].includes(result.user.role) 
-          ? roleRedirectMap[result.user.role] 
-          : (from || roleRedirectMap[result.user.role] || '/');
-        navigate(targetPath)
+        handleRoleRedirection(result.user, navigate, from)
       } else {
         showError(result.error || 'Error al autenticar con Google')
       }

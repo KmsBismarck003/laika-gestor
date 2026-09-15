@@ -9,7 +9,7 @@ const AuthSync = () => {
     const params = new URLSearchParams(search);
     const token = params.get('token');
     const userB64 = params.get('user');
-    const redirect = params.get('redirect') || '/';
+    const redirect = params.get('redirect') || '/events/manage';
 
     if (token && userB64) {
       try {
@@ -19,7 +19,8 @@ const AuthSync = () => {
         localStorage.setItem('token', token);
         localStorage.setItem('user', JSON.stringify(userObj));
         
-        window.location.replace(redirect);
+        const safeRedirect = (redirect.startsWith('/events') || redirect.startsWith('/manager')) ? redirect : '/events/manage';
+        window.location.replace(safeRedirect);
       } catch (err) {
         console.error('Error sincronizando SSO:', err);
         navigate('/login');
@@ -32,7 +33,7 @@ const AuthSync = () => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh', background: '#0a0a0a', color: '#fff' }}>
       <h2>Sincronizando Sesión...</h2>
-      <p style={{ opacity: 0.7 }}>Accediendo al entorno seguro</p>
+      <p style={{ opacity: 0.7 }}>Accediendo a Laika Gestor</p>
     </div>
   );
 };
