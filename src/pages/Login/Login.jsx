@@ -256,7 +256,6 @@ const Login = () => {
             </div>
           </div>
           <h1 className='admin-login-title'>GESTOR LAIKA</h1>
-          <p className='admin-login-subtitle'>Gestión operativa de eventos</p>
         </div>
 
         <form onSubmit={handleSubmit} className='admin-login-form'>
