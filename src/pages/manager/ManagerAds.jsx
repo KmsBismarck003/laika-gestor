@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../services/api';
 import { getImageUrl } from '../../utils/imageUtils';
-import { Card, Table, Button, Badge, Input, Modal, Alert } from '../../components';
+import { Card, Table, Button, Badge, Input, Modal, Alert, Icon } from '../../components';
 import { useNotification } from '../../context/NotificationContext';
 import { useAuth } from '../../context/AuthContext';
-import { Icon } from '../../components';
+import '../EventManagerDashboard/EventManagerDashboard.css';
 
 const ManagerAds = () => {
     const { success, error: showError } = useNotification();
@@ -170,16 +170,17 @@ const ManagerAds = () => {
     ];
 
     return (
-        <div className="manager-ads-page" style={{ padding: '2rem' }}>
-            <div className="flex justify-between items-center mb-6" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+        <div className="bento-dashboard-container">
+            {/* Header */}
+            <header className="bento-header" style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div>
-                    <h1 style={{ fontSize: '1.5rem', fontWeight: '800', margin: 0 }}>Gestión de Publicidad</h1>
-                    <p style={{ color: '#64748b', fontSize: '0.9rem' }}>Promociona tus eventos con banners personalizados</p>
+                    <h1 className="bento-welcome-title">Gestión de Publicidad</h1>
+                    <p className="bento-date-subtitle">Promociona tus eventos con banners personalizados</p>
                 </div>
                 <Button onClick={() => handleOpenModal()} variant="primary" disabled={myEvents.length === 0}>
                     <Icon name="plus" size={16} className="mr-2" /> Nuevo Anuncio
                 </Button>
-            </div>
+            </header>
 
             {myEvents.length === 0 && !loading && (
                 <Alert variant="warning" title="Sin Permisos de Publicidad">
@@ -188,9 +189,9 @@ const ManagerAds = () => {
                 </Alert>
             )}
 
-            <Card className="glass-panel" style={{ padding: 0 }}>
-                <Table columns={columns} data={ads} loading={loading} />
-            </Card>
+            <div className="bento-card" style={{ padding: 0, overflow: 'hidden' }}>
+                <Table columns={columns} data={ads} loading={loading} hoverable striped />
+            </div>
 
             {isModalOpen && (
                 <Modal isOpen={true} title={editingAd ? 'Editar Anuncio' : 'Nuevo Anuncio'} onClose={() => setIsModalOpen(false)}>

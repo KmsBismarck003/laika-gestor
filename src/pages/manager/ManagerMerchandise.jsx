@@ -5,6 +5,7 @@ import { merchService } from '../../services/merch.service';
 import api from '../../services/api';
 import { Edit, Plus, Trash, ExternalLink, Info, ShoppingBag } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import '../EventManagerDashboard/EventManagerDashboard.css';
 
 const ManagerMerchandise = () => {
     const navigate = useNavigate();
@@ -432,119 +433,117 @@ const ManagerMerchandise = () => {
     }
 
     return (
-        <div className="p-6 text-white max-w-7xl mx-auto">
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+        <div className="bento-dashboard-container">
+            <header className="bento-header" style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div>
-                    <h1 className="text-3xl font-extrabold tracking-tight bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">
-                        Constructor de Mercancia
-                    </h1>
-                    <p className="text-gray-400 mt-1">Crea y administra los productos oficiales de todos tus eventos en un solo lugar.</p>
+                    <h1 className="bento-welcome-title">Constructor de Mercancía</h1>
+                    <p className="bento-date-subtitle">Crea y administra los productos oficiales de todos tus eventos en un solo lugar.</p>
                 </div>
-                <Button variant="primary" onClick={() => { resetForm(); setShowModal(true); }} className="flex items-center gap-2">
+                <Button variant="primary" onClick={() => { resetForm(); setShowModal(true); }} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                     <Plus size={16} /> Crear Producto
                 </Button>
-            </div>
+            </header>
 
             {!settings?.is_enabled && (
-                <div className="mb-6 p-4 rounded-lg bg-purple-950/40 border border-purple-800 text-purple-200 flex items-start gap-3">
-                    <Info size={20} className="text-purple-400 mt-0.5 shrink-0" />
+                <div className="bento-alert bento-alert-info">
+                    <Info size={20} style={{ color: '#a855f7', marginTop: '2px', flexShrink: 0 }} />
                     <div>
-                        <h4 className="font-bold text-white mb-0.5">Acceso Parcial por Evento</h4>
-                        <p className="text-sm text-purple-300">
-                            Tu cuenta no tiene habilitado el modulo de mercancia general, pero el administrador ha desbloqueado esta funcion para eventos especificos. Podras crear y gestionar productos unicamente para esos eventos autorizados.
+                        <h4 className="bento-alert-title">Acceso Parcial por Evento</h4>
+                        <p className="bento-alert-desc">
+                            Tu cuenta no tiene habilitado el módulo de mercancía general, pero el administrador ha desbloqueado esta función para eventos específicos. Podrás crear y gestionar productos únicamente para esos eventos autorizados.
                         </p>
                     </div>
                 </div>
             )}
 
             {loading ? (
-                <div className="text-center py-12 text-gray-400">Cargando catalogo...</div>
+                <div className="loading-placeholder">Cargando catálogo...</div>
             ) : merchItems.length === 0 ? (
-                <Card className="text-center py-16 border border-dashed border-gray-700 bg-gray-900 rounded-xl flex flex-col items-center justify-center">
-                    <ShoppingBag size={48} className="text-purple-500 mb-4" />
-                    <h3 className="text-lg font-bold mb-2">No tienes productos en tu catalogo</h3>
-                    <p className="text-gray-400 mb-6 max-w-sm mx-auto">Empieza agregando tu primer playera, gorra, hoodie o accesorio para tus eventos.</p>
+                <div className="bento-card" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '4rem 2rem', textAlign: 'center' }}>
+                    <ShoppingBag size={48} style={{ color: '#a855f7', marginBottom: '1rem' }} />
+                    <h3 style={{ fontSize: '1.2rem', fontWeight: 700, margin: '0 0 0.5rem 0', color: 'var(--text-primary)' }}>No tienes productos en tu catálogo</h3>
+                    <p style={{ color: 'var(--text-muted)', marginBottom: '1.5rem', maxWidth: '400px' }}>Empieza agregando tu primer playera, gorra, hoodie o accesorio para tus eventos.</p>
                     <Button variant="primary" onClick={() => { resetForm(); setShowModal(true); }}>Agregar Producto</Button>
-                </Card>
+                </div>
             ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="bento-grid-venues">
                     {merchItems.map(item => (
-                        <Card key={item.id} className="overflow-hidden flex flex-col bg-gray-900 border border-gray-800 rounded-xl hover:border-purple-500/50 transition-all duration-300">
+                        <div key={item.id} className="bento-event-card">
                             {item.image_url ? (
-                                <div className="h-52 w-full bg-cover bg-center" style={{ backgroundImage: `url(${item.image_url.split(',')[0]})` }} />
+                                <div className="bento-event-cover" style={{ backgroundImage: `url(${item.image_url.split(',')[0]})` }} />
                             ) : (
-                                <div className="h-52 w-full bg-gray-800 flex items-center justify-center text-gray-500">Sin Imagen</div>
+                                <div className="bento-event-cover-empty">Sin Imagen</div>
                             )}
-                            <div className="p-5 flex flex-col flex-1">
-                                <div className="flex justify-between items-start mb-2">
-                                    <span className="text-xs font-semibold px-2 py-1 bg-purple-900/40 text-purple-300 border border-purple-800 rounded">
+                            <div className="bento-event-body">
+                                <div className="bento-event-tags">
+                                    <span className="bento-tag bento-tag-primary">
                                         {item.category || 'General'}
                                     </span>
                                     <div>
-                                        {item.admin_status === 'approved' && <span className="text-xs font-bold px-2 py-1 bg-green-900/40 text-green-400 border border-green-800 rounded">Aprobado</span>}
-                                        {item.admin_status === 'pending_review' && <span className="text-xs font-bold px-2 py-1 bg-yellow-900/40 text-yellow-400 border border-yellow-800 rounded">En Revision</span>}
-                                        {item.admin_status === 'rejected' && <span className="text-xs font-bold px-2 py-1 bg-red-900/40 text-red-400 border border-red-800 rounded">Rechazado</span>}
+                                        {item.admin_status === 'approved' && <span className="bento-tag bento-tag-success">Aprobado</span>}
+                                        {item.admin_status === 'pending_review' && <span className="bento-tag bento-tag-warning">En Revisión</span>}
+                                        {item.admin_status === 'rejected' && <span className="bento-tag bento-tag-danger">Rechazado</span>}
                                     </div>
                                 </div>
                                 
-                                <h3 className="font-bold text-lg text-white mb-1">{item.name}</h3>
-                                <p className="text-sm text-gray-400 mb-4 line-clamp-2 flex-1">{item.description}</p>
+                                <h3 className="bento-event-title">{item.name}</h3>
+                                <p className="bento-event-desc">{item.description}</p>
                                 
-                                <div className="text-xs text-gray-500 mb-4 bg-gray-950 p-2 rounded flex items-center justify-between">
+                                <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginBottom: '1rem', background: 'var(--bg-tertiary)', padding: '0.5rem', borderRadius: '4px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                     <span>Evento:</span>
-                                    <span className="font-semibold text-gray-300 truncate max-w-[200px]" title={getEventName(item.event_id)}>
+                                    <span style={{ fontWeight: 600, color: 'var(--text-primary)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '150px' }} title={getEventName(item.event_id)}>
                                         {getEventName(item.event_id)}
                                     </span>
                                 </div>
 
-                                <div className="flex justify-between items-center border-t border-gray-800 pt-4 mt-auto">
+                                <div className="bento-event-footer bento-event-row">
                                     <div>
-                                        <span className="text-xs text-gray-400 block">Precio</span>
-                                        <span className="font-extrabold text-xl text-white">
+                                        <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', display: 'block' }}>Precio</span>
+                                        <span style={{ fontWeight: 800, fontSize: '1.25rem', color: 'var(--text-primary)' }}>
                                             ${item.variants && item.variants.length > 0 
                                                 ? Math.min(...item.variants.map(v => parseFloat(v.price) || 0)).toFixed(2) 
                                                 : '0.00'}
                                         </span>
                                     </div>
-                                    <div className="text-right">
-                                        <span className="text-xs text-gray-400 block">Total Stock</span>
-                                        <span className="font-bold text-gray-200">
+                                    <div style={{ textAlign: 'right' }}>
+                                        <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', display: 'block' }}>Total Stock</span>
+                                        <span style={{ fontWeight: 700, color: 'var(--text-primary)' }}>
                                             {item.variants ? item.variants.reduce((acc, v) => acc + (v.stock || 0), 0) : 0} pzas
                                         </span>
                                     </div>
                                 </div>
 
-                                <div className="mt-4 flex gap-2 border-t border-gray-800 pt-3">
+                                <div className="bento-btn-group">
                                     <Button 
                                         variant="outline" 
                                         size="small" 
                                         onClick={() => handleEditClick(item)}
-                                        className="flex items-center justify-center gap-1 text-xs flex-1 text-gray-200 border-gray-700 hover:bg-gray-800"
+                                        style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', fontSize: '0.75rem' }}
                                     >
-                                        <Edit size={12} className="mr-1" /> Editar
+                                        <Edit size={12} /> Editar
                                     </Button>
                                     <Button 
                                         variant="danger" 
                                         size="small" 
                                         onClick={() => handleDeleteClick(item.id)}
-                                        className="flex items-center justify-center gap-1 text-xs flex-1 bg-red-950/40 text-red-400 border border-red-900/50 hover:bg-red-900/40 hover:text-white"
+                                        style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', fontSize: '0.75rem', background: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', border: '1px solid rgba(239, 68, 68, 0.2)' }}
                                     >
-                                        <Trash size={12} className="mr-1" /> Eliminar
+                                        <Trash size={12} /> Eliminar
                                     </Button>
                                 </div>
-                                <div className="mt-2 flex gap-2">
+                                <div style={{ marginTop: '0.5rem', display: 'flex', gap: '0.5rem' }}>
                                     <Button 
                                         variant="outline" 
                                         size="small" 
                                         fullWidth 
                                         onClick={() => navigate(`/events/manage/${item.event_id}?tab=merch`)}
-                                        className="flex items-center justify-center gap-1 text-xs text-gray-400 border-gray-800 hover:bg-gray-800 hover:text-white"
+                                        style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', fontSize: '0.75rem' }}
                                     >
                                         <ExternalLink size={12} /> Ir al Evento
                                     </Button>
                                 </div>
                             </div>
-                        </Card>
+                        </div>
                     ))}
                 </div>
             )}
@@ -556,15 +555,15 @@ const ManagerMerchandise = () => {
                     setEditingId(null);
                     resetForm();
                 }} 
-                title={editingId ? "Editar Mercancia" : "Añadir Mercancia"} 
+                title={editingId ? "Editar Mercancía" : "Añadir Mercancía"} 
                 size="large"
             >
-                <form onSubmit={handleCreateMerch} className="space-y-4 text-gray-900 max-h-[80vh] overflow-y-auto px-1">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label className="block text-sm font-medium mb-1 text-gray-700">Seleccionar Evento</label>
+                <form onSubmit={handleCreateMerch} className="bento-modal-body">
+                    <div className="bento-grid-2">
+                        <div className="bento-form-group">
+                            <label className="bento-label">Seleccionar Evento</label>
                             <select
-                                className="w-full p-2 border border-gray-300 rounded bg-white text-gray-900"
+                                className="bento-select"
                                 value={formData.event_id}
                                 onChange={(e) => setFormData({...formData, event_id: e.target.value})}
                                 required
@@ -575,92 +574,89 @@ const ManagerMerchandise = () => {
                                 ))}
                             </select>
                         </div>
-                        <div>
-                            <label className="block text-sm font-medium mb-1 text-gray-700">Nombre del Producto</label>
-                            <Input 
-                                value={formData.name}
-                                onChange={(e) => setFormData({...formData, name: e.target.value})}
-                                required
-                            />
-                        </div>
-                    </div>
-
-                    <div>
-                        <label className="block text-sm font-medium mb-1 text-gray-700">Descripcion</label>
-                        <textarea 
-                            className="w-full p-2 border border-gray-300 rounded text-gray-900 bg-white"
-                            rows="2"
-                            value={formData.description}
-                            onChange={(e) => setFormData({...formData, description: e.target.value})}
+                        <Input 
+                            label="Nombre del Producto"
+                            value={formData.name}
+                            onChange={(e) => setFormData({...formData, name: e.target.value})}
                             required
+                            fullWidth
                         />
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div>
-                            <label className="block text-sm font-medium mb-1 text-gray-700">Categoria</label>
-                            <Input 
-                                value={formData.category}
-                                onChange={(e) => setFormData({...formData, category: e.target.value})}
-                                placeholder="Ej. Playeras, Gorras"
-                                required
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-sm font-medium mb-1 text-gray-700">Precio Base ($)</label>
-                            <Input 
-                                type="number" 
-                                min="0" 
-                                step="0.01"
-                                value={formData.price}
-                                onChange={(e) => setFormData({...formData, price: e.target.value})}
-                                required={variants.length === 0}
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-sm font-medium mb-1 text-gray-700">Stock Base</label>
-                            <Input 
-                                type="number" 
-                                min="0"
-                                value={formData.stock}
-                                onChange={(e) => setFormData({...formData, stock: e.target.value})}
-                                required={variants.length === 0}
-                            />
-                        </div>
+                    <Input 
+                        label="Descripción"
+                        textarea
+                        value={formData.description}
+                        onChange={(e) => setFormData({...formData, description: e.target.value})}
+                        required
+                        fullWidth
+                    />
+
+                    <div className="bento-grid-3">
+                        <Input 
+                            label="Categoría"
+                            value={formData.category}
+                            onChange={(e) => setFormData({...formData, category: e.target.value})}
+                            placeholder="Ej. Playeras, Gorras"
+                            required
+                            fullWidth
+                        />
+                        <Input 
+                            label="Precio Base ($)"
+                            type="number" 
+                            min="0" 
+                            step="0.01"
+                            value={formData.price}
+                            onChange={(e) => setFormData({...formData, price: e.target.value})}
+                            required={variants.length === 0}
+                            fullWidth
+                        />
+                        <Input 
+                            label="Stock Base"
+                            type="number" 
+                            min="0"
+                            value={formData.stock}
+                            onChange={(e) => setFormData({...formData, stock: e.target.value})}
+                            required={variants.length === 0}
+                            fullWidth
+                        />
                     </div>
 
                     {/* CONFIGURACIÓN RÁPIDA DE TALLAS */}
-                    <div className="bg-purple-50 p-4 rounded-lg border border-purple-200 space-y-3">
-                        <h4 className="text-sm font-bold text-purple-900 uppercase tracking-wider">Asistente Rápido de Tallas</h4>
-                        <p className="text-xs text-purple-700">Activa las tallas disponibles y define el número de unidades en stock para cada una.</p>
+                    <div className="bento-wizard-container">
+                        <div>
+                            <h4 className="bento-wizard-title">Asistente Rápido de Tallas</h4>
+                            <p className="bento-wizard-subtitle">Activa las tallas disponibles y define el número de unidades en stock para cada una.</p>
+                        </div>
                         
-                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
+                        <div className="bento-wizard-grid">
                             {['XS', 'S', 'M', 'L', 'XL', 'XXL'].map(size => {
                                 const isChecked = variants.some(v => v.attributes && v.attributes.talla && v.attributes.talla.toUpperCase() === size.toUpperCase());
                                 const matchedVar = variants.find(v => v.attributes && v.attributes.talla && v.attributes.talla.toUpperCase() === size.toUpperCase());
                                 const stockVal = matchedVar ? matchedVar.stock : '';
                                 
                                 return (
-                                    <div key={size} className="flex flex-col p-2 bg-white rounded border border-purple-100 hover:border-purple-300 transition-all">
-                                        <label className="flex items-center gap-2 cursor-pointer font-bold text-sm text-gray-800 mb-1">
+                                    <div key={size} className={`bento-wizard-card ${isChecked ? 'active' : ''}`}>
+                                        <label className="bento-wizard-label">
                                             <input 
                                                 type="checkbox" 
                                                 checked={isChecked} 
                                                 onChange={(e) => handleSizeCheckboxChange(size, e.target.checked)}
-                                                className="rounded border-purple-300 text-purple-600 focus:ring-purple-500"
+                                                style={{ cursor: 'pointer' }}
                                             />
                                             Talla {size}
                                         </label>
                                         {isChecked && (
-                                            <div className="mt-1">
-                                                <span className="text-[10px] text-gray-500 block">Unidades</span>
+                                            <div style={{ marginTop: '0.5rem' }}>
+                                                <span style={{ fontSize: '0.65rem', color: 'var(--text-muted)', display: 'block', marginBottom: '2px' }}>Unidades</span>
                                                 <input 
+                                                    className="bento-input"
+                                                    style={{ padding: '0.25rem 0.5rem', fontSize: '0.8rem', minHeight: 'auto' }}
                                                     type="number"
                                                     min="0"
                                                     placeholder="Ej. 10"
                                                     value={stockVal}
                                                     onChange={(e) => handleSizeStockChange(size, e.target.value)}
-                                                    className="w-full p-1 border border-gray-300 rounded text-xs text-gray-900 bg-white"
                                                     required
                                                 />
                                             </div>
@@ -672,130 +668,135 @@ const ManagerMerchandise = () => {
                     </div>
 
                     {/* DYNAMIC ATTRIBUTED CONFIGURATION */}
-                    <div className="bg-gray-50 p-4 rounded-lg border border-gray-200 space-y-3">
-                        <div className="flex justify-between items-center">
-                            <h4 className="text-sm font-bold text-gray-800 uppercase tracking-wider">Definicion de Opciones (Tallas/Colores/Modelos)</h4>
-                            <button
-                                type="button"
-                                className="px-3 py-1 bg-purple-100 hover:bg-purple-200 text-purple-700 rounded text-xs font-bold transition-all"
+                    <div className="bento-wizard-container">
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <h4 className="bento-wizard-title">Definición de Opciones (Tallas/Colores/Modelos)</h4>
+                            <Button
+                                variant="outline"
+                                size="small"
                                 onClick={handleAddAttributeRow}
                             >
                                 + Agregar Atributo
-                            </button>
+                            </Button>
                         </div>
                         
                         {formAttributes.map((attr, idx) => (
-                            <div key={idx} className="flex gap-2 items-center">
+                            <div key={idx} style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
                                 <input
                                     type="text"
-                                    className="flex-1 p-2 border border-gray-300 rounded bg-white text-gray-900 text-sm"
+                                    className="bento-input"
+                                    style={{ flex: 1 }}
                                     placeholder="Nombre: Ej. talla, color"
                                     value={attr.name}
                                     onChange={(e) => handleAttributeRowChange(idx, 'name', e.target.value)}
                                 />
                                 <input
                                     type="text"
-                                    className="flex-[2] p-2 border border-gray-300 rounded bg-white text-gray-900 text-sm"
+                                    className="bento-input"
+                                    style={{ flex: 2 }}
                                     placeholder="Valores: Ej. S, M, L (Separados por coma)"
                                     value={attr.values}
                                     onChange={(e) => handleAttributeRowChange(idx, 'values', e.target.value)}
                                 />
-                                <button
-                                    type="button"
-                                    className="p-2 text-red-500 hover:bg-red-50 rounded"
+                                <Button
+                                    variant="danger"
+                                    size="small"
                                     onClick={() => handleRemoveAttributeRow(idx)}
                                 >
                                     <Trash size={16} />
-                                </button>
+                                </Button>
                             </div>
                         ))}
                     </div>
 
                     {/* DYNAMIC VARIANTS GENERATION AND EDITING */}
-                    <div className="bg-gray-50 p-4 rounded-lg border border-gray-200 space-y-3">
-                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+                    <div className="bento-wizard-container">
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem' }}>
                             <div>
-                                <h4 className="text-sm font-bold text-gray-800 uppercase tracking-wider">Variantes del Producto</h4>
-                                <p className="text-xs text-gray-500">Define stock y precio especifico por combinacion de atributos.</p>
+                                <h4 className="bento-wizard-title">Variantes del Producto</h4>
+                                <p className="bento-wizard-subtitle">Define stock y precio específico por combinación de atributos.</p>
                             </div>
-                            <div className="flex gap-2">
-                                <button
-                                    type="button"
-                                    className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded text-xs font-bold transition-all"
+                            <div style={{ display: 'flex', gap: '0.5rem' }}>
+                                <Button
+                                    variant="primary"
+                                    size="small"
                                     onClick={handleGenerateVariants}
                                 >
                                     Generar Variantes
-                                </button>
-                                <button
-                                    type="button"
-                                    className="px-3 py-1.5 bg-gray-600 hover:bg-gray-700 text-white rounded text-xs font-bold transition-all"
+                                </Button>
+                                <Button
+                                    variant="outline"
+                                    size="small"
                                     onClick={handleAddManualVariant}
                                 >
                                     Agregar Manual
-                                </button>
+                                </Button>
                             </div>
                         </div>
 
                         {variants.length > 0 ? (
-                            <div className="border border-gray-200 rounded overflow-hidden max-h-60 overflow-y-auto">
-                                <table className="w-full text-left border-collapse text-xs text-gray-700 bg-white">
-                                    <thead>
-                                        <tr className="bg-gray-100 border-b border-gray-200 font-bold">
-                                            <th className="p-2">Atributos</th>
-                                            <th className="p-2">SKU</th>
-                                            <th className="p-2 w-24">Precio ($)</th>
-                                            <th className="p-2 w-20">Stock</th>
-                                            <th className="p-2 w-10 text-center">Accion</th>
+                            <div style={{ border: '1px solid var(--border-color)', borderRadius: '8px', overflow: 'hidden', maxHeight: '250px', overflowY: 'auto', background: 'var(--bg-secondary)' }}>
+                                <table style={{ width: '100%', textAlign: 'left', borderCollapse: 'collapse', fontSize: '0.85rem' }}>
+                                    <thead style={{ background: 'var(--bg-tertiary)', borderBottom: '1px solid var(--border-color)' }}>
+                                        <tr>
+                                            <th style={{ padding: '0.75rem' }}>Atributos</th>
+                                            <th style={{ padding: '0.75rem' }}>SKU</th>
+                                            <th style={{ padding: '0.75rem', width: '100px' }}>Precio ($)</th>
+                                            <th style={{ padding: '0.75rem', width: '100px' }}>Stock</th>
+                                            <th style={{ padding: '0.75rem', width: '60px', textAlign: 'center' }}>Acción</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {variants.map((v, idx) => (
-                                            <tr key={idx} className="border-b border-gray-200 hover:bg-gray-50">
-                                                <td className="p-2 font-medium">
+                                            <tr key={idx} style={{ borderBottom: '1px solid var(--border-color)' }}>
+                                                <td style={{ padding: '0.75rem' }}>
                                                     {v.attributes && Object.keys(v.attributes).length > 0 ? (
                                                         Object.entries(v.attributes).map(([key, val]) => (
-                                                            <div key={key} className="inline-block bg-purple-50 text-purple-700 px-1.5 py-0.5 rounded mr-1">
+                                                            <span key={key} className="bento-tag bento-tag-primary" style={{ marginRight: '4px', display: 'inline-block', marginBottom: '2px' }}>
                                                                 {key}: <strong>{val || 'sin definir'}</strong>
-                                                            </div>
+                                                            </span>
                                                         ))
                                                     ) : (
-                                                        <span className="text-gray-400">Estandar</span>
+                                                        <span style={{ color: 'var(--text-muted)' }}>Estándar</span>
                                                     )}
                                                 </td>
-                                                <td className="p-2">
+                                                <td style={{ padding: '0.5rem' }}>
                                                     <input
                                                         type="text"
                                                         value={v.sku}
                                                         onChange={(e) => handleVariantChange(idx, 'sku', e.target.value)}
-                                                        className="w-full p-1 border border-gray-300 rounded text-gray-900 bg-white text-xs font-mono"
+                                                        className="bento-input"
+                                                        style={{ padding: '0.25rem 0.5rem', minHeight: 'auto', fontSize: '0.8rem', fontFamily: 'monospace' }}
                                                     />
                                                 </td>
-                                                <td className="p-2">
+                                                <td style={{ padding: '0.5rem' }}>
                                                     <input
                                                         type="number"
                                                         step="0.01"
                                                         min="0"
                                                         value={v.price}
                                                         onChange={(e) => handleVariantChange(idx, 'price', e.target.value)}
-                                                        className="w-full p-1 border border-gray-300 rounded text-gray-900 bg-white text-xs"
+                                                        className="bento-input"
+                                                        style={{ padding: '0.25rem 0.5rem', minHeight: 'auto', fontSize: '0.8rem' }}
                                                     />
                                                 </td>
-                                                <td className="p-2">
+                                                <td style={{ padding: '0.5rem' }}>
                                                     <input
                                                         type="number"
                                                         min="0"
                                                         value={v.stock}
                                                         onChange={(e) => handleVariantChange(idx, 'stock', e.target.value)}
-                                                        className="w-full p-1 border border-gray-300 rounded text-gray-900 bg-white text-xs"
+                                                        className="bento-input"
+                                                        style={{ padding: '0.25rem 0.5rem', minHeight: 'auto', fontSize: '0.8rem' }}
                                                     />
                                                 </td>
-                                                <td className="p-2 text-center">
+                                                <td style={{ padding: '0.5rem', textAlign: 'center' }}>
                                                     <button
                                                         type="button"
                                                         onClick={() => handleRemoveVariant(idx)}
-                                                        className="text-red-500 hover:text-red-700 p-1"
+                                                        style={{ color: '#ef4444', background: 'transparent', border: 'none', cursor: 'pointer', padding: '0.25rem' }}
                                                     >
-                                                        <Trash size={14} />
+                                                        <Trash size={16} />
                                                     </button>
                                                 </td>
                                             </tr>
@@ -804,80 +805,79 @@ const ManagerMerchandise = () => {
                                 </table>
                             </div>
                         ) : (
-                            <div className="text-center py-6 text-xs text-gray-500 border border-dashed border-gray-200 bg-white rounded">
-                                Sin variantes definidas. Se usara el Precio y Stock Base de arriba.
+                            <div className="loading-placeholder" style={{ padding: '1.5rem', fontSize: '0.8rem' }}>
+                                Sin variantes definidas. Se usará el Precio y Stock Base de arriba.
                             </div>
                         )}
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 border-t border-gray-200 pt-3">
-                        <div>
-                            <label className="block text-sm font-medium mb-1 text-gray-700">Limite por persona</label>
-                            <Input 
-                                type="number" 
-                                min="1"
-                                value={formData.max_per_person}
-                                onChange={(e) => setFormData({...formData, max_per_person: e.target.value})}
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-sm font-medium mb-2 text-gray-700">Metodos de Entrega</label>
-                            <div className="flex flex-col gap-2">
-                                <label className="flex items-center gap-2 text-sm text-gray-800">
+                    <div className="bento-grid-2" style={{ borderTop: '1px solid var(--border-color)', paddingTop: '1rem', marginTop: '1rem' }}>
+                        <Input 
+                            label="Límite por persona"
+                            type="number" 
+                            min="1"
+                            value={formData.max_per_person}
+                            onChange={(e) => setFormData({...formData, max_per_person: e.target.value})}
+                            fullWidth
+                        />
+                        <div className="bento-form-group">
+                            <label className="bento-label">Métodos de Entrega</label>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                                <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-primary)', fontSize: '0.85rem' }}>
                                     <input type="checkbox" checked={formData.delivery_pickup} onChange={(e) => setFormData({...formData, delivery_pickup: e.target.checked})} />
                                     Recoger en Stand del Evento
                                 </label>
-                                <label className="flex items-center gap-2 text-sm text-gray-800">
+                                <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-primary)', fontSize: '0.85rem' }}>
                                     <input type="checkbox" checked={formData.delivery_home} onChange={(e) => setFormData({...formData, delivery_home: e.target.checked})} />
-                                    Envio a Domicilio
+                                    Envío a Domicilio
                                 </label>
                             </div>
                         </div>
                     </div>
 
-                    <div>
-                        <label className="block text-sm font-medium mb-1 text-gray-700">Imagen del Producto</label>
-                        <div className="flex gap-2 mb-2">
-                            <button
-                                type="button"
-                                className={`px-3 py-1 text-xs font-bold rounded ${uploadType === 'file' ? 'bg-purple-600 text-white' : 'bg-gray-200 text-gray-700'}`}
+                    <div className="bento-form-group">
+                        <label className="bento-label">Imagen del Producto</label>
+                        <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.5rem' }}>
+                            <Button
+                                variant={uploadType === 'file' ? 'primary' : 'outline'}
+                                size="small"
                                 onClick={() => setUploadType('file')}
                             >
                                 Subir Archivo
-                            </button>
-                            <button
-                                type="button"
-                                className={`px-3 py-1 text-xs font-bold rounded ${uploadType === 'url' ? 'bg-purple-600 text-white' : 'bg-gray-200 text-gray-700'}`}
+                            </Button>
+                            <Button
+                                variant={uploadType === 'url' ? 'primary' : 'outline'}
+                                size="small"
                                 onClick={() => setUploadType('url')}
                             >
                                 Enlace URL
-                            </button>
+                            </Button>
                         </div>
                         {uploadType === 'file' ? (
                             <label 
                                 htmlFor="global-merch-file-upload" 
-                                className="border border-dashed border-gray-300 rounded p-6 text-center bg-gray-50 cursor-pointer block hover:bg-gray-100 transition-all duration-200"
+                                style={{ display: 'block', border: '1px dashed var(--border-color)', borderRadius: '8px', padding: '1.5rem', textAlign: 'center', background: 'var(--bg-secondary)', cursor: 'pointer', transition: 'all 0.2s' }}
                             >
                                 <input
                                     type="file"
                                     accept="image/*"
                                     onChange={handleImageUpload}
                                     disabled={uploading}
-                                    className="hidden"
+                                    style={{ position: 'absolute', width: '1px', height: '1px', padding: 0, margin: '-1px', overflow: 'hidden', clip: 'rect(0, 0, 0, 0)', whiteSpace: 'nowrap', borderWidth: 0 }}
                                     id="global-merch-file-upload"
                                 />
-                                <span className="text-purple-600 font-bold block mb-1">
+                                <span style={{ display: 'block', color: '#a855f7', fontWeight: 700, marginBottom: '0.25rem' }}>
                                     {uploading ? 'Subiendo...' : 'Añadir nueva imagen'}
                                 </span>
-                                <span className="text-xs text-gray-500 block">Puedes subir multiples imagenes una por una para el carrusel</span>
+                                <span style={{ display: 'block', fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Puedes subir múltiples imágenes una por una para el carrusel</span>
                             </label>
                         ) : (
-                            <div className="flex gap-2">
+                            <div style={{ display: 'flex', gap: '0.5rem' }}>
                                 <input
                                     type="url"
                                     id="url-input-temp"
                                     placeholder="https://ejemplo.com/imagen.jpg"
-                                    className="flex-1 p-2 border border-gray-300 rounded bg-white text-gray-900 text-sm"
+                                    className="bento-input"
                                 />
                                 <Button type="button" onClick={() => {
                                     const input = document.getElementById('url-input-temp');
@@ -892,15 +892,15 @@ const ManagerMerchandise = () => {
                         )}
                         
                         {formData.image_url && (
-                            <div className="mt-4">
-                                <p className="text-xs font-bold text-gray-500 mb-2 uppercase">Imagenes en el carrusel ({formData.image_url.split(',').length})</p>
-                                <div className="flex gap-2 overflow-x-auto pb-2">
+                            <div style={{ marginTop: '1rem' }}>
+                                <p style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '0.5rem', textTransform: 'uppercase' }}>Imágenes en el carrusel ({formData.image_url.split(',').length})</p>
+                                <div style={{ display: 'flex', gap: '0.5rem', overflowX: 'auto', paddingBottom: '0.5rem' }}>
                                     {formData.image_url.split(',').map((url, idx) => (
-                                        <div key={idx} className="relative shrink-0 border border-gray-200 rounded p-1 bg-white">
-                                            <img src={url} alt={`Preview ${idx}`} className="h-16 w-16 object-cover rounded" />
+                                        <div key={idx} style={{ position: 'relative', flexShrink: 0, border: '1px solid var(--border-color)', borderRadius: '4px', padding: '4px', background: 'var(--bg-tertiary)' }}>
+                                            <img src={url} alt={`Preview ${idx}`} style={{ height: '64px', width: '64px', objectFit: 'cover', borderRadius: '4px' }} />
                                             <button 
                                                 type="button" 
-                                                className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold hover:bg-red-600"
+                                                style={{ position: 'absolute', top: '-8px', right: '-8px', background: '#ef4444', color: 'white', border: 'none', borderRadius: '50%', width: '20px', height: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.7rem', fontWeight: 'bold', cursor: 'pointer' }}
                                                 onClick={(e) => {
                                                     e.preventDefault();
                                                     const imgs = formData.image_url.split(',');
@@ -915,7 +915,7 @@ const ManagerMerchandise = () => {
                         )}
                     </div>
 
-                    <div className="pt-4 flex justify-end gap-2 border-t border-gray-200">
+                    <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.5rem', borderTop: '1px solid var(--border-color)', paddingTop: '1rem', marginTop: '1rem' }}>
                         <Button 
                             type="button" 
                             variant="ghost" 
@@ -928,7 +928,7 @@ const ManagerMerchandise = () => {
                             Cancelar
                         </Button>
                         <Button type="submit" variant="primary" disabled={submitting || uploading}>
-                            {submitting ? 'Guardando...' : editingId ? 'Guardar Cambios' : 'Enviar a Revision'}
+                            {submitting ? 'Guardando...' : editingId ? 'Guardar Cambios' : 'Enviar a Revisión'}
                         </Button>
                     </div>
                 </form>

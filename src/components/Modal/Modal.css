@@ -71,8 +71,8 @@
 
 .modal__content,
 .modal-content {
-  background: #fff !important;
-  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+  background: var(--bg-primary) !important;
+  border: 1px solid var(--border-color) !important;
   border-radius: 16px !important;
   box-shadow:
     0 24px 80px rgba(0, 0, 0, 0.45),
@@ -194,6 +194,7 @@
   position: relative;
   z-index: 1;
   flex: 1;
+  min-height: 0;
   overflow-y: auto;
 }
 

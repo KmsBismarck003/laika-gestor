@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Card, Icon, AnimatedCounter, Button, Modal } from '../../components';
+import { Icon, AnimatedCounter, Button, Modal } from '../../components';
 import { useAuth } from '../../context/AuthContext';
 import { useNotification } from '../../context/NotificationContext';
 import api from '../../services/api';
 import EventList from '../manager/EventList';
 import { useSearchParams } from 'react-router-dom';
 import VenueMapSVG from '../../components/VenueMapSVG';
-
+import './EventManagerDashboard.css';
 
 const EventManagerDashboard = () => {
     const navigate = useNavigate();
@@ -133,10 +133,10 @@ const EventManagerDashboard = () => {
 
     if (activeTab === 'list') {
         return (
-            <div className="admin-dashboard-page">
-                <header className="dashboard-header" style={{ marginBottom: '1rem' }}>
-                    <Button variant="ghost" onClick={() => navigate('/events/manage')}>
-                        <Icon name="arrowLeft" size={16} className="mr-2" /> VOLVER AL MONITOR
+            <div className="bento-dashboard-container">
+                <header style={{ marginBottom: '1rem' }}>
+                    <Button variant="outline" onClick={() => navigate('/events/manage')}>
+                        <Icon name="arrowLeft" size={16} style={{ marginRight: '8px' }} /> VOLVER AL MONITOR
                     </Button>
                 </header>
                 <EventList />
@@ -145,121 +145,109 @@ const EventManagerDashboard = () => {
     }
 
     return (
-
-        <div className="admin-dashboard-page">
-            <header className="dashboard-header">
-                <div className="welcome-banner">
-                    <h1 className="welcome-greeting">{displayText}</h1>
-                    <p className="welcome-date">
-                        {new Date().toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' })}
-                    </p>
-                </div>
+        <div className="bento-dashboard-container">
+            {/* Header Section */}
+            <header className="bento-header">
+                <h1 className="bento-welcome-title">{displayText}</h1>
+                <p className="bento-date-subtitle">
+                    {new Date().toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
+                </p>
             </header>
 
-            <div className="stats-grid">
-                <Card className="stat-card">
-                    <div className="stat-info">
-                        <p className="stat-label">Total Eventos</p>
-                        <h2 className="stat-value"><AnimatedCounter value={stats.totalEvents} /></h2>
+            {/* Stats Grid - Bento Style */}
+            <div className="bento-grid-stats">
+                <div className="bento-card bento-stat-card">
+                    <div className="bento-stat-header">
+                        <p className="bento-stat-label">Total Eventos</p>
+                        <div className="bento-stat-icon"><Icon name="calendar" size={18} /></div>
                     </div>
-                    <div className="stat-icon"><Icon name="calendar" size={20} /></div>
-                </Card>
-
-                <Card className="stat-card">
-                    <div className="stat-info">
-                        <p className="stat-label">Boletos Vendidos</p>
-                        <h2 className="stat-value"><AnimatedCounter value={stats.totalSold} /></h2>
-                    </div>
-                    <div className="stat-icon"><Icon name="ticket" size={20} /></div>
-                </Card>
-
-                <Card className="stat-card hero-stat-dark">
-                    <div className="stat-info">
-                        <p className="stat-label">Recaudación</p>
-                        <h2 className="stat-value">$<AnimatedCounter value={stats.totalRevenue} /></h2>
-                    </div>
-                    <div className="stat-icon"><Icon name="dollarSign" size={20} /></div>
-                </Card>
-
-                <Card className="stat-card">
-                    <div className="stat-info">
-                        <p className="stat-label">Publicados</p>
-                        <h2 className="stat-value"><AnimatedCounter value={stats.publishedEvents} /></h2>
-                    </div>
-                    <div className="stat-icon"><Icon name="checkCircle" size={20} /></div>
-                </Card>
-            </div>
-
-            <div className="dashboard-shortcuts">
-                <div className="shortcuts-section">
-                    <h3 className="section-title"><Icon name="grid" size={16} /> Panel de Control</h3>
-                    <div className="shortcuts-grid">
-                        {shortcuts.map(item => (
-                            <div key={item.id} className="shortcut-card" onClick={() => navigate(item.path)}>
-                                <p className="shortcut-label">{item.label}</p>
-                                <div className="icon-container"><Icon name={item.icon} size={18} /></div>
-                            </div>
-                        ))}
-                    </div>
+                    <h2 className="bento-stat-value"><AnimatedCounter value={stats.totalEvents} /></h2>
                 </div>
-            </div>
-            <div className="dashboard-shortcuts" style={{ marginTop: '2rem' }}>
-                <div className="shortcuts-section">
-                    <h3 className="section-title"><Icon name="map" size={16} /> Mis Recintos Asignados</h3>
-                    <div className="venues-horizontal-list">
-                        {loadingVenues ? (
-                            <div className="loading-placeholder">Cargando recintos...</div>
-                        ) : myVenues.length === 0 ? (
-                            <div className="empty-venues-msg">
-                                <p>No tienes recintos asignados todavía. Contacta al administrador.</p>
-                            </div>
-                        ) : (
-                            myVenues.map(venue => (
-                                <Card key={venue.id} className="venue-mini-card">
-                                    <div className="venue-card-content">
-                                        <div className="venue-info-main">
-                                            <h4 className="venue-name-h4">{venue.name}</h4>
-                                            <p className="venue-location-p"><Icon name="map-pin" size={10} /> {venue.city}</p>
-                                        </div>
-                                        <div className="venue-card-actions" style={{ display: 'flex', gap: '8px' }}>
-                                            <Button 
-                                                size="small" 
-                                                variant="primary" 
-                                                onClick={() => navigate(`/events/create?venue_id=${venue.id}`)}
-                                                className="quick-event-btn"
-                                                style={{ flex: 1 }}
-                                            >
-                                                <Icon name="plus" size={12} className="mr-1" /> CREAR EVENTO
-                                            </Button>
-                                            <Button 
-                                                size="small" 
-                                                variant="outline" 
-                                                onClick={() => handleOpenRoomsModal(venue)}
-                                                className="quick-event-btn"
-                                                style={{ flex: 1 }}
-                                            >
-                                                <Icon name="map" size={12} className="mr-1" /> MAPA
-                                            </Button>
-                                        </div>
-                                    </div>
-                                </Card>
-                            ))
-                        )}
+
+                <div className="bento-card bento-stat-card">
+                    <div className="bento-stat-header">
+                        <p className="bento-stat-label">Boletos Vendidos</p>
+                        <div className="bento-stat-icon"><Icon name="ticket" size={18} /></div>
                     </div>
+                    <h2 className="bento-stat-value"><AnimatedCounter value={stats.totalSold} /></h2>
+                </div>
+
+                <div className="bento-card bento-stat-card revenue-card">
+                    <div className="bento-stat-header">
+                        <p className="bento-stat-label">Recaudación</p>
+                        <div className="bento-stat-icon"><Icon name="dollarSign" size={18} /></div>
+                    </div>
+                    <h2 className="bento-stat-value">$<AnimatedCounter value={stats.totalRevenue} /></h2>
+                </div>
+
+                <div className="bento-card bento-stat-card">
+                    <div className="bento-stat-header">
+                        <p className="bento-stat-label">Publicados</p>
+                        <div className="bento-stat-icon"><Icon name="checkCircle" size={18} /></div>
+                    </div>
+                    <h2 className="bento-stat-value"><AnimatedCounter value={stats.publishedEvents} /></h2>
                 </div>
             </div>
 
-            <div className="dashboard-footer-grid">
-                <div className="health-panel premium-vitals" style={{ background: '#fff' }}>
-                    <div className="health-item">
-                        <div className="status-dot online"></div>
-                        <div>
-                            <span className="health-label">Estado Gestor</span>
-                            <div className="health-value">ACTIVO</div>
+            {/* Shortcuts Section */}
+            <section className="bento-section">
+                <h3 className="bento-section-title"><Icon name="grid" size={18} /> Panel de Control</h3>
+                <div className="bento-grid-shortcuts">
+                    {shortcuts.map(item => (
+                        <div key={item.id} className="bento-shortcut-btn" onClick={() => navigate(item.path)}>
+                            <div className="bento-shortcut-icon"><Icon name={item.icon} size={20} /></div>
+                            <p className="bento-shortcut-label">{item.label}</p>
                         </div>
-                    </div>
+                    ))}
                 </div>
-            </div>
+            </section>
+
+            {/* Venues Section */}
+            <section className="bento-section">
+                <h3 className="bento-section-title"><Icon name="map" size={18} /> Mis Recintos Asignados</h3>
+                <div className="bento-grid-venues">
+                    {loadingVenues ? (
+                        <div className="loading-placeholder">Cargando recintos...</div>
+                    ) : myVenues.length === 0 ? (
+                        <div className="empty-msg">
+                            No tienes recintos asignados todavía. Contacta al administrador.
+                        </div>
+                    ) : (
+                        myVenues.map(venue => (
+                            <div key={venue.id} className="bento-card bento-venue-card">
+                                <div className="bento-venue-info">
+                                    <h4>{venue.name}</h4>
+                                    <p><Icon name="map-pin" size={12} /> {venue.city}</p>
+                                </div>
+                                <div className="bento-venue-actions">
+                                    <Button 
+                                        size="small" 
+                                        variant="primary" 
+                                        onClick={() => navigate(`/events/create?venue_id=${venue.id}`)}
+                                    >
+                                        Crear Evento
+                                    </Button>
+                                    <Button 
+                                        size="small" 
+                                        variant="outline" 
+                                        onClick={() => handleOpenRoomsModal(venue)}
+                                    >
+                                        Salas
+                                    </Button>
+                                </div>
+                            </div>
+                        ))
+                    )}
+                </div>
+            </section>
+
+            {/* Footer */}
+            <footer className="bento-footer">
+                <div className="bento-status-badge">
+                    <span className="status-dot"></span>
+                    Estado Gestor: ACTIVO
+                </div>
+            </footer>
 
             {/* Rooms View & Map Modal */}
             <Modal
@@ -275,13 +263,13 @@ const EventManagerDashboard = () => {
             >
                 <div className="rooms-modal-layout">
                     <div className="rooms-list-panel">
-                        <h3 style={{ fontSize: '0.9rem', fontWeight: 800, marginBottom: '1rem', color: '#1a1a1a', borderBottom: '1px solid #f0f0f0', paddingBottom: '0.5rem' }}>
+                        <h3 style={{ fontSize: '0.9rem', fontWeight: 800, marginBottom: '1rem', color: 'var(--text-primary)', borderBottom: '1px solid var(--border-color)', paddingBottom: '0.5rem' }}>
                             🚪 Selecciona una Sala
                         </h3>
                         {loadingRooms ? (
-                            <div style={{ padding: '2rem', textAlign: 'center', color: '#999', fontSize: '0.8rem' }}>Cargando salas...</div>
+                            <div style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.8rem' }}>Cargando salas...</div>
                         ) : rooms.length === 0 ? (
-                            <div style={{ padding: '2rem', textAlign: 'center', color: '#999', fontSize: '0.8rem' }}>
+                            <div style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.8rem' }}>
                                 No hay salas registradas para este recinto.
                             </div>
                         ) : (
@@ -294,11 +282,11 @@ const EventManagerDashboard = () => {
                                     <div className="room-item-info">
                                         <span className="room-item-name">{room.name}</span>
                                         <span className="room-item-capacity">
-                                            <Icon name="users" size={10} style={{ marginRight: '4px' }} />
+                                            <Icon name="users" size={10} />
                                             Capacidad: {room.capacity || room.total_capacity || 'N/D'}
                                         </span>
                                     </div>
-                                    <div className="room-item-actions" onClick={(e) => e.stopPropagation()}>
+                                    <div onClick={(e) => e.stopPropagation()}>
                                         <Button 
                                             size="small" 
                                             variant="outline"
@@ -314,7 +302,7 @@ const EventManagerDashboard = () => {
 
                     <div className="map-preview-panel">
                         {loadingMap ? (
-                            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem', color: '#666' }}>
+                            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem', color: 'var(--text-muted)' }}>
                                 <div className="avm-loading-spinner" />
                                 <span style={{ fontSize: '0.8rem' }}>Cargando mapa de asientos...</span>
                             </div>
@@ -326,9 +314,9 @@ const EventManagerDashboard = () => {
                             </div>
                         ) : roomMapData.length > 0 ? (
                             <div style={{ width: '100%', height: '360px', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.75rem', color: '#555', fontWeight: 600 }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.75rem', color: 'var(--text-secondary)', fontWeight: 600 }}>
                                     <span>Distribución de: {selectedRoomForMap.name}</span>
-                                    <span style={{ color: '#a855f7' }}>Modo Lectura</span>
+                                    <span style={{ color: 'var(--text-primary)' }}>Modo Lectura</span>
                                 </div>
                                 <VenueMapSVG mapData={roomMapData} readOnly={true} height="100%" />
                             </div>
@@ -350,129 +338,9 @@ const EventManagerDashboard = () => {
                     </div>
                 </div>
             </Modal>
-            
-            <style>{`
-                .section-title { font-size: 0.8rem; font-weight: 900; letter-spacing: 0.15em; color: #000; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.5rem; border-bottom: 1px solid #eee; padding-bottom: 0.5rem; }
-                .health-label { font-size: 0.6rem; font-weight: 800; color: #999; }
-                .health-value { font-size: 0.75rem; font-weight: 800; color: #000; }
-                
-                .venues-horizontal-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; margin-top: 1rem; }
-                .venue-mini-card { border: 1px solid #f0f0f0; transition: transform 0.2s; background: #fff; }
-                .venue-mini-card:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
-                .venue-card-content { display: flex; flex-direction: column; gap: 1rem; }
-                .venue-name-h4 { font-size: 0.9rem; font-weight: 800; color: #1a1a1a; margin: 0; }
-                .venue-location-p { font-size: 0.75rem; color: #666; margin: 0.2rem 0 0 0; display: flex; align-items: center; gap: 4px; }
-                .venue-card-actions { border-top: 1px solid #f9f9f9; padding-top: 0.75rem; }
-                .quick-event-btn { width: 100%; font-weight: 700; font-size: 0.7rem; }
-                .empty-venues-msg { padding: 2rem; text-align: center; color: #999; font-size: 0.8rem; background: #fcfcfc; border-radius: 10px; border: 1px dashed #ddd; width: 100%; }
-
-                /* Rooms & Map Modal Styles */
-                .rooms-modal-layout {
-                    display: flex;
-                    gap: 1.5rem;
-                    min-height: 400px;
-                }
-                .rooms-list-panel {
-                    flex: 2;
-                    border-right: 1px solid #f0f0f0;
-                    padding-right: 1.5rem;
-                    max-height: 500px;
-                    overflow-y: auto;
-                }
-                .map-preview-panel {
-                    flex: 3;
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    justify-content: center;
-                    background: #fafafa;
-                    border-radius: 12px;
-                    padding: 1rem;
-                    border: 1px solid #eaeaea;
-                    min-height: 400px;
-                }
-                .room-item-card {
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    padding: 0.75rem 1rem;
-                    border: 1px solid #eee;
-                    border-radius: 8px;
-                    margin-bottom: 0.75rem;
-                    background: #fff;
-                    cursor: pointer;
-                    transition: all 0.2s;
-                }
-                .room-item-card:hover {
-                    border-color: #a855f7;
-                    background: #fbf8ff;
-                    transform: translateY(-2px);
-                    box-shadow: 0 4px 12px rgba(168,85,247,0.05);
-                }
-                .room-item-card.active {
-                    border-color: #a855f7;
-                    background: #f3e8ff;
-                    box-shadow: 0 4px 12px rgba(168,85,247,0.08);
-                }
-                .room-item-info {
-                    display: flex;
-                    flex-direction: column;
-                    gap: 4px;
-                }
-                .room-item-name {
-                    font-weight: 700;
-                    font-size: 0.85rem;
-                    color: #1a1a1a;
-                }
-                .room-item-capacity {
-                    font-size: 0.75rem;
-                    color: #666;
-                    display: flex;
-                    align-items: center;
-                    gap: 4px;
-                }
-                .room-item-actions {
-                    display: flex;
-                    gap: 8px;
-                }
-                .modal-no-map {
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    justify-content: center;
-                    gap: 1rem;
-                    color: #666;
-                    text-align: center;
-                    padding: 2rem;
-                }
-                .modal-no-map-icon {
-                    font-size: 2.5rem;
-                    opacity: 0.5;
-                }
-                .modal-no-map-title {
-                    font-weight: 700;
-                    font-size: 0.95rem;
-                    color: #333;
-                }
-                .modal-no-map-desc {
-                    font-size: 0.8rem;
-                    color: #888;
-                    max-width: 250px;
-                }
-                .avm-loading-spinner {
-                    width: 28px;
-                    height: 28px;
-                    border: 3px solid rgba(0,0,0,0.1);
-                    border-top-color: #a855f7;
-                    border-radius: 50%;
-                    animation: avm-spin 1s linear infinite;
-                }
-                @keyframes avm-spin {
-                    to { transform: rotate(360deg); }
-                }
-            `}</style>
         </div>
     );
 };
 
 export default EventManagerDashboard;
+

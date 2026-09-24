@@ -3,12 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useNotification } from '../../context/NotificationContext';
 import api from '../../services/api';
-import Card from '../../components/Card';
 import Button from '../../components/Button';
 import Modal from '../../components/Modal';
 import EventForm from './EventForm';
 import ManagerStatsCards from './components/ManagerStatsCards';
-import '../../styles/manager.css';
+import '../EventManagerDashboard/EventManagerDashboard.css'; // Import Bento styles
 
 const formatTime = (time) => {
     if (!time) return '';
@@ -32,10 +31,10 @@ const EventList = () => {
         const role = user.role?.toLowerCase();
         if (role === 'admin') return true;
         
-        // Si es gestor, permitir ciertas acciones por defecto si no hay objeto de permisos
+        // Si es gestor, permitir ciertas acciones por defecto si no hay objeto de permisos o está vacío
         const isManager = role === 'gestor' || role === 'manager';
-        if (!user.permissions) {
-            // Default permissions for managers if object is missing
+        if (!user.permissions || Object.keys(user.permissions).length === 0) {
+            // Default permissions for managers if object is missing or empty
             if (isManager) {
                 const defaultManagerPerms = ['canViewDashboard', 'canCreateEvents', 'canEditEvents', 'canViewEventAnalytics'];
                 return defaultManagerPerms.includes(permissionKey);
@@ -85,7 +84,6 @@ const EventList = () => {
         setEvents([newEvent, ...events]);
         setShowCreateModal(false);
         showNotification('Evento creado exitosamente', 'success');
-        // Opcional: navegar al detalle
         navigate(`/events/manage/${newEvent.id}`);
     };
 
@@ -94,7 +92,6 @@ const EventList = () => {
         try {
             await api.manager.publishEvent(eventId);
             showNotification('Evento publicado', 'success');
-            // Update local state
             setEvents(events.map(ev =>
                 ev.id === eventId ? { ...ev, status: 'published' } : ev
             ));
@@ -129,20 +126,18 @@ const EventList = () => {
     };
 
     return (
-        <div className="manager-container">
+        <div className="bento-dashboard-container" style={{ padding: 0 }}>
             {/* Header */}
-            <div className="manager-header">
-                <div className="manager-title">
-                    <h1>Mis Eventos</h1>
-                    <p>Gestiona y monitorea todos tus eventos desde aquí</p>
+            <div className="bento-header" style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div>
+                    <h1 className="bento-welcome-title">Mis Eventos</h1>
+                    <p className="bento-date-subtitle">Gestiona y monitorea todos tus eventos desde aquí</p>
                 </div>
                 {hasPermission('canCreateEvents') && (
-                    <div className="manager-actions">
-                        <Button onClick={() => setShowCreateModal(true)} variant="primary">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
-                            Crear Nuevo Evento
-                        </Button>
-                    </div>
+                    <Button onClick={() => setShowCreateModal(true)} variant="primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+                        Crear Nuevo Evento
+                    </Button>
                 )}
             </div>
 
@@ -150,80 +145,88 @@ const EventList = () => {
             {hasPermission('canViewEventAnalytics') && <ManagerStatsCards stats={stats} />}
 
             {/* Event List Table */}
-            <div className="manager-table-container">
+            <div className="bento-card" style={{ padding: '0', overflow: 'hidden' }}>
                 {loading ? (
-                    <div style={{ padding: '2rem', textAlign: 'center' }}>Cargando eventos...</div>
+                    <div className="loading-placeholder">Cargando eventos...</div>
                 ) : (
-                    <table className="manager-table">
-                        <thead>
-                            <tr>
-                                <th>Evento</th>
-                                <th>Fecha</th>
-                                <th>Ubicación</th>
-                                <th>Estado</th>
-                                <th>Tickets Vendidos</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {filteredEvents.length > 0 ? (
-                                filteredEvents.map(event => (
-                                    <tr key={event.id} style={{ cursor: 'pointer' }} onClick={() => navigate(`/events/manage/${event.id}`)}>
-                                        <td>
-                                            <div className="event-cell-name">{event.name}</div>
-                                            <small className="text-muted">{event.category}</small>
-                                        </td>
-                                        <td className="event-cell-date">
-                                            {new Date(event.event_date).toLocaleDateString()}
-                                            <br />
-                                            <small>{formatTime(event.event_time)}</small>
-                                        </td>
-                                        <td>{event.venue || event.location}</td>
-                                        <td>
-                                            <span className={`status-badge status-${event.status}`}>
-                                                {getStatusLabel(event.status)}
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <strong>{event.tickets_sold}</strong> / {event.total_tickets}
-                                        </td>
-                                        <td onClick={(e) => e.stopPropagation()}>
-                                            <div className="action-buttons">
-                                                {hasPermission('canEditEvents') && (
-                                                    <Button
-                                                        size="small"
-                                                        variant="outline"
-                                                        onClick={() => navigate(`/events/manage/${event.id}`)}
-                                                    >
-                                                        Gestionar
-                                                    </Button>
-                                                )}
-                                                {event.status === 'draft' && hasPermission('canCreateEvents') && (
-                                                    <Button
-                                                        size="small"
-                                                        variant="primary"
-                                                        onClick={(e) => handleQuickPublish(e, event.id)}
-                                                        style={{ marginLeft: '0.5rem', backgroundColor: '#28a745', borderColor: '#28a745' }}
-                                                    >
-                                                        Publicar
-                                                    </Button>
-                                                )}
-                                            </div>
+                    <div style={{ overflowX: 'auto' }}>
+                        <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+                            <thead style={{ background: 'var(--bg-tertiary)' }}>
+                                <tr>
+                                    <th style={{ padding: '1rem', fontWeight: 600, color: 'var(--text-secondary)' }}>Evento</th>
+                                    <th style={{ padding: '1rem', fontWeight: 600, color: 'var(--text-secondary)' }}>Fecha</th>
+                                    <th style={{ padding: '1rem', fontWeight: 600, color: 'var(--text-secondary)' }}>Ubicación</th>
+                                    <th style={{ padding: '1rem', fontWeight: 600, color: 'var(--text-secondary)' }}>Estado</th>
+                                    <th style={{ padding: '1rem', fontWeight: 600, color: 'var(--text-secondary)' }}>Tickets Vendidos</th>
+                                    <th style={{ padding: '1rem', fontWeight: 600, color: 'var(--text-secondary)' }}>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {filteredEvents.length > 0 ? (
+                                    filteredEvents.map(event => (
+                                        <tr 
+                                            key={event.id} 
+                                            style={{ cursor: 'pointer', borderBottom: '1px solid var(--border-color)', transition: 'background 0.2s' }} 
+                                            onClick={() => navigate(`/events/manage/${event.id}`)}
+                                            onMouseEnter={(e) => e.currentTarget.style.background = 'var(--bg-tertiary)'}
+                                            onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+                                        >
+                                            <td style={{ padding: '1rem' }}>
+                                                <div style={{ fontWeight: 700, color: 'var(--text-primary)' }}>{event.name}</div>
+                                                <small style={{ color: 'var(--text-muted)' }}>{event.category}</small>
+                                            </td>
+                                            <td style={{ padding: '1rem', color: 'var(--text-primary)' }}>
+                                                {new Date(event.event_date).toLocaleDateString()}
+                                                <br />
+                                                <small style={{ color: 'var(--text-muted)' }}>{formatTime(event.event_time)}</small>
+                                            </td>
+                                            <td style={{ padding: '1rem', color: 'var(--text-primary)' }}>{event.venue || event.location}</td>
+                                            <td style={{ padding: '1rem' }}>
+                                                <span className="bento-status-badge">
+                                                    <span className="status-dot" style={{ background: event.status === 'published' ? '#10b981' : '#f59e0b', boxShadow: 'none' }}></span>
+                                                    {getStatusLabel(event.status)}
+                                                </span>
+                                            </td>
+                                            <td style={{ padding: '1rem', color: 'var(--text-primary)' }}>
+                                                <strong>{event.tickets_sold}</strong> / {event.total_tickets}
+                                            </td>
+                                            <td style={{ padding: '1rem' }} onClick={(e) => e.stopPropagation()}>
+                                                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                                                    {hasPermission('canEditEvents') && (
+                                                        <Button
+                                                            size="small"
+                                                            variant="outline"
+                                                            onClick={() => navigate(`/events/manage/${event.id}`)}
+                                                        >
+                                                            Gestionar
+                                                        </Button>
+                                                    )}
+                                                    {event.status === 'draft' && hasPermission('canCreateEvents') && (
+                                                        <Button
+                                                            size="small"
+                                                            variant="primary"
+                                                            onClick={(e) => handleQuickPublish(e, event.id)}
+                                                        >
+                                                            Publicar
+                                                        </Button>
+                                                    )}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ))
+                                ) : (
+                                    <tr>
+                                        <td colSpan="6" style={{ textAlign: 'center', padding: '3rem' }}>
+                                            <p style={{ color: 'var(--text-muted)', marginBottom: '1rem' }}>No tienes eventos registrados aún.</p>
+                                            <Button variant="outline" onClick={() => setShowCreateModal(true)}>
+                                                Crear mi primer evento
+                                            </Button>
                                         </td>
                                     </tr>
-                                ))
-                            ) : (
-                                <tr>
-                                    <td colSpan="6" style={{ textAlign: 'center', padding: '3rem' }}>
-                                        <p className="text-muted">No tienes eventos registrados aún.</p>
-                                        <Button variant="outline" onClick={() => setShowCreateModal(true)}>
-                                            Crear mi primer evento
-                                        </Button>
-                                    </td>
-                                </tr>
-                            )}
-                        </tbody>
-                    </table>
+                                )}
+                            </tbody>
+                        </table>
+                    </div>
                 )}
             </div>
 
@@ -241,3 +244,4 @@ const EventList = () => {
 };
 
 export default EventList;
+

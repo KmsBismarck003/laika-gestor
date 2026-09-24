@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Table, Badge, Button, Icon, Input } from '../../components';
+import { Table, Button, Icon, Input } from '../../components';
 import { managerAPI } from '../../services/managerService';
-import '../../styles/manager.css';
+import '../EventManagerDashboard/EventManagerDashboard.css';
 
 const ManagerTransactions = () => {
     const [transactions, setTransactions] = useState([]);
@@ -43,28 +43,46 @@ const ManagerTransactions = () => {
     });
 
     return (
-        <Card title="Auditoría de Transacciones">
-            <div className="table-actions" style={{ marginBottom: '1rem', display: 'flex', gap: '1rem' }}>
-                <Input
-                    placeholder="Buscar por ID, Cliente o Evento..."
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                    fullWidth
-                />
-                <Button variant="outline">
-                    <Icon name="download" size={16} className="mr-2" />
-                    Exportar CSV
-                </Button>
-            </div>
+        <div className="bento-dashboard-container">
+            {/* Header */}
+            <header className="bento-header">
+                <h1 className="bento-welcome-title">Control de Ventas</h1>
+                <p className="bento-date-subtitle">Auditoría de Transacciones</p>
+            </header>
 
-            <Table
-                columns={columns}
-                data={filtered}
-                hoverable
-                striped
-                emptyMessage="No hay transacciones registradas"
-            />
-        </Card>
+            <div className="bento-card" style={{ padding: '2rem' }}>
+                <div style={{ marginBottom: '1.5rem', display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                    <div style={{ flex: 1, minWidth: '250px' }}>
+                        <Input
+                            placeholder="Buscar por ID, Cliente o Evento..."
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                            fullWidth
+                            style={{ 
+                                background: 'var(--bg-tertiary)', 
+                                border: '1px solid var(--border-color)', 
+                                color: 'var(--text-primary)',
+                                borderRadius: '12px'
+                            }}
+                        />
+                    </div>
+                    <Button variant="outline" style={{ borderRadius: '12px' }}>
+                        <Icon name="download" size={16} style={{ marginRight: '8px' }} />
+                        Exportar CSV
+                    </Button>
+                </div>
+
+                <div style={{ border: '1px solid var(--border-color)', borderRadius: '16px', overflow: 'hidden' }}>
+                    <Table
+                        columns={columns}
+                        data={filtered}
+                        hoverable
+                        striped
+                        emptyMessage="No hay transacciones registradas"
+                    />
+                </div>
+            </div>
+        </div>
     );
 };
 

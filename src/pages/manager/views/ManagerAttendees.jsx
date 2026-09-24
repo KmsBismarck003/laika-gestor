@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Table, PermissionWall, Button } from '../../../components';
+import { Table, PermissionWall, Button, Icon, Badge } from '../../../components';
 import { useAuth } from '../../../context/AuthContext';
 import { useNotification } from '../../../context/NotificationContext';
 import { managerAPI } from '../../../services/managerService';
+import '../../EventManagerDashboard/EventManagerDashboard.css'; // Import Bento styles
 
 const ManagerAttendees = () => {
     const { user } = useAuth();
@@ -63,16 +64,16 @@ const ManagerAttendees = () => {
         { key: 'checkedIn', header: 'CHECK-IN', render: (v, row) => {
             const checkin = row.checked_in || row.checkin || v;
             return (
-                <span style={{
-                    display: 'inline-block',
-                    padding: '2px 10px',
-                    borderRadius: '99px',
-                    fontSize: '0.72rem',
-                    fontWeight: 700,
-                    background: checkin ? '#dcfce7' : '#f1f5f9',
-                    color: checkin ? '#166534' : '#64748b'
+                <span className="bento-status-badge" style={{
+                    background: checkin ? 'rgba(16, 185, 129, 0.1)' : 'var(--bg-tertiary)',
+                    color: checkin ? '#10b981' : 'var(--text-muted)',
+                    borderColor: 'transparent',
+                    border: 'none',
+                    padding: '0.25rem 0.75rem',
+                    fontSize: '0.7rem'
                 }}>
-                    {checkin ? 'Verificado' : 'Pendiente'}
+                    <span className="status-dot" style={{ background: checkin ? '#10b981' : 'var(--text-muted)', boxShadow: 'none', width: '6px', height: '6px' }}></span>
+                    {checkin ? 'Ingresado' : 'Pendiente'}
                 </span>
             );
         } }
@@ -83,54 +84,61 @@ const ManagerAttendees = () => {
             permission="canViewUsers"
             label="la lista de asistentes"
         >
-            <div className="manager-attendees">
-                <h2 style={{ fontSize: '1.2rem', marginBottom: '1.5rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '2px' }}>
-                    Gestión de Asistentes
-                </h2>
+            <div className="bento-dashboard-container">
+                {/* Header */}
+                <header className="bento-header">
+                    <h1 className="bento-welcome-title">Control de Asistentes</h1>
+                    <p className="bento-date-subtitle">Gestiona la lista de invitados y su acceso</p>
+                </header>
 
-                {/* Selector de Evento */}
-                <div style={{ marginBottom: '1.5rem' }}>
-                    <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '1px', color: '#475569' }}>
-                        Selecciona un Evento
-                    </label>
-                    <select
-                        value={selectedEventId}
-                        onChange={handleEventChange}
-                        disabled={loadingEvents}
-                        style={{
-                            width: '100%',
-                            maxWidth: '400px',
-                            padding: '0.625rem 0.75rem',
-                            borderRadius: '0.5rem',
-                            border: '1px solid #e2e8f0',
-                            fontSize: '0.875rem',
-                            background: '#fff',
-                            color: '#0f172a',
-                            cursor: 'pointer'
-                        }}
-                    >
-                        <option value="">
-                            {loadingEvents ? 'Cargando eventos...' : '— Todos los eventos —'}
-                        </option>
-                        {events.map(ev => (
-                            <option key={ev.id} value={ev.id}>
-                                {ev.name} ({ev.status || 'n/d'})
+                <div className="bento-card" style={{ padding: '2rem' }}>
+                    {/* Selector de Evento */}
+                    <div style={{ marginBottom: '1.5rem' }}>
+                        <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '1px', color: 'var(--text-secondary)' }}>
+                            Selecciona un Evento para administrar
+                        </label>
+                        <select
+                            value={selectedEventId}
+                            onChange={handleEventChange}
+                            disabled={loadingEvents}
+                            style={{
+                                width: '100%',
+                                maxWidth: '400px',
+                                padding: '0.75rem 1rem',
+                                borderRadius: '12px',
+                                border: '1px solid var(--border-color)',
+                                fontSize: '0.9rem',
+                                background: 'var(--bg-tertiary)',
+                                color: 'var(--text-primary)',
+                                cursor: 'pointer',
+                                outline: 'none'
+                            }}
+                        >
+                            <option value="">
+                                {loadingEvents ? 'Cargando eventos...' : '— Todos los eventos —'}
                             </option>
-                        ))}
-                    </select>
-                </div>
+                            {events.map(ev => (
+                                <option key={ev.id} value={ev.id}>
+                                    {ev.name} ({ev.status || 'n/d'})
+                                </option>
+                            ))}
+                        </select>
+                    </div>
 
-                <Card className="glass-card" style={{ padding: 0, overflow: 'hidden' }}>
-                    <Table
-                        columns={columns}
-                        data={attendees}
-                        loading={loadingAttendees}
-                        emptyMessage={selectedEventId
-                            ? 'No hay asistentes registrados para este evento.'
-                            : 'Selecciona un evento para ver los asistentes.'
-                        }
-                    />
-                </Card>
+                    <div style={{ border: '1px solid var(--border-color)', borderRadius: '16px', overflow: 'hidden' }}>
+                        <Table
+                            columns={columns}
+                            data={attendees}
+                            loading={loadingAttendees}
+                            striped
+                            hoverable
+                            emptyMessage={selectedEventId
+                                ? 'No hay asistentes registrados para este evento.'
+                                : 'Selecciona un evento para ver los asistentes.'
+                            }
+                        />
+                    </div>
+                </div>
             </div>
         </PermissionWall>
     );

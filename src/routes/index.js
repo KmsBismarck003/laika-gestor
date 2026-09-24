@@ -6,9 +6,9 @@ const Login = lazy(() => import('../pages/Login/Login'))
 // Dashboard de Organizador/Gestor
 const EventManagerDashboard = lazy(() => import('../pages/EventManagerDashboard/EventManagerDashboard'))
 const EventDetail = lazy(() => import('../pages/manager/EventDetail'))
-const ManagerAnalytics = lazy(() => import('../pages/manager/views/ManagerAnalytics'))
-const ManagerTransactions = lazy(() => import('../pages/manager/views/ManagerTransactions'))
-const ManagerAttendees = lazy(() => import('../pages/manager/views/ManagerAttendees'))
+const ManagerAnalytics = lazy(() => import('../pages/manager/ManagerAnalytics'))
+const ManagerTransactions = lazy(() => import('../pages/manager/ManagerTransactions'))
+const ManagerAttendees = lazy(() => import('../pages/manager/views/ManagerAttendees')) // Este tiene selector de eventos global
 const CreateEventPage = lazy(() => import('../pages/manager/views/CreateEventPage'))
 const ManagerStatsPage = lazy(() => import('../pages/manager/ManagerStatsPage'))
 const ManagerAds = lazy(() => import('../pages/manager/ManagerAds'))
