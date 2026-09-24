@@ -45,7 +45,7 @@ export const ThemeProvider = ({ children }) => {
       root.style.setProperty('--bg-primary', '#F8FAFC');
       root.style.setProperty('--bg-card', '#FFFFFF');
       root.style.setProperty('--text-primary', '#000000');
-      root.style.setProperty('--bg-sidebar', '#000000');
+      root.style.setProperty('--bg-sidebar', '#1A1A1A');
       root.style.setProperty('--text-sidebar', '#FFFFFF');
       root.style.setProperty('--border-color', '#000000');
     }

@@ -35,8 +35,8 @@ const DashboardLayout = () => {
       label: 'PANEL PRINCIPAL',
       items: [
         { id: 'dashboard', path: '/admin', icon: 'dashboard', label: 'Vista General', permission: 'admin.view' },
-        { id: 'big_data', path: '/admin/big-data', icon: 'database', label: 'Análisis y Predicciones', permission: 'admin.view' },
-        { id: 'logs', path: '/admin/logs', icon: 'fileText', label: 'Historial de Actividad', permission: 'logs.view' }
+        { id: 'big_data', path: '/admin/big-data', icon: 'database', label: 'Analíticas', permission: 'admin.view' },
+        { id: 'logs', path: '/admin/logs', icon: 'fileText', label: 'Historial', permission: 'logs.view' }
       ]
     },
     {
@@ -45,31 +45,31 @@ const DashboardLayout = () => {
       items: [
         { id: 'b2b', path: '/admin/b2b', icon: 'briefcase', label: 'B2B (Contratos)', permission: 'admin.view' },
         { id: 'events', path: '/admin/events', icon: 'calendar', label: 'Gestión de Eventos', permission: 'events.view' },
-        { id: 'historical', path: '/admin/history', icon: 'history', label: 'Historial de Eventos', permission: 'events.view' },
-        { id: 'sales', path: '/admin/sales', icon: 'dollarSign', label: 'Reportes de Ventas', permission: 'sales.view' },
-        { id: 'venues', path: '/admin/venues', icon: 'map', label: 'Lugares y Sedes', permission: 'venues.view' },
-        { id: 'venue_map', path: '/admin/venue-map', icon: 'map', label: 'Diseño de Lugares', permission: 'admin.view' },
-        { id: 'merchandise_adm', path: '/admin/merchandise', icon: 'shoppingBag', label: 'Aprobación de Tienda', permission: 'admin.view' }
+        { id: 'historical', path: '/admin/history', icon: 'history', label: 'Historial', permission: 'events.view' },
+        { id: 'sales', path: '/admin/sales', icon: 'dollarSign', label: 'Ventas', permission: 'sales.view' },
+        { id: 'venues', path: '/admin/venues', icon: 'map', label: 'Lugares', permission: 'venues.view' },
+        { id: 'venue_map', path: '/admin/venue-map', icon: 'map', label: 'Diseño de Sedes', permission: 'admin.view' },
+        { id: 'merchandise_adm', path: '/admin/merchandise', icon: 'shoppingBag', label: 'Aprobación Tienda', permission: 'admin.view' }
       ]
     },
     {
       id: 'mkt',
       label: 'MARKETING Y DIFUSIÓN',
       items: [
-        { id: 'ads', path: '/admin/ads', icon: 'image', label: 'Administrar Anuncios', permission: 'cms.view' },
+        { id: 'ads', path: '/admin/ads', icon: 'image', label: 'Anuncios', permission: 'cms.view' },
         { id: 'laika', path: '/admin/laika', icon: 'bot', label: 'Laika Agent', permission: 'admin.view' },
-        { id: 'emails', path: '/admin/emails', icon: 'mail', label: 'Correos de Difusión', permission: 'admin.view' },
-        { id: 'push', path: '/admin/push-manager', icon: 'bell', label: 'Notificaciones Push', permission: 'admin.view' },
-        { id: 'ticker', path: '/admin/ticker', icon: 'sparkles', label: 'Anuncios en Banner', permission: 'cms.view' }
+        { id: 'emails', path: '/admin/emails', icon: 'mail', label: 'Correos', permission: 'admin.view' },
+        { id: 'push', path: '/admin/push-manager', icon: 'bell', label: 'Push', permission: 'admin.view' },
+        { id: 'ticker', path: '/admin/ticker', icon: 'sparkles', label: 'Banners', permission: 'cms.view' }
       ]
     },
     {
       id: 'sistema',
       label: 'SEGURIDAD Y SISTEMA',
       items: [
-        { id: 'database', path: '/admin/database', icon: 'database', label: 'Copias de Seguridad', permission: 'database.view' },
-        { id: 'users', path: '/admin/users', icon: 'users', label: 'Gestión Usuarios', permission: 'users.view' },
-        { id: 'auth_audit', path: '/admin/auth-audit', icon: 'shield', label: 'Registro de Accesos', permission: 'auth.audit' },
+        { id: 'database', path: '/admin/database', icon: 'database', label: 'Backups', permission: 'database.view' },
+        { id: 'users', path: '/admin/users', icon: 'users', label: 'Usuarios', permission: 'users.view' },
+        { id: 'auth_audit', path: '/admin/auth-audit', icon: 'shield', label: 'Accesos', permission: 'auth.audit' },
         { id: 'config', path: '/admin/config', icon: 'settings', label: 'Configuración', permission: 'config.view' },
         { id: 'laika_agent', path: '#laika-agent', icon: 'sparkles', label: 'Laika Agente', permission: 'admin.view' }
       ]
@@ -119,16 +119,16 @@ const DashboardLayout = () => {
             id: 'g_main',
             label: 'GESTIÓN GESTOR',
             items: [
-              { id: 'g_main_hub', path: '/events/manage', icon: 'dashboard', label: 'Mi Panel de Control' },
+              { id: 'g_main_hub', path: '/events/manage', icon: 'dashboard', label: 'Mi Panel' },
               { id: 'g_create', path: '/events/create', icon: 'plus', label: 'Crear Evento' },
               { id: 'g_events', path: '/events/manage?tab=list', icon: 'calendar', label: 'Mis Eventos' },
-              { id: 'g_historical', path: '/events/history', icon: 'history', label: 'Historial de Eventos' },
+              { id: 'g_historical', path: '/events/history', icon: 'history', label: 'Historial' },
               { id: 'g_venue_map', path: '/events/manage?tab=venues', icon: 'map', label: 'Diseñar Lugar' },
-              { id: 'g_stats', path: '/manager/analytics', icon: 'chart', label: 'Análisis y Predicciones' },
-              { id: 'g_transactions', path: '/manager/transactions', icon: 'dollarSign', label: 'Control de Ventas' },
-              { id: 'g_attendees', path: '/manager/attendees', icon: 'users', label: 'Control de Asistentes' },
-              { id: 'g_ads', path: '/manager/ads', icon: 'image', label: 'Administrar Anuncios' },
-              { id: 'g_merchandise', path: '/manager/merchandise', icon: 'shoppingBag', label: 'Diseño de Tienda / Souvenirs' }
+              { id: 'g_stats', path: '/manager/analytics', icon: 'chart', label: 'Analíticas' },
+              { id: 'g_transactions', path: '/manager/transactions', icon: 'dollarSign', label: 'Ventas' },
+              { id: 'g_attendees', path: '/manager/attendees', icon: 'users', label: 'Asistentes' },
+              { id: 'g_ads', path: '/manager/ads', icon: 'image', label: 'Anuncios' },
+              { id: 'g_merchandise', path: '/manager/merchandise', icon: 'shoppingBag', label: 'Tienda / Souvenirs' }
             ]
           }
         ],
@@ -139,10 +139,10 @@ const DashboardLayout = () => {
             items: [
               { id: 'o_dashboard', path: '/staff/dashboard', icon: 'dashboard', label: 'Panel de Staff' },
               { id: 'o_staff', path: '/staff?tab=scanner', icon: 'checkCircle', label: 'Lector de Entradas' },
-              { id: 'o_helpdesk', path: '/staff?tab=helpdesk', icon: 'search', label: 'Soporte de Entrada' },
+              { id: 'o_helpdesk', path: '/staff?tab=helpdesk', icon: 'search', label: 'Soporte' },
               { id: 'o_boxoffice', path: '/staff?tab=boxoffice', icon: 'shoppingBag', label: 'Venta Presencial' },
-              { id: 'o_history', path: '/staff/history', icon: 'history', label: 'Registro de Accesos' },
-              { id: 'o_incidents', path: '/staff/incidents', icon: 'alertTriangle', label: 'Reporte de Problemas' }
+              { id: 'o_history', path: '/staff/history', icon: 'history', label: 'Accesos' },
+              { id: 'o_incidents', path: '/staff/incidents', icon: 'alertTriangle', label: 'Incidentes' }
             ]
           }
         ],
@@ -183,11 +183,11 @@ const DashboardLayout = () => {
         onToggle: () => setExpandedSections(prev => ({ ...prev, gestor: !prev.gestor })),
         items: [
           { id: 'g_events_s', path: '/events/manage', icon: 'calendar', label: 'Monitor Eventos' },
-          { id: 'g_stats_s', path: '/manager/analytics', icon: 'chart', label: 'Análisis y Predicciones' },
-          { id: 'g_transactions_s', path: '/manager/transactions', icon: 'dollarSign', label: 'Auditoría de Pagos' },
-          { id: 'g_attendees_s', path: '/manager/attendees', icon: 'users', label: 'Registro de Asistentes' },
-          { id: 'g_ads_s', path: '/manager/ads', icon: 'image', label: 'Administrar Anuncios' },
-          { id: 'g_merchandise_s', path: '/manager/merchandise', icon: 'shoppingBag', label: 'Supervisar Tienda' }
+          { id: 'g_stats_s', path: '/manager/analytics', icon: 'chart', label: 'Analíticas' },
+          { id: 'g_transactions_s', path: '/manager/transactions', icon: 'dollarSign', label: 'Auditoría' },
+          { id: 'g_attendees_s', path: '/manager/attendees', icon: 'users', label: 'Asistentes' },
+          { id: 'g_ads_s', path: '/manager/ads', icon: 'image', label: 'Anuncios' },
+          { id: 'g_merchandise_s', path: '/manager/merchandise', icon: 'shoppingBag', label: 'Tienda' }
         ]
       },
       {
@@ -198,8 +198,8 @@ const DashboardLayout = () => {
         onToggle: () => setExpandedSections(prev => ({ ...prev, operador: !prev.operador })),
         items: [
           { id: 'o_staff_s', path: '/staff', icon: 'checkCircle', label: 'Terminal de Staff' },
-          { id: 'o_history_s', path: '/staff/history', icon: 'history', label: 'Registro de Accesos' },
-          { id: 'o_incidents_s', path: '/staff/incidents', icon: 'alertTriangle', label: 'Control de Reportes' }
+          { id: 'o_history_s', path: '/staff/history', icon: 'history', label: 'Accesos' },
+          { id: 'o_incidents_s', path: '/staff/incidents', icon: 'alertTriangle', label: 'Reportes' }
         ]
       },
       {
@@ -209,9 +209,9 @@ const DashboardLayout = () => {
         isExpanded: expandedSections.usuario,
         onToggle: () => setExpandedSections(prev => ({ ...prev, usuario: !prev.usuario })),
         items: [
-          { id: 'u_dashboard_s', path: '/user/dashboard', icon: 'dashboard', label: 'Vista del Cliente' },
-          { id: 'u_tickets_s', path: '/user/tickets', icon: 'ticket', label: 'Boletos del Cliente' },
-          { id: 'u_achievements_s', path: '/user/achievements', icon: 'star', label: 'Premios del Cliente' }
+          { id: 'u_dashboard_s', path: '/user/dashboard', icon: 'dashboard', label: 'Cliente' },
+          { id: 'u_tickets_s', path: '/user/tickets', icon: 'ticket', label: 'Boletos' },
+          { id: 'u_achievements_s', path: '/user/achievements', icon: 'star', label: 'Premios' }
         ]
       }
     ]
