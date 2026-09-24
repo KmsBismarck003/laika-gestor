@@ -7,6 +7,7 @@ import api from '../../services/api';
 import EventList from '../manager/EventList';
 import { useSearchParams } from 'react-router-dom';
 import VenueMapSVG from '../../components/VenueMapSVG';
+import './EventManagerDashboard.css';
 
 
 const EventManagerDashboard = () => {
@@ -196,8 +197,8 @@ const EventManagerDashboard = () => {
                     <div className="shortcuts-grid">
                         {shortcuts.map(item => (
                             <div key={item.id} className="shortcut-card" onClick={() => navigate(item.path)}>
+                                <div className="icon-container"><Icon name={item.icon} size={22} /></div>
                                 <p className="shortcut-label">{item.label}</p>
-                                <div className="icon-container"><Icon name={item.icon} size={18} /></div>
                             </div>
                         ))}
                     </div>
@@ -221,24 +222,22 @@ const EventManagerDashboard = () => {
                                             <h4 className="venue-name-h4">{venue.name}</h4>
                                             <p className="venue-location-p"><Icon name="map-pin" size={10} /> {venue.city}</p>
                                         </div>
-                                        <div className="venue-card-actions" style={{ display: 'flex', gap: '8px' }}>
+                                        <div className="venue-card-actions">
                                             <Button 
                                                 size="small" 
                                                 variant="primary" 
                                                 onClick={() => navigate(`/events/create?venue_id=${venue.id}`)}
-                                                className="quick-event-btn"
-                                                style={{ flex: 1 }}
+                                                className="venue-event-btn"
                                             >
-                                                <Icon name="plus" size={12} className="mr-1" /> CREAR EVENTO
+                                                <Icon name="plus" size={14} /> Crear Evento
                                             </Button>
                                             <Button 
                                                 size="small" 
                                                 variant="outline" 
                                                 onClick={() => handleOpenRoomsModal(venue)}
-                                                className="quick-event-btn"
-                                                style={{ flex: 1 }}
+                                                className="venue-map-btn"
                                             >
-                                                <Icon name="map" size={12} className="mr-1" /> MAPA
+                                                <Icon name="map" size={14} /> Mapa
                                             </Button>
                                         </div>
                                     </div>
@@ -250,14 +249,9 @@ const EventManagerDashboard = () => {
             </div>
 
             <div className="dashboard-footer-grid">
-                <div className="health-panel premium-vitals" style={{ background: '#fff' }}>
-                    <div className="health-item">
-                        <div className="status-dot online"></div>
-                        <div>
-                            <span className="health-label">Estado Gestor</span>
-                            <div className="health-value">ACTIVO</div>
-                        </div>
-                    </div>
+                <div className="gestor-status-badge">
+                    <span className="gestor-status-dot"></span>
+                    Estado Gestor · <strong>ACTIVO</strong>
                 </div>
             </div>
 
@@ -362,7 +356,7 @@ const EventManagerDashboard = () => {
                 .venue-card-content { display: flex; flex-direction: column; gap: 1rem; }
                 .venue-name-h4 { font-size: 0.9rem; font-weight: 800; color: #1a1a1a; margin: 0; }
                 .venue-location-p { font-size: 0.75rem; color: #666; margin: 0.2rem 0 0 0; display: flex; align-items: center; gap: 4px; }
-                .venue-card-actions { border-top: 1px solid #f9f9f9; padding-top: 0.75rem; }
+                .venue-card-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; border-top: 1px solid #f9f9f9; padding-top: 0.75rem; }
                 .quick-event-btn { width: 100%; font-weight: 700; font-size: 0.7rem; }
                 .empty-venues-msg { padding: 2rem; text-align: center; color: #999; font-size: 0.8rem; background: #fcfcfc; border-radius: 10px; border: 1px dashed #ddd; width: 100%; }
 
