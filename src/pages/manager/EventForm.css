@@ -1,30 +1,28 @@
-/* ============================================
-   EVENT FORM (CREAR NUEVO EVENTO) - Estilo SaaS
-   Modal ancho + layout 60/40 + preview
-   ============================================ */
+/* ==========================================================================
+   EVENT FORM - Bento Box & Modern Dark Aesthetic SaaS Styling
+   Modal ancho + layout 60/40 + live preview + theme awareness
+   ========================================================================== */
 
 /* ---------- MODAL: ancho, altura y sombra suave ---------- */
 .modal__content--large.event-form-modal {
-  max-width: 900px;
+  max-width: 950px;
   max-height: 90vh;
   border-radius: 16px !important;
   overflow: hidden;
 }
 
 .event-form-modal.modal__content {
-  background: #fff !important;
-  border: 1px solid rgba(16, 24, 40, 0.06) !important;
-  box-shadow:
-    0 1px 2px rgba(16, 24, 40, 0.03),
-    0 8px 24px rgba(16, 24, 40, 0.08),
-    0 32px 80px rgba(16, 24, 40, 0.18) !important;
+  background: #111218 !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.05) !important;
+  color: #f8fafc;
 }
 
 /* Header: título grande a la izquierda + línea divisoria sutil */
 .event-form-modal .modal__header {
   padding: 1.5rem 2rem;
-  background: #fff;
-  border-bottom: 1px solid #eef0f2;
+  background: #111218;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .event-form-modal .modal__header::after {
@@ -32,68 +30,73 @@
 }
 
 .event-form-modal .modal__title {
-  font-size: 1.4rem;
+  font-size: 1.35rem;
   font-weight: 800;
-  letter-spacing: 0.03em;
-  color: #1a1a1a;
+  letter-spacing: -0.02em;
+  color: #ffffff;
 }
 
 .event-form-modal .modal__close {
-  border: 1px solid #e5e7eb;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 10px;
-  background: #f9fafb;
-  color: #6b7280;
-  width: 38px;
-  height: 38px;
+  background: rgba(255, 255, 255, 0.04);
+  color: #94a3b8;
+  width: 36px;
+  height: 36px;
   font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .event-form-modal .modal__close:hover {
-  background: #ff6b00;
-  border-color: #ff6b00;
+  background: #ef4444;
+  border-color: #ef4444;
   color: #fff;
   transform: scale(1.05);
 }
 
 .event-form-modal .modal__body {
-  padding: 30px;
+  padding: 24px 30px;
+  background: #111218;
+  color: #f8fafc;
 }
 
-/* ---------- SCROLLBAR PERSONALIZADA (delgada, gris clara) ---------- */
+/* ---------- SCROLLBAR PERSONALIZADA ---------- */
 .event-form-modal .modal__body::-webkit-scrollbar,
-.event-form-modal .modal__content::-webkit-scrollbar {
+.event-form-modal .modal__content::-webkit-scrollbar,
+.event-form-container .form-scroll-area::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 
 .event-form-modal .modal__body::-webkit-scrollbar-track,
-.event-form-modal .modal__content::-webkit-scrollbar-track {
+.event-form-modal .modal__content::-webkit-scrollbar-track,
+.event-form-container .form-scroll-area::-webkit-scrollbar-track {
   background: transparent;
-  border-left: none;
 }
 
 .event-form-modal .modal__body::-webkit-scrollbar-thumb,
-.event-form-modal .modal__content::-webkit-scrollbar-thumb {
-  background: #d1d5db;
+.event-form-modal .modal__content::-webkit-scrollbar-thumb,
+.event-form-container .form-scroll-area::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
   border-radius: 999px;
-  border: none;
 }
 
 .event-form-modal .modal__body::-webkit-scrollbar-thumb:hover,
-.event-form-modal .modal__content::-webkit-scrollbar-thumb:hover {
-  background: #9ca3af;
-}
-
-.event-form-modal .modal__body {
-  scrollbar-width: thin;
-  scrollbar-color: #d1d5db transparent;
+.event-form-container .form-scroll-area::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
 }
 
 /* ---------- GRID PRINCIPAL: 60% formulario / 40% preview ---------- */
+.event-form-container {
+  width: 100%;
+  color: #f8fafc;
+}
+
 .event-form-container .manager-form-grid {
   display: grid;
   grid-template-columns: 3fr 2fr;
-  gap: 1.75rem;
+  gap: 2rem;
   align-items: start;
 }
 
@@ -106,7 +109,10 @@
 .event-form-container .form-scroll-area {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 20px;
+  max-height: 75vh;
+  overflow-y: auto;
+  padding-right: 0.75rem;
 }
 
 .event-form-container .form-group,
@@ -126,25 +132,25 @@
 /* ---------- LABELS ---------- */
 .event-form-container .input__label,
 .event-form-container .event-label {
-  font-size: 0.7rem;
-  font-weight: 600;
-  color: #4b5563;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #cbd5e1;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
-  margin-bottom: 5px;
+  letter-spacing: 0.06em;
+  margin-bottom: 6px;
   display: block;
 }
 
 .event-form-container .event-label--xs {
-  font-size: 0.62rem;
+  font-size: 0.68rem;
 }
 
 .event-form-container .event-section-label {
-  font-size: 0.78rem;
-  font-weight: 700;
-  color: #374151;
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #ffffff;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.06em;
   display: block;
   margin-bottom: 0.75rem;
 }
@@ -154,94 +160,72 @@
   margin-bottom: 0;
 }
 
-/* ---------- INPUTS (componente Input) ---------- */
-.event-form-container .input {
-  width: 100%;
-  padding: 0.625rem 0.75rem;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  background: #f9fafb;
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: #1a1a1a;
-  box-sizing: border-box;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
-}
-
-.event-form-container .input:hover {
-  border-color: #d1d5db;
-}
-
-.event-form-container .input:focus {
-  outline: none;
-  border-color: #ff6b00;
-  background: #fff;
-  box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.12);
-}
-
-/* ---------- INPUTS NATIVOS (select/textarea/input del form) ---------- */
+/* ---------- INPUTS Y CONTROLES NATIVOS ---------- */
+.event-form-container .input,
 .event-form-container .event-input {
   width: 100%;
-  padding: 0.625rem 0.75rem;
-  border: 1px solid #e5e7eb;
+  padding: 0.75rem 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 8px;
-  background: #f9fafb;
-  font-size: 0.875rem;
+  background: #181922;
+  font-size: 0.9rem;
   font-weight: 500;
-  color: #1a1a1a;
+  color: #ffffff;
   font-family: inherit;
   box-sizing: border-box;
   transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
 }
 
+.event-form-container .input:hover,
 .event-form-container .event-input:hover {
-  border-color: #d1d5db;
+  border-color: rgba(255, 255, 255, 0.25);
 }
 
+.event-form-container .input:focus,
 .event-form-container .event-input:focus {
   outline: none;
-  border-color: #ff6b00;
-  background: #fff;
-  box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.12);
+  border-color: #6366f1;
+  background: #1c1d28;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
 }
 
 .event-form-container select.event-input {
   cursor: pointer;
   appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23ff6b00' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23818cf8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
   background-repeat: no-repeat;
-  background-position: right 12px center;
-  padding-right: 2.25rem;
+  background-position: right 14px center;
+  padding-right: 2.5rem;
 }
 
 .event-form-container textarea.event-input {
-  min-height: 120px;
+  min-height: 110px;
   resize: vertical;
   line-height: 1.5;
 }
 
-/* ---------- CAJA RECINTO / SALA ---------- */
+/* ---------- CAJA RECINTO / SALA (Bento Card) ---------- */
 .event-form-container .venue-chip-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 15px;
   align-items: center;
-  background: #f8fafc;
-  border: 1px solid #eef0f2;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 12px;
-  padding: 1rem;
+  padding: 1.25rem;
 }
 
 .event-form-container .venue-chip-grid .event-input {
-  background: #fff;
+  background: #181922;
 }
 
-/* ---------- SECCIÓN MULTIFUNCIÓN ---------- */
+/* ---------- SECCIÓN MULTIFUNCIÓN (Bento Box) ---------- */
 .event-form-container .functions-box {
-  background: #f9fafb;
-  border: 1px solid #eef0f2;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 12px;
-  padding: 1.15rem;
+  padding: 1.25rem;
 }
 
 .event-form-container .function-list {
@@ -250,25 +234,25 @@
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
 }
 
 .event-form-container .function-chip {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #fff;
-  border: 1px solid #eef0f2;
+  background: #181922;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 10px;
-  padding: 0.65rem 0.9rem;
-  font-size: 0.8rem;
+  padding: 0.75rem 1rem;
+  font-size: 0.85rem;
   font-weight: 500;
-  color: #374151;
+  color: #f8fafc;
 }
 
 .event-form-container .functions-box > p:last-child {
-  font-size: 0.72rem;
-  color: #9ca3af;
+  font-size: 0.75rem;
+  color: #94a3b8;
   margin: 0.75rem 0 0;
 }
 
@@ -288,26 +272,26 @@
   border-radius: 8px;
 }
 
-/* ---------- SUBIDA DE IMAGEN (dashed naranja) ---------- */
+/* ---------- SUBIDA DE IMAGEN ---------- */
 .event-form-container .image-upload-dropzone {
-  border: 2px dashed rgba(255, 107, 0, 0.5);
+  border: 2px dashed rgba(99, 102, 241, 0.4);
   border-radius: 12px;
   padding: 2rem 1.5rem;
   text-align: center;
   cursor: pointer;
-  background: rgba(255, 107, 0, 0.06);
+  background: rgba(99, 102, 241, 0.04);
   position: relative;
   overflow: hidden;
   transition: border-color 0.2s ease, background-color 0.2s ease;
 }
 
 .event-form-container .image-upload-dropzone:hover {
-  border-color: #ff6b00;
-  background: rgba(255, 107, 0, 0.1);
+  border-color: #6366f1;
+  background: rgba(99, 102, 241, 0.08);
 }
 
 .event-form-container .upload-camera-icon {
-  color: #ff6b00;
+  color: #818cf8;
   margin-bottom: 0.5rem;
 }
 
@@ -317,58 +301,50 @@
 }
 
 .event-form-container .upload-placeholder p:first-of-type {
-  color: #1f2937;
-  font-weight: 600;
-  font-size: 0.9rem;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.95rem;
   margin: 0 0 0.25rem;
 }
 
 .event-form-container .upload-placeholder p:last-of-type {
-  color: #9ca3af;
+  color: #94a3b8;
   font-weight: 400;
-  font-size: 0.75rem;
+  font-size: 0.78rem;
   margin: 0;
 }
 
 /* ---------- VISTA PREVIA ---------- */
 .event-form-container .preview-column {
-  background: #f3f4f6;
-  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
   padding: 1.5rem;
 }
 
 .event-form-container .preview-column .event-section-label {
   text-align: center;
-  margin-bottom: 1rem;
-  color: #6b7280;
+  margin-bottom: 1.25rem;
+  color: #94a3b8;
 }
 
 .event-form-container .preview-column > p:last-child {
-  color: #6b7280;
+  color: #64748b;
   font-size: 0.75rem;
   text-align: center;
 }
 
 .event-form-container .preview-column .btn--primary {
-  background: #ff6b00;
-  border-color: #ff6b00;
-  border-radius: 12px;
+  background: #6366f1;
+  border-color: #6366f1;
+  border-radius: 10px;
   font-weight: 800;
-}
-
-.event-form-container .preview-column .premium-event-card {
-  border-radius: 16px !important;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1) !important;
-  background: #ffffff !important;
-}
-
-.event-form-container .preview-column .premium-card-wrapper {
-  max-width: 100% !important;
 }
 
 .event-form-container .preview-column .preview-container {
   background: transparent !important;
   padding: 0 !important;
+  border: none !important;
 }
 
 /* ---------- CONFIGURACIÓN AVANZADA ---------- */
@@ -380,25 +356,25 @@
   margin: 0;
   background: transparent;
   border: none;
-  border-radius: 6px;
-  font-size: 0.72rem;
-  font-weight: 600;
-  color: #4b5563;
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #94a3b8;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  line-height: 1.4;
+  cursor: pointer;
+  transition: color 0.2s;
 }
 
 .event-form-container .advanced-toggle .btn:hover {
   background: transparent;
-  color: #ff6b00;
+  color: #ffffff;
 }
 
 .event-form-container .advanced-box {
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 12px;
-  padding: 1.15rem;
+  padding: 1.25rem;
 }
 
 .event-form-container .advanced-box-grid {
@@ -410,19 +386,19 @@
 /* ---------- CARACTERÍSTICAS HABILITADAS ---------- */
 .event-form-container .event-section-subtitle {
   display: block;
-  font-size: 0.7rem;
+  font-size: 0.74rem;
   font-weight: 500;
-  color: #9ca3af;
+  color: #94a3b8;
   text-transform: none;
   letter-spacing: 0;
   margin-top: 0.25rem;
 }
 
 .event-form-container .features-box {
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 12px;
-  padding: 1.15rem;
+  padding: 1.25rem;
 }
 
 .event-form-container .features-pills {
@@ -437,32 +413,27 @@
   align-items: center;
   gap: 6px;
   padding: 6px 14px;
-  background: #f3f4f6;
-  border: 1px solid #e5e7eb;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 999px;
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 0.04em;
-  color: #4b5563;
+  color: #94a3b8;
   text-transform: uppercase;
   white-space: nowrap;
 }
 
-.event-form-container .feature-pill svg {
-  display: inline-block;
-  vertical-align: middle;
-}
-
 .event-form-container .feature-pill--on {
-  background: rgba(255, 107, 0, 0.1);
-  border-color: rgba(255, 107, 0, 0.35);
-  color: #c2410c;
+  background: rgba(99, 102, 241, 0.15);
+  border-color: rgba(99, 102, 241, 0.4);
+  color: #c7d2fe;
 }
 
 .event-form-container .features-ads-link {
   margin-top: 1rem;
   padding-top: 1rem;
-  border-top: 1px solid #eef0f2;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 /* ---------- FOOTER: CANCELAR / GUARDAR EVENTO ---------- */
@@ -473,8 +444,8 @@
   gap: 15px;
   margin-top: auto;
   padding: 1.25rem 0 0;
-  border-top: 1px solid #eef0f2;
-  background: #fff;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  background: #111218;
   position: sticky;
   bottom: 0;
   z-index: 5;
@@ -482,8 +453,8 @@
 
 .event-form-container .form-actions .btn--outline {
   background: transparent;
-  border: 1px solid #e5e7eb;
-  color: #4b5563;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #cbd5e1;
   border-radius: 8px;
   font-weight: 600;
   letter-spacing: 0.04em;
@@ -491,32 +462,38 @@
 }
 
 .event-form-container .form-actions .btn--outline:hover:not(:disabled) {
-  background: #f3f4f6;
-  border-color: #d1d5db;
-  color: #374151;
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
 }
 
 .event-form-container .form-actions .btn--primary {
-  background: #ff6b00;
-  border: 1px solid #ff6b00;
-  color: #fff;
+  background: #6366f1;
+  border: 1px solid #6366f1;
+  color: #ffffff;
   border-radius: 8px;
   font-weight: 800;
-  letter-spacing: 0.06em;
-  padding: 0.7rem 1.6rem;
-  min-width: 150px;
-  box-shadow: 0 4px 14px rgba(255, 107, 0, 0.3);
+  letter-spacing: 0.04em;
+  padding: 0.75rem 1.75rem;
+  min-width: 160px;
+  box-shadow: 0 4px 16px rgba(99, 102, 241, 0.4);
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .event-form-container .form-actions .btn--primary:hover:not(:disabled) {
-  background: #e86200;
-  border-color: #e86200;
+  background: #4f46e5;
+  border-color: #4f46e5;
   transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5);
 }
 
 .event-form-container .form-actions .btn--primary:disabled {
-  background: #ffb27a;
-  border-color: #ffb27a;
+  background: rgba(99, 102, 241, 0.4);
+  border-color: transparent;
+  color: rgba(255, 255, 255, 0.6);
+  cursor: not-allowed;
+  transform: none;
 }
 
 /* ---------- RESPONSIVE ---------- */

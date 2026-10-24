@@ -448,6 +448,15 @@ const EventForm = ({ event = null, onSuccess, onClose }) => {
                 payload.location = 'Ubicación General';
             }
 
+            // Ensure contract_id is valid integer
+            if (activeContract?.id) {
+                payload.contract_id = parseInt(activeContract.id, 10);
+            } else if (formData.contract_id) {
+                payload.contract_id = parseInt(formData.contract_id, 10);
+            } else {
+                payload.contract_id = 1;
+            }
+
             // Seating map override
             if (!hasAdvancedPackage) payload.use_seating_map = false;
 
@@ -509,7 +518,7 @@ const EventForm = ({ event = null, onSuccess, onClose }) => {
                                     backdropFilter: 'blur(10px)'
                                 }}>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                                        <span style={{ fontSize: '1.5rem' }}>📝</span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#818cf8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
                                         <div style={{ textAlign: 'left' }}>
                                             <strong style={{ color: 'var(--primary, #6366f1)', fontSize: '0.9rem' }}>¡Borrador detectado!</strong>
                                             <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary, #64748b)', margin: 0 }}>Tienes progreso no guardado de una sesión anterior.</p>

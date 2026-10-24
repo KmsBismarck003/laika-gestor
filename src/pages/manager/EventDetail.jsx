@@ -83,19 +83,22 @@ const EventDetail = () => {
             {/* Header */}
             <div className="manager-header">
                 <div className="manager-title">
-                    <div className="flex items-center gap-3">
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
                         <button
                             onClick={() => navigate('/events/manage')}
-                            className="text-gray-500 hover:text-gray-800 mr-2"
+                            className="manager-back-btn"
                         >
-                            ← Volver
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                            Volver
                         </button>
-                        <h1 className="text-2xl font-bold">{event?.name || 'Evento'}</h1>
-                        <span className={`status-badge status-${event?.status || 'draft'} ml-3`}>
+                        <h1 style={{ fontSize: '1.75rem', fontWeight: 800, color: '#ffffff', margin: 0, letterSpacing: '-0.02em' }}>
+                            {event?.name || 'Evento'}
+                        </h1>
+                        <span className={`status-badge status-${event?.status || 'draft'}`}>
                             {(event?.status || 'draft').toUpperCase()}
                         </span>
                     </div>
-                    <p className="mt-1 text-gray-500">
+                    <p style={{ marginTop: '0.5rem', color: '#94a3b8', fontSize: '0.9rem' }}>
                         {event?.event_date ? new Date(event.event_date).toLocaleDateString() : 'Fecha no definida'} • {event?.location || 'Ubicación no definida'}
                     </p>
                 </div>
@@ -201,27 +204,41 @@ const EventDetail = () => {
                             </div>
                         )}
 
-                        {/* Functions List */}
+                        {/* Functions List Bento Card */}
                         {event.functions && event.functions.length > 0 && (
-                            <div className="manager-stat-card mb-6" style={{ gridColumn: '1 / -1' }}>
-                                <h3 className="font-bold text-lg mb-3"> Fechas Programadas</h3>
-                                <div className="overflow-x-auto">
-                                    <table className="w-full text-left border-collapse">
+                            <div className="bento-card">
+                                <div className="bento-card-header">
+                                    <h3 className="bento-card-title">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: '#818cf8' }}><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                                        Fechas y Recintos Programados
+                                    </h3>
+                                    <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>{event.functions.length} funciones configuradas</span>
+                                </div>
+                                <div style={{ overflowX: 'auto' }}>
+                                    <table className="functions-bento-table">
                                         <thead>
-                                            <tr className="border-b">
-                                                <th className="p-2">Fecha</th>
-                                                <th className="p-2">Hora</th>
-                                                <th className="p-2">Recinto</th>
-                                                <th className="p-2">Ciudad</th>
+                                            <tr>
+                                                <th>Fecha</th>
+                                                <th>Hora</th>
+                                                <th>Recinto</th>
+                                                <th>Ciudad</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             {event.functions.map((f, idx) => (
-                                                <tr key={idx} className="border-b hover:bg-gray-50">
-                                                    <td className="p-2">{new Date(f.date).toLocaleDateString()}</td>
-                                                    <td className="p-2 text-sm">{String(f.time).substring(0, 5)}</td>
-                                                    <td className="p-2">{f.venue_name || '—'}</td>
-                                                    <td className="p-2 text-sm text-gray-500">{f.venue_city || '—'}</td>
+                                                <tr key={idx}>
+                                                    <td>
+                                                        <span className="date-badge">{new Date(f.date).toLocaleDateString()}</span>
+                                                    </td>
+                                                    <td>
+                                                        <span className="time-badge">{String(f.time).substring(0, 5)} hrs</span>
+                                                    </td>
+                                                    <td style={{ fontWeight: 600, color: '#ffffff' }}>
+                                                        {f.venue_name || event.venue || 'Recinto Principal'}
+                                                    </td>
+                                                    <td>
+                                                        <span style={{ color: '#94a3b8', fontSize: '0.85rem' }}>{f.venue_city || event.location || '—'}</span>
+                                                    </td>
                                                 </tr>
                                             ))}
                                         </tbody>

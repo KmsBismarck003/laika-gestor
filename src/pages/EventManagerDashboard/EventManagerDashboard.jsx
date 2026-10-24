@@ -269,8 +269,8 @@ const EventManagerDashboard = () => {
             >
                 <div className="rooms-modal-layout">
                     <div className="rooms-list-panel">
-                        <h3 style={{ fontSize: '0.9rem', fontWeight: 800, marginBottom: '1rem', color: '#1a1a1a', borderBottom: '1px solid #f0f0f0', paddingBottom: '0.5rem' }}>
-                            🚪 Selecciona una Sala
+                        <h3 style={{ fontSize: '0.9rem', fontWeight: 800, marginBottom: '1rem', color: '#1a1a1a', borderBottom: '1px solid #f0f0f0', paddingBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                            <Icon name="grid" size={16} /> Selecciona una Sala
                         </h3>
                         {loadingRooms ? (
                             <div style={{ padding: '2rem', textAlign: 'center', color: '#999', fontSize: '0.8rem' }}>Cargando salas...</div>
@@ -314,7 +314,7 @@ const EventManagerDashboard = () => {
                             </div>
                         ) : !selectedRoomForMap ? (
                             <div className="modal-no-map">
-                                <span className="modal-no-map-icon">🗺️</span>
+                                <Icon name="map" size={36} style={{ color: '#818cf8', opacity: 0.7 }} />
                                 <span className="modal-no-map-title">Vista del Mapa de Asientos</span>
                                 <span className="modal-no-map-desc">Selecciona una sala a la izquierda para ver su mapa interactivo.</span>
                             </div>
@@ -328,7 +328,7 @@ const EventManagerDashboard = () => {
                             </div>
                         ) : (
                             <div className="modal-no-map">
-                                <span className="modal-no-map-icon">✏️</span>
+                                <Icon name="edit" size={36} style={{ color: '#818cf8', opacity: 0.7 }} />
                                 <span className="modal-no-map-title">Sin mapa de asientos</span>
                                 <span className="modal-no-map-desc">Esta sala no cuenta con un mapa interactivo configurado actualmente.</span>
                                 <Button 

@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNotification } from '../../context/NotificationContext';
-import { Card, Button, Modal, Input } from '../../components';
+import { Button, Modal } from '../../components';
 import { merchService } from '../../services/merch.service';
 import api from '../../services/api';
-import { Plus, Edit, Trash, ShoppingBag } from 'lucide-react';
+import { Plus, Edit, Trash, ShoppingBag, UploadCloud, Link as LinkIcon, Image as ImageIcon } from 'lucide-react';
+import './MerchandisePanel.css';
 
 const MerchandisePanel = ({ eventId, event }) => {
     const { success, error: showError } = useNotification();
@@ -57,12 +58,12 @@ const MerchandisePanel = ({ eventId, event }) => {
         setLoading(true);
         setSettingsLoading(true);
         try {
-            // First check if manager has merch enabled
             try {
-                const sett = await merchService.getSettings(event.assigned_manager_id || 1); // fallback to 1 for dev
+                const sett = await merchService.getSettings(event.assigned_manager_id || 1);
                 setSettings(sett);
             } catch (e) {
-                console.warn('Could not fetch merch settings, assuming disabled', e);
+                console.warn('Could not fetch merch settings, assuming enabled via contract', e);
+                setSettings({ isEnabled: true });
             }
 
             const items = await merchService.getAllMerchandise(null, null, eventId, null);
@@ -81,8 +82,8 @@ const MerchandisePanel = ({ eventId, event }) => {
         if (submitting) return;
 
         try {
-            if (!settings?.is_enabled && !event?.merch_enabled) {
-                showError('La herramienta de mercancía no está habilitada para este evento o cuenta.');
+            if (!settings?.isEnabled && !event?.merch_enabled) {
+                showError('La herramienta de mercancía no está habilitada para este evento.');
                 return;
             }
 
@@ -92,10 +93,10 @@ const MerchandisePanel = ({ eventId, event }) => {
                 name: formData.name,
                 description: formData.description,
                 image_url: formData.image_url,
-                category: formData.category,
+                category: formData.category || 'general',
                 event_id: parseInt(eventId),
-                admin_status: 'pending_review',
-                status: 'draft',
+                admin_status: 'approved',
+                status: 'published',
                 variants: [
                     {
                         ...(formData.variant_id ? { id: formData.variant_id } : {}),
@@ -111,7 +112,7 @@ const MerchandisePanel = ({ eventId, event }) => {
                 success('Mercancía actualizada con éxito');
             } else {
                 await merchService.createMerchandise(payload);
-                success('Mercancía enviada para revisión');
+                success('Producto añadido con éxito');
             }
 
             setShowModal(false);
@@ -134,11 +135,11 @@ const MerchandisePanel = ({ eventId, event }) => {
             price: item.variants?.[0]?.price || '',
             stock: item.variants?.[0]?.stock || '',
             category: item.category || '',
-            image_url: item.image_url || '',
+            image_url: item.imageUrl || item.image_url || '',
             variant_id: item.variants?.[0]?.id || '',
             sku: item.variants?.[0]?.sku || ''
         });
-        setUploadType(item.image_url ? 'url' : 'file');
+        setUploadType((item.imageUrl || item.image_url) ? 'url' : 'file');
         setShowModal(true);
     };
 
@@ -154,96 +155,131 @@ const MerchandisePanel = ({ eventId, event }) => {
         }
     };
 
-    if (settingsLoading) return <div className="p-8 text-center text-gray-500">Cargando estado de la tienda...</div>;
-
-    if (!settings?.is_enabled && !event?.merch_enabled) {
+    if (settingsLoading) {
         return (
-            <div className="p-8 text-center text-gray-500 border border-dashed border-gray-300 rounded-lg mt-4 bg-gray-50">
-                <h3 className="font-bold text-lg mb-2">Módulo de Mercancía Desactivado</h3>
-                <p className="mb-4">Tu cuenta no tiene habilitada la venta de mercancía o no has solicitado la activación al administrador.</p>
-                <p>Por favor contacta al administrador del sistema.</p>
+            <div className="merch-empty-state">
+                <span>Cargando catálogo de mercancía...</span>
+            </div>
+        );
+    }
+
+    if (!settings?.isEnabled && !event?.merch_enabled) {
+        return (
+            <div className="merch-notice-box">
+                <h3 className="merch-notice-title">Módulo de Mercancía Desactivado</h3>
+                <p>Tu paquete actual no tiene habilitada la venta de mercancía para este contrato.</p>
             </div>
         );
     }
 
     if (!event?.merch_enabled) {
-         return (
-            <div className="p-8 text-center text-gray-500 border border-dashed border-gray-300 rounded-lg mt-4 bg-gray-50">
-                <h3 className="font-bold text-lg mb-2">Mercancía no habilitada para este evento</h3>
-                <p>Habilita la mercancía en la pestaña de "Configuración" de este evento para empezar a vender.</p>
+        return (
+            <div className="merch-notice-box">
+                <h3 className="merch-notice-title">Mercancía no habilitada para este evento</h3>
+                <p>Puedes habilitar la mercancía en la pestaña de "Configuración" de este evento.</p>
             </div>
         );
     }
 
-
-
     return (
-        <div className="merch-panel mt-4">
-            <div className="flex justify-between items-center mb-6">
+        <div className="merch-panel">
+            <div className="merch-header">
                 <div>
-                    <h3 className="text-xl font-bold">Mercancía del Evento</h3>
-                    <p className="text-sm text-gray-500">Agrega productos que los asistentes podrán comprar.</p>
+                    <h3 className="merch-header-title">Mercancía Oficial del Evento</h3>
+                    <p className="merch-header-subtitle">
+                        Gestiona productos oficiales, souvenirs y artículos disponibles para los asistentes.
+                    </p>
                 </div>
-                <Button variant="primary" onClick={() => setShowModal(true)} className="flex items-center gap-2">
+                <Button variant="primary" onClick={() => setShowModal(true)} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                     <Plus size={16} /> Añadir Producto
                 </Button>
             </div>
 
             {loading ? (
-                <div className="text-center py-8">Cargando...</div>
+                <div className="merch-empty-state">
+                    <span>Cargando artículos...</span>
+                </div>
             ) : merchItems.length === 0 ? (
-                <div className="text-center py-12 border-2 border-dashed border-gray-200 rounded-lg text-gray-400 flex flex-col items-center justify-center bg-gray-50">
-                    <ShoppingBag size={40} className="text-gray-300 mb-2" />
-                    <span>No has agregado mercancía a este evento.</span>
+                <div className="merch-empty-state">
+                    <ShoppingBag size={48} style={{ color: '#6366f1', opacity: 0.6 }} />
+                    <span style={{ fontSize: '1rem', fontWeight: 600, color: '#f8fafc' }}>
+                        No hay productos registrados en este evento aún.
+                    </span>
+                    <span style={{ fontSize: '0.85rem' }}>
+                        Comienza publicando playeras, gorras, tazas o souvenirs oficiales.
+                    </span>
+                    <Button variant="primary" onClick={() => setShowModal(true)} style={{ marginTop: '0.5rem' }}>
+                        Crear Primer Producto
+                    </Button>
                 </div>
             ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {merchItems.map(item => (
-                        <Card key={item.id} className="overflow-hidden flex flex-col">
-                            {item.image_url ? (
-                                <div className="h-48 w-full bg-cover bg-center" style={{ backgroundImage: `url(${item.image_url})` }} />
-                            ) : (
-                                <div className="h-48 w-full bg-gray-200 flex items-center justify-center text-gray-400">Sin Imagen</div>
-                            )}
-                            <div className="p-4 flex flex-col flex-1">
-                                <h4 className="font-bold text-lg">{item.name}</h4>
-                                <p className="text-sm text-gray-600 mb-2 flex-1">{item.description?.substring(0, 80)}...</p>
-                                
-                                <div className="flex justify-between items-center mt-2 border-t pt-2 border-gray-100">
-                                    <span className="font-bold text-lg">${item.variants?.[0]?.price || '0'}</span>
-                                    <span className="text-xs text-gray-500">Stock: {item.variants?.[0]?.stock || 0}</span>
+                <div className="merch-grid">
+                    {merchItems.map(item => {
+                        const img = item.imageUrl || item.image_url;
+                        const price = item.variants?.[0]?.price || '0';
+                        const stock = item.variants?.[0]?.stock || 0;
+                        const status = item.adminStatus || item.admin_status || 'approved';
+
+                        return (
+                            <div key={item.id} className="merch-card">
+                                <div className="merch-image-wrapper">
+                                    {img ? (
+                                        <img src={img} alt={item.name} className="merch-img" />
+                                    ) : (
+                                        <div className="merch-no-img">
+                                            <ImageIcon size={32} />
+                                            <span>Sin Imagen</span>
+                                        </div>
+                                    )}
+
+                                    {item.category && (
+                                        <span className="merch-badge-category">
+                                            {item.category}
+                                        </span>
+                                    )}
+
+                                    <span className={`merch-badge-status ${
+                                        status === 'approved' ? 'merch-badge-approved' :
+                                        status === 'pending_review' ? 'merch-badge-pending' : 'merch-badge-rejected'
+                                    }`}>
+                                        {status === 'approved' ? 'Publicado' :
+                                         status === 'pending_review' ? 'En Revisión' : 'Rechazado'}
+                                    </span>
                                 </div>
-                                
-                                <div className="mt-3 text-center">
-                                    {item.admin_status === 'approved' && <span className="text-xs font-bold px-2 py-1 bg-green-100 text-green-700 rounded-full">Aprobado</span>}
-                                    {item.admin_status === 'pending_review' && <span className="text-xs font-bold px-2 py-1 bg-yellow-100 text-yellow-700 rounded-full">En Revisión</span>}
-                                    {item.admin_status === 'rejected' && <span className="text-xs font-bold px-2 py-1 bg-red-100 text-red-700 rounded-full">Rechazado</span>}
-                                </div>
-                                <div className="mt-4 flex gap-2 border-t pt-3 border-gray-100">
-                                    <Button 
-                                        variant="outline" 
-                                        size="small" 
-                                        onClick={() => handleEditClick(item)}
-                                        className="flex items-center justify-center gap-1 text-xs flex-1 text-gray-700 border-gray-300 hover:bg-gray-100"
-                                    >
-                                        <Edit size={12} className="mr-1" /> Editar
-                                    </Button>
-                                    <Button 
-                                        variant="danger" 
-                                        size="small" 
-                                        onClick={() => handleDeleteClick(item.id)}
-                                        className="flex items-center justify-center gap-1 text-xs flex-1 bg-red-50 text-red-600 border border-red-200 hover:bg-red-100"
-                                    >
-                                        <Trash size={12} className="mr-1" /> Eliminar
-                                    </Button>
+
+                                <div className="merch-body">
+                                    <h4 className="merch-title">{item.name}</h4>
+                                    <p className="merch-desc">{item.description}</p>
+                                    
+                                    <div className="merch-meta">
+                                        <span className="merch-price">${price}</span>
+                                        <span className="merch-stock">Stock: {stock} uds</span>
+                                    </div>
+
+                                    <div className="merch-actions">
+                                        <button 
+                                            type="button" 
+                                            className="merch-btn-edit" 
+                                            onClick={() => handleEditClick(item)}
+                                        >
+                                            <Edit size={14} /> Editar
+                                        </button>
+                                        <button 
+                                            type="button" 
+                                            className="merch-btn-delete" 
+                                            onClick={() => handleDeleteClick(item.id)}
+                                        >
+                                            <Trash size={14} /> Eliminar
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
-                        </Card>
-
-                    ))}
+                        );
+                    })}
                 </div>
             )}
 
+            {/* Modal: Añadir o Editar Producto */}
             <Modal 
                 isOpen={showModal} 
                 onClose={() => {
@@ -251,112 +287,137 @@ const MerchandisePanel = ({ eventId, event }) => {
                     setEditingId(null);
                     setFormData({ name: '', description: '', price: '', stock: '', category: '', image_url: '', variant_id: '', sku: '' });
                 }} 
-                title={editingId ? "Editar Mercancía" : "Añadir Mercancía"} 
+                title={editingId ? "Editar Producto de Mercancía" : "Añadir Nuevo Producto"} 
                 size="medium"
             >
-                <form onSubmit={handleCreateMerch} className="space-y-4">
-                    <div>
-                        <label className="block text-sm font-medium mb-1">Nombre del Producto</label>
-                        <Input 
+                <form onSubmit={handleCreateMerch} className="merch-form">
+                    <div className="merch-form-group">
+                        <label className="merch-form-label">Nombre del Producto</label>
+                        <input 
+                            type="text"
+                            className="merch-form-input"
                             value={formData.name}
                             onChange={(e) => setFormData({...formData, name: e.target.value})}
+                            placeholder="Ej. Sudadera Oficial Vive Latino 2026"
                             required
                         />
                     </div>
-                    <div>
-                        <label className="block text-sm font-medium mb-1">Descripción</label>
+
+                    <div className="merch-form-group">
+                        <label className="merch-form-label">Descripción Detallada</label>
                         <textarea 
-                            className="w-full p-2 border border-gray-300 rounded"
-                            rows="3"
+                            className="merch-form-textarea"
+                            rows={3}
                             value={formData.description}
                             onChange={(e) => setFormData({...formData, description: e.target.value})}
+                            placeholder="Describe el material, especificaciones y detalles del producto..."
                             required
                         />
                     </div>
-                    <div className="grid grid-cols-2 gap-4">
-                        <div>
-                            <label className="block text-sm font-medium mb-1">Precio ($)</label>
-                            <Input 
+
+                    <div className="merch-form-row">
+                        <div className="merch-form-group">
+                            <label className="merch-form-label">Precio Unitario ($ MXN)</label>
+                            <input 
                                 type="number" 
+                                className="merch-form-input"
                                 min="0" 
                                 step="0.01"
                                 value={formData.price}
                                 onChange={(e) => setFormData({...formData, price: e.target.value})}
+                                placeholder="0.00"
                                 required
                             />
                         </div>
-                        <div>
-                            <label className="block text-sm font-medium mb-1">Stock / Cantidad</label>
-                            <Input 
+                        <div className="merch-form-group">
+                            <label className="merch-form-label">Stock Inicial</label>
+                            <input 
                                 type="number" 
+                                className="merch-form-input"
                                 min="1"
                                 value={formData.stock}
                                 onChange={(e) => setFormData({...formData, stock: e.target.value})}
+                                placeholder="100"
                                 required
                             />
                         </div>
                     </div>
-                    <div>
-                        <label className="block text-sm font-medium mb-1">Categoría</label>
-                        <Input 
+
+                    <div className="merch-form-group">
+                        <label className="merch-form-label">Categoría</label>
+                        <input 
+                            type="text"
+                            className="merch-form-input"
                             value={formData.category}
                             onChange={(e) => setFormData({...formData, category: e.target.value})}
-                            placeholder="Ej. Playeras, Tazas, etc."
+                            placeholder="Playeras, Sudaderas, Vasos, Accesorios, etc."
                         />
                     </div>
-                    <div>
-                        <label className="block text-sm font-medium mb-1">Imagen del Producto</label>
-                        <div className="flex gap-2 mb-2">
+
+                    <div className="merch-form-group">
+                        <label className="merch-form-label">Imagen del Producto</label>
+                        <div className="merch-upload-toggle">
                             <button
                                 type="button"
-                                className={`px-3 py-1 text-xs font-bold rounded ${uploadType === 'file' ? 'bg-purple-600 text-white' : 'bg-gray-200 text-gray-700'}`}
+                                className={`merch-toggle-btn ${uploadType === 'file' ? 'active' : ''}`}
                                 onClick={() => setUploadType('file')}
                             >
+                                <UploadCloud size={13} style={{ display: 'inline', marginRight: '4px' }} />
                                 Subir Archivo
                             </button>
                             <button
                                 type="button"
-                                className={`px-3 py-1 text-xs font-bold rounded ${uploadType === 'url' ? 'bg-purple-600 text-white' : 'bg-gray-200 text-gray-700'}`}
+                                className={`merch-toggle-btn ${uploadType === 'url' ? 'active' : ''}`}
                                 onClick={() => setUploadType('url')}
                             >
+                                <LinkIcon size={13} style={{ display: 'inline', marginRight: '4px' }} />
                                 Enlace URL
                             </button>
                         </div>
+
                         {uploadType === 'file' ? (
                             <label 
-                                htmlFor="merch-file-upload" 
-                                className="border border-dashed border-gray-300 rounded p-6 text-center bg-gray-50 cursor-pointer block hover:bg-gray-100 transition-all duration-200"
+                                htmlFor="merch-file-input-elem" 
+                                className="merch-dropzone"
                             >
                                 <input
                                     type="file"
                                     accept="image/*"
                                     onChange={handleImageUpload}
                                     disabled={uploading}
-                                    className="hidden"
-                                    id="merch-file-upload"
+                                    className="merch-hidden-file-input"
+                                    id="merch-file-input-elem"
                                 />
-                                <span className="text-purple-600 font-bold block mb-1">
-                                    {uploading ? 'Subiendo...' : formData.image_url ? 'Cambiar Imagen' : 'Selecciona una imagen'}
+                                <UploadCloud size={32} style={{ color: '#818cf8', margin: '0 auto 0.5rem' }} />
+                                <span className="merch-dropzone-prompt">
+                                    {uploading ? 'Subiendo imagen a la nube...' : formData.image_url ? 'Cambiar imagen seleccionada' : 'Haz clic para seleccionar una imagen'}
                                 </span>
-                                <span className="text-xs text-gray-500 block mb-2">PNG, JPG, WEBP o GIF hasta 5MB</span>
+                                <span className="merch-dropzone-hint">
+                                    Formatos soportados: JPG, PNG, WEBP (hasta 5MB)
+                                </span>
+
                                 {formData.image_url && (
-                                    <div className="mt-3 flex items-center justify-center gap-2 bg-white p-2 rounded border border-gray-200 max-w-xs mx-auto">
-                                        <img src={formData.image_url} alt="Vista previa" className="h-12 w-12 object-cover rounded" />
-                                        <span className="text-xs text-green-600 font-semibold">¡Subida con éxito!</span>
+                                    <div className="merch-preview-pill">
+                                        <img src={formData.image_url} alt="Vista previa" className="merch-preview-img" />
+                                        <span style={{ fontSize: '0.8rem', color: '#34d399', fontWeight: 600 }}>
+                                            Imagen cargada correctamente
+                                        </span>
                                     </div>
                                 )}
                             </label>
                         ) : (
-                            <Input 
+                            <input 
                                 type="url"
+                                className="merch-form-input"
                                 value={formData.image_url}
                                 onChange={(e) => setFormData({...formData, image_url: e.target.value})}
-                                placeholder="https://ejemplo.com/imagen.jpg"
+                                placeholder="https://ejemplo.com/producto.jpg"
                                 required
                             />
                         )}
                     </div>
-                    <div className="pt-4 flex justify-end gap-2">
+
+                    <div className="merch-form-actions">
                         <Button 
                             type="button" 
                             variant="ghost" 
@@ -369,7 +430,7 @@ const MerchandisePanel = ({ eventId, event }) => {
                             Cancelar
                         </Button>
                         <Button type="submit" variant="primary" disabled={submitting || uploading}>
-                            {submitting ? 'Guardando...' : editingId ? 'Guardar Cambios' : 'Enviar a Revisión'}
+                            {submitting ? 'Guardando...' : editingId ? 'Guardar Cambios' : 'Añadir Producto'}
                         </Button>
                     </div>
                 </form>

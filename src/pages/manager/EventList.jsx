@@ -171,7 +171,7 @@ const EventList = () => {
                                     <tr key={event.id} style={{ cursor: 'pointer' }} onClick={() => navigate(`/events/manage/${event.id}`)}>
                                         <td>
                                             <div className="event-cell-name">{event.name}</div>
-                                            <small className="text-muted">{event.category}</small>
+                                            <div className="event-cell-category">{event.category}</div>
                                         </td>
                                         <td className="event-cell-date">
                                             {new Date(event.event_date).toLocaleDateString()}

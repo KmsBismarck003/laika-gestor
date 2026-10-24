@@ -1,424 +1,547 @@
-/* Manager Module - Centralized Styles */
+/* ==========================================================================
+   Manager Module - Bento Box & Modern Dark Aesthetic Design System
+   ========================================================================== */
 
-/* ============================================
-   Variables & Theme Overrides
-   ============================================ */
-.manager-container {
-  --manager-bg: var(--bg-primary, #ffffff);
-  --manager-card-bg: var(--bg-secondary, #f8f9fa);
-  --manager-border: var(--border-color, #e9ecef);
-  --manager-text: var(--text-primary, #212529);
-  --manager-text-muted: var(--text-secondary, #6c757d);
-  --manager-accent: var(--primary, #000000);
-  --manager-danger: #dc3545;
-  --manager-success: #28a745;
-  --manager-warning: #ffc107;
-
-  width: 100%;
-  min-height: 100%;
-  padding: var(--spacing-6, 1.5rem);
-  background: var(--manager-bg);
-  color: var(--manager-text);
+:root {
+  --manager-bg: #09090b;
+  --manager-card-bg: #111218;
+  --manager-card-surface: rgba(255, 255, 255, 0.03);
+  --manager-card-hover: rgba(255, 255, 255, 0.06);
+  --manager-border: rgba(255, 255, 255, 0.08);
+  --manager-border-subtle: rgba(255, 255, 255, 0.05);
+  --manager-border-glow: rgba(99, 102, 241, 0.3);
+  
+  --manager-text: #f8fafc;
+  --manager-text-secondary: #cbd5e1;
+  --manager-text-muted: #94a3b8;
+  
+  --manager-accent: #6366f1;
+  --manager-accent-hover: #4f46e5;
+  --manager-accent-light: rgba(99, 102, 241, 0.15);
+  
+  --manager-danger: #ef4444;
+  --manager-danger-bg: rgba(239, 68, 68, 0.12);
+  --manager-danger-border: rgba(239, 68, 68, 0.25);
+  
+  --manager-success: #10b981;
+  --manager-success-bg: rgba(16, 185, 129, 0.12);
+  --manager-success-border: rgba(16, 185, 129, 0.25);
+  
+  --manager-warning: #f59e0b;
+  --manager-warning-bg: rgba(245, 158, 11, 0.12);
+  --manager-warning-border: rgba(245, 158, 11, 0.25);
+  
+  --manager-radius-sm: 8px;
+  --manager-radius-md: 12px;
+  --manager-radius-lg: 16px;
+  --manager-radius-full: 9999px;
+  
+  --manager-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --manager-shadow-md: 0 8px 24px -4px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.06);
+  --manager-shadow-glow: 0 0 20px rgba(99, 102, 241, 0.15);
 }
 
-/* ============================================
-     Layout & Header
-     ============================================ */
+/* ==========================================================================
+   Base Layout
+   ========================================================================== */
+.manager-container {
+  width: 100%;
+  min-height: 100vh;
+  padding: 2rem;
+  background-color: var(--manager-bg);
+  color: var(--manager-text);
+  box-sizing: border-box;
+}
+
+/* Header */
 .manager-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: var(--spacing-8, 2rem);
-  padding-bottom: var(--spacing-4, 1rem);
+  margin-bottom: 2rem;
+  padding-bottom: 1.25rem;
   border-bottom: 1px solid var(--manager-border);
 }
 
 .manager-title h1 {
-  font-size: 1.75rem;
-  font-weight: 700;
+  font-size: 1.85rem;
+  font-weight: 800;
   margin: 0;
-  letter-spacing: -0.5px;
+  letter-spacing: -0.03em;
+  color: #ffffff;
 }
 
 .manager-title p {
-  margin: 0.5rem 0 0;
+  margin: 0.35rem 0 0;
   color: var(--manager-text-muted);
   font-size: 0.95rem;
 }
 
 .manager-actions {
   display: flex;
-  gap: var(--spacing-3, 0.75rem);
+  align-items: center;
+  gap: 0.75rem;
 }
 
-/* ============================================
-     Stats Grid
-     ============================================ */
+/* Back Link Button */
+.manager-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--manager-text-muted);
+  background: transparent;
+  border: 1px solid var(--manager-border);
+  border-radius: var(--manager-radius-sm);
+  padding: 0.45rem 0.85rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.manager-back-btn:hover {
+  color: #ffffff;
+  background: var(--manager-card-hover);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* ==========================================================================
+   Bento Stats Grid
+   ========================================================================== */
 .manager-stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: var(--spacing-5, 1.25rem);
-  margin-bottom: var(--spacing-8, 2rem);
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 2rem;
 }
 
 .manager-stat-card {
   background: var(--manager-card-bg);
   border: 1px solid var(--manager-border);
-  border-radius: 12px;
+  border-radius: var(--manager-radius-lg);
   padding: 1.5rem;
   display: flex;
   align-items: center;
-  gap: 1rem;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  gap: 1.25rem;
+  box-shadow: var(--manager-shadow-sm);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), 
+              border-color 0.25s ease, 
+              box-shadow 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.manager-stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.5), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
 .manager-stat-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  border-color: var(--manager-accent);
+  transform: translateY(-3px);
+  border-color: rgba(99, 102, 241, 0.4);
+  box-shadow: var(--manager-shadow-md), var(--manager-shadow-glow);
+}
+
+.manager-stat-card:hover::before {
+  opacity: 1;
 }
 
 .stat-icon-wrapper {
-  width: 48px;
-  height: 48px;
-  border-radius: 10px;
-  background: rgba(0, 0, 0, 0.05);
+  width: 52px;
+  height: 52px;
+  border-radius: var(--manager-radius-md);
+  background: rgba(99, 102, 241, 0.12);
+  border: 1px solid rgba(99, 102, 241, 0.25);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.5rem;
-  color: var(--manager-accent);
+  color: #818cf8;
+  font-size: 1.4rem;
+  flex-shrink: 0;
 }
 
 .stat-info {
   flex: 1;
+  min-width: 0;
 }
 
 .stat-label {
   display: block;
-  font-size: 0.85rem;
+  font-size: 0.78rem;
   color: var(--manager-text-muted);
-  margin-bottom: 0.25rem;
-  font-weight: 600;
+  margin-bottom: 0.35rem;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.06em;
 }
 
 .stat-value {
   display: block;
-  font-size: 1.5rem;
+  font-size: 1.75rem;
   font-weight: 800;
-  color: var(--manager-text);
-  line-height: 1;
+  color: #ffffff;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
 }
 
-/* ============================================
-     Event List (Table)
-     ============================================ */
+/* ==========================================================================
+   Bento Box Table: Event List
+   ========================================================================== */
 .manager-table-container {
   background: var(--manager-card-bg);
   border: 1px solid var(--manager-border);
-  border-radius: 12px;
+  border-radius: var(--manager-radius-lg);
   overflow: hidden;
   margin-bottom: 2rem;
+  box-shadow: var(--manager-shadow-sm);
 }
 
 .manager-table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
+  text-align: left;
 }
 
-/* Table Header */
 .manager-table thead {
-  background: var(--manager-accent, #000000);
+  background: rgba(255, 255, 255, 0.02);
+  border-bottom: 1px solid var(--manager-border);
 }
 
 .manager-table th {
-  padding: 1rem;
-  text-align: left;
-  font-weight: 600;
-  font-size: 0.85rem;
-  color: #ffffff;
+  padding: 1rem 1.25rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--manager-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
   border-bottom: 1px solid var(--manager-border);
 }
 
 .manager-table td {
-  padding: 1rem;
-  border-bottom: 1px solid var(--manager-border);
+  padding: 1.15rem 1.25rem;
+  font-size: 0.9rem;
+  color: var(--manager-text);
+  border-bottom: 1px solid var(--manager-border-subtle);
   vertical-align: middle;
+  transition: background-color 0.15s ease;
 }
 
 .manager-table tr:last-child td {
   border-bottom: none;
 }
 
-.manager-table tr:hover td {
-  background: rgba(0, 0, 0, 0.01);
+.manager-table tbody tr {
+  transition: background-color 0.2s ease;
+}
+
+.manager-table tbody tr:hover td {
+  background-color: var(--manager-card-hover);
 }
 
 .event-cell-name {
+  font-weight: 700;
+  color: #ffffff;
+  font-size: 0.95rem;
+  line-height: 1.3;
+}
+
+.event-cell-category {
+  display: inline-block;
+  font-size: 0.72rem;
   font-weight: 600;
-  color: var(--manager-text);
+  color: #818cf8;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-top: 0.2rem;
 }
 
 .event-cell-date {
-  font-size: 0.9rem;
+  font-size: 0.88rem;
+  color: var(--manager-text-secondary);
+  font-weight: 500;
+}
+
+.event-cell-date small {
+  display: block;
+  font-size: 0.76rem;
   color: var(--manager-text-muted);
+  margin-top: 0.15rem;
 }
 
 /* Status Badges */
 .status-badge {
   display: inline-flex;
   align-items: center;
-  padding: 0.25rem 0.75rem;
-  border-radius: 999px;
+  gap: 0.4rem;
+  padding: 0.3rem 0.75rem;
+  border-radius: var(--manager-radius-full);
   font-size: 0.75rem;
-  font-weight: 600;
-  /* text-transform: uppercase; */
-  letter-spacing: 0.5px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.status-badge::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.status-published, .status-active {
+  background: var(--manager-success-bg);
+  color: #34d399;
+  border: 1px solid var(--manager-success-border);
+}
+.status-published::before, .status-active::before {
+  background: #34d399;
+  box-shadow: 0 0 8px #34d399;
 }
 
 .status-draft {
-  background: #e2e3e5;
-  color: #383d41;
+  background: rgba(148, 163, 184, 0.12);
+  color: #cbd5e1;
+  border: 1px solid rgba(148, 163, 184, 0.25);
 }
-
-.status-published {
-  background: #d4edda;
-  color: #155724;
-}
-
-.status-completed {
-  background: #cce5ff;
-  color: #004085;
+.status-draft::before {
+  background: #94a3b8;
 }
 
 .status-cancelled {
-  background: #f8d7da;
-  color: #721c24;
+  background: var(--manager-danger-bg);
+  color: #f87171;
+  border: 1px solid var(--manager-danger-border);
+}
+.status-cancelled::before {
+  background: #f87171;
+}
+
+.status-completed {
+  background: rgba(99, 102, 241, 0.15);
+  color: #a5b4fc;
+  border: 1px solid rgba(99, 102, 241, 0.3);
+}
+.status-completed::before {
+  background: #818cf8;
 }
 
 .status-sold_out {
-  background: #fff3cd;
-  color: #856404;
+  background: var(--manager-warning-bg);
+  color: #fbbf24;
+  border: 1px solid var(--manager-warning-border);
+}
+.status-sold_out::before {
+  background: #fbbf24;
 }
 
 .status-archived {
-  background: #d6d8d9;
-  color: #1b1e21;
+  background: rgba(100, 116, 139, 0.15);
+  color: #94a3b8;
+  border: 1px solid rgba(100, 116, 139, 0.25);
+}
+.status-archived::before {
+  background: #64748b;
 }
 
 .action-buttons {
   display: flex;
+  align-items: center;
   gap: 0.5rem;
 }
 
-/* ============================================
-     Event Detail View (Tabs)
-     ============================================ */
+/* ==========================================================================
+   Event Detail Navigation Tabs
+   ========================================================================== */
 .manager-tabs {
   display: flex;
-  gap: 2rem;
+  gap: 0.5rem;
   border-bottom: 1px solid var(--manager-border);
   margin-bottom: 2rem;
+  padding-bottom: 0.5rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.manager-tabs::-webkit-scrollbar {
+  display: none;
 }
 
 .tab-button {
-  background: none;
-  border: none;
-  padding: 1rem 0;
-  font-size: 1rem;
-  font-weight: 500;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--manager-radius-md);
+  padding: 0.65rem 1.25rem;
+  font-size: 0.88rem;
+  font-weight: 600;
   color: var(--manager-text-muted);
   cursor: pointer;
-  position: relative;
-  transition: color 0.2s;
+  white-space: nowrap;
+  transition: all 0.2s ease;
 }
 
 .tab-button:hover {
-  color: var(--manager-text);
+  color: #ffffff;
+  background: var(--manager-card-hover);
 }
 
 .tab-button.active {
-  color: var(--manager-accent);
-  font-weight: 600;
-}
-
-.tab-button.active::after {
-  content: '';
-  position: absolute;
-  bottom: -1px;
-  left: 0;
-  width: 100%;
-  height: 3px;
-  background: var(--manager-accent);
-  border-radius: 3px 3px 0 0;
-}
-
-/* ============================================
-     Ticket Overview Panel
-     ============================================ */
-.ticket-progress-container {
-  background: var(--manager-card-bg);
-  border-radius: 12px;
-  padding: 1.5rem;
-  margin-bottom: 2rem;
-  border: 1px solid var(--manager-border);
-}
-
-.progress-header {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 1rem;
-}
-
-.progress-bar-bg {
-  height: 12px;
-  background: #e9ecef;
-  border-radius: 6px;
-  overflow: hidden;
-}
-
-.progress-bar-fill {
-  height: 100%;
-  background: var(--manager-accent);
-  transition: width 0.5s ease;
-}
-
-.ticket-stats-mini-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1rem;
-  margin-top: 1.5rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--manager-border);
-}
-
-.mini-stat {
-  text-align: center;
-}
-
-.mini-stat-val {
-  display: block;
-  font-size: 1.25rem;
+  color: #ffffff;
+  background: rgba(99, 102, 241, 0.15);
+  border-color: rgba(99, 102, 241, 0.35);
+  box-shadow: 0 0 15px rgba(99, 102, 241, 0.15);
   font-weight: 700;
 }
 
-.mini-stat-label {
-  font-size: 0.75rem;
-  color: var(--manager-text-muted);
-  text-transform: uppercase;
-}
-
-/* ============================================
-     Revenue Panel
-     ============================================ */
-.revenue-detail-grid {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 2rem;
-}
-
-.revenue-main-card {
+/* ==========================================================================
+   Detail Card & Functions Bento Table
+   ========================================================================== */
+.bento-card {
   background: var(--manager-card-bg);
-  padding: 2rem;
-  border-radius: 12px;
   border: 1px solid var(--manager-border);
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  border-radius: var(--manager-radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--manager-shadow-sm);
+  margin-bottom: 1.5rem;
 }
 
-.total-revenue-display {
-  font-size: 3.5rem;
-  font-weight: 800;
-  color: var(--manager-accent);
-  margin: 1rem 0;
-}
-
-.revenue-breakdown {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.breakdown-item {
+.bento-card-header {
   display: flex;
   justify-content: space-between;
-  padding: 1rem;
-  background: var(--bg-primary);
-  border-radius: 8px;
-  border: 1px solid var(--manager-border);
-}
-
-/* ============================================
-     Card Preview
-     ============================================ */
-.preview-container {
-  background: #f0f0f0;
-  /* Simulate page bg */
-  padding: 2rem;
-  border-radius: 12px;
-  display: flex;
-  justify-content: center;
   align-items: center;
-  border: 2px dashed var(--manager-border);
-  margin-bottom: 2rem;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--manager-border-subtle);
 }
 
-/* ============================================
-     Forms
-     ============================================ */
-.manager-form-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
+.bento-card-title {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
 }
 
-.form-full-width {
-  grid-column: 1 / -1;
+.functions-bento-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  text-align: left;
 }
 
+.functions-bento-table th {
+  padding: 0.85rem 1rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--manager-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border-bottom: 1px solid var(--manager-border);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.functions-bento-table td {
+  padding: 1rem;
+  font-size: 0.88rem;
+  color: var(--manager-text);
+  border-bottom: 1px solid var(--manager-border-subtle);
+  vertical-align: middle;
+}
+
+.functions-bento-table tr:last-child td {
+  border-bottom: none;
+}
+
+.functions-bento-table tr:hover td {
+  background-color: var(--manager-card-hover);
+}
+
+.date-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.65rem;
+  background: rgba(99, 102, 241, 0.12);
+  border: 1px solid rgba(99, 102, 241, 0.25);
+  border-radius: var(--manager-radius-sm);
+  color: #a5b4fc;
+  font-weight: 600;
+  font-size: 0.82rem;
+}
+
+.time-badge {
+  font-family: monospace;
+  font-weight: 600;
+  color: var(--manager-text-secondary);
+}
+
+/* ==========================================================================
+   Danger Zone
+   ========================================================================== */
 .danger-zone {
-  border: 1px solid var(--manager-danger);
-  background: rgba(220, 53, 69, 0.05);
-  border-radius: 12px;
-  padding: 2rem;
-  margin-top: 3rem;
+  border: 1px solid var(--manager-danger-border);
+  background: var(--manager-danger-bg);
+  border-radius: var(--manager-radius-lg);
+  padding: 1.75rem;
+  margin-top: 2.5rem;
 }
 
 .danger-header {
   color: var(--manager-danger);
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.65rem;
 }
 
-/* ============================================
-     Responsive
-     ============================================ */
+.danger-header h3 {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 800;
+}
+
+.danger-zone p {
+  color: #fca5a5;
+  font-size: 0.9rem;
+  margin-bottom: 1.25rem;
+  line-height: 1.5;
+}
+
+/* ==========================================================================
+   Responsive Adaptations
+   ========================================================================== */
 @media (max-width: 768px) {
-
-  .manager-form-grid,
-  .revenue-detail-grid,
-  .manager-stats-grid,
-  .ticket-stats-mini-grid {
-    grid-template-columns: 1fr;
+  .manager-container {
+    padding: 1.25rem;
   }
-
+  
   .manager-header {
     flex-direction: column;
     align-items: flex-start;
     gap: 1rem;
   }
-
+  
   .manager-actions {
     width: 100%;
+    justify-content: flex-start;
   }
-
-  .manager-actions button {
-    flex: 1;
+  
+  .manager-stats-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .manager-table th,
+  .manager-table td {
+    padding: 0.85rem;
   }
 }
