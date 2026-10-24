@@ -4,6 +4,7 @@ import Button from '../../components/Button';
 import Input from '../../components/Input';
 import { Icon, Modal } from '../../components';
 import api, { venueAPI } from '../../services/api';
+import { b2bAPI } from '../../services/b2bService';
 import { useNotification } from '../../context/NotificationContext';
 import { useAuth } from '../../context/AuthContext';
 import EventCardPreview from './EventCardPreview';
@@ -27,6 +28,7 @@ const EventForm = ({ event = null, onSuccess, onClose }) => {
     const location = useLocation();
     const { success, error, warning } = useNotification();
     const { user } = useAuth();
+    const [activeContract, setActiveContract] = useState(null);
     const [loading, setLoading] = useState(false);
     const [uploading, setUploading] = useState(false);
     const [venues, setVenues] = useState([]);
@@ -52,6 +54,7 @@ const EventForm = ({ event = null, onSuccess, onClose }) => {
         seat_map_url: '',
         room_id: '',
         use_seating_map: false,
+        contract_id: event?.contract_id || null,
         ads_enabled: false,
         max_ads: 5,
         merch_enabled: false,
@@ -130,6 +133,35 @@ const EventForm = ({ event = null, onSuccess, onClose }) => {
         setDraftInfo(null);
         success('Borrador descartado');
     };
+
+    // Load Active Contract for Manager
+    useEffect(() => {
+        const loadContract = async () => {
+            if (!user?.id) return;
+            try {
+                const list = await b2bAPI.getContractsByManager(user.id);
+                const contracts = Array.isArray(list) ? list : (list?.contracts || list?.data || []);
+                const active = contracts.find(c => c.status === 'ACTIVE') || contracts[0] || null;
+                if (active) {
+                    setActiveContract(active);
+                    if (!event) {
+                        setFormData(prev => ({
+                            ...prev,
+                            contract_id: active.id,
+                            ads_enabled: Boolean(active.adsEnabled),
+                            max_ads: active.maxAdsPerEvent || 5,
+                            merch_enabled: Boolean(active.merchEnabled),
+                            metrics_enabled: Boolean(active.metricsEnabled),
+                            use_seating_map: Boolean(active.seatingMapEnabled),
+                        }));
+                    }
+                }
+            } catch (err) {
+                console.warn("No se pudo cargar el contrato del gestor:", err);
+            }
+        };
+        loadContract();
+    }, [user, event]);
 
     // Load Venues
     useEffect(() => {
@@ -302,6 +334,11 @@ const EventForm = ({ event = null, onSuccess, onClose }) => {
     const handleAddFunction = () => {
         if (!newFunction.date || !newFunction.time || !newFunction.venue_id) {
             warning('Fecha, hora y recinto son requeridos para agregar una función');
+            return;
+        }
+        const maxFuncs = activeContract?.maxFunctionsPerEvent;
+        if (maxFuncs && functions.length >= maxFuncs) {
+            warning(`Tu contrato ampara hasta un máximo de ${maxFuncs} fecha(s) por evento.`);
             return;
         }
         setFunctions(prev => [...prev, { ...newFunction, tempId: Date.now() }]);
@@ -784,9 +821,16 @@ const EventForm = ({ event = null, onSuccess, onClose }) => {
                         {/* --- ENABLED FEATURES (READ ONLY FOR MANAGER) --- */}
                         <div className="form-group features-box">
                             <div className="event-section-label">
-                                🚀 Características Habilitadas
-                                <span className="event-section-subtitle">(Configuradas por Admin)</span>
+                                🚀 Características del Paquete
+                                <span className="event-section-subtitle">
+                                    {activeContract ? `(Contrato Folio #${activeContract.id} · ${activeContract.name})` : '(Configuradas por Admin)'}
+                                </span>
                             </div>
+                            {activeContract && (
+                                <div style={{ fontSize: '0.8rem', color: '#64748b', marginBottom: '0.6rem' }}>
+                                    {activeContract.isUnlimited ? '✨ Eventos ilimitados amparados' : `📊 Cupo: ${activeContract.maxEvents || 0} eventos`} · Máx. {activeContract.maxFunctionsPerEvent || 1} fecha(s) por evento
+                                </div>
+                            )}
                             <div className="features-pills">
                                 <span className={`feature-pill ${formData.ads_enabled ? 'feature-pill--on' : ''}`}>
                                     <Icon name="image" size={12} /> ANUNCIOS {formData.ads_enabled ? `· SÍ (${formData.max_ads} máx)` : '· NO'}
@@ -795,7 +839,10 @@ const EventForm = ({ event = null, onSuccess, onClose }) => {
                                     <Icon name="activity" size={12} /> MÉTRICAS {formData.metrics_enabled ? '· SÍ' : '· NO'}
                                 </span>
                                 <span className={`feature-pill ${formData.merch_enabled ? 'feature-pill--on' : ''}`}>
-                                    <Icon name="shopping-bag" size={12} /> MERCANCÍA {formData.merch_enabled ? '· SÍ' : '· NO'}
+                                    <Icon name="shopping-bag" size={12} /> LAIKASHOP {formData.merch_enabled ? '· SÍ' : '· NO'}
+                                </span>
+                                <span className={`feature-pill ${formData.use_seating_map ? 'feature-pill--on' : ''}`}>
+                                    <Icon name="map-pin" size={12} /> MAPA SALA {formData.use_seating_map ? '· SÍ' : '· NO'}
                                 </span>
                             </div>
                             {formData.ads_enabled && event && (

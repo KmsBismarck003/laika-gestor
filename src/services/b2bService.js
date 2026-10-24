@@ -1,6 +1,5 @@
 import axios from 'axios';
-
-const ADMIN_URL = process.env.REACT_APP_ADMIN_API_URL || 'http://localhost:8005/api/admin';
+import { API_BASE_URL } from './apiClient';
 
 const getAuthHeaders = () => {
     const token = localStorage.getItem('token') || sessionStorage.getItem('token');
@@ -8,7 +7,7 @@ const getAuthHeaders = () => {
 };
 
 const b2bClient = axios.create({
-    baseURL: ADMIN_URL
+    baseURL: API_BASE_URL
 });
 
 b2bClient.interceptors.request.use((config) => {
@@ -75,6 +74,10 @@ const b2bAPI = {
     },
     unassignContractManager: async (contractId, userId) => {
         const response = await b2bClient.delete(`/b2b/contracts/${contractId}/managers/${userId}`);
+        return response.data;
+    },
+    getContractsByManager: async (userId) => {
+        const response = await b2bClient.get(`/b2b/managers/${userId}/contracts`);
         return response.data;
     }
 };
