@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
+import Pagination from '../../../../components/Pagination/Pagination';
 import './CourtesyManager.css';
 
 export default function CourtesyTable({ tickets, onRevoke }) {
   const [filter, setFilter] = useState('ALL');
   const [searchTerm, setSearchTerm] = useState('');
   const [copiedId, setCopiedId] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 10;
 
   const copyToClipboard = (text, id) => {
     navigator.clipboard.writeText(text);
@@ -117,7 +120,7 @@ export default function CourtesyTable({ tickets, onRevoke }) {
           </thead>
           <tbody>
             {filteredTickets.length > 0 ? (
-              filteredTickets.map((tkt) => (
+              filteredTickets.slice((currentPage - 1) * pageSize, currentPage * pageSize).map((tkt) => (
                 <tr key={tkt.id}>
                   <td style={{ fontFamily: 'monospace', fontWeight: 700 }}>{tkt.ticket_code}</td>
                   <td>
@@ -181,6 +184,14 @@ export default function CourtesyTable({ tickets, onRevoke }) {
           </tbody>
         </table>
       </div>
+
+      {Math.ceil(filteredTickets.length / pageSize) > 1 && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={Math.ceil(filteredTickets.length / pageSize)}
+          onPageChange={setCurrentPage}
+        />
+      )}
     </div>
   );
 }

@@ -503,7 +503,7 @@ const DashboardLayout = () => {
         </header>
 
         <main className='dashboard-content'>
-          {!['/admin', '/events/manage', '/staff'].includes(location.pathname) && (
+          {!['/admin', '/staff'].includes(location.pathname) && !location.pathname.startsWith('/events/manage') && (
             <button className='back-body-btn' onClick={() => navigate(-1)} title="Volver">
               <Icon name="arrowLeft" size={18} /> Volver
             </button>

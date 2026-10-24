@@ -3,7 +3,49 @@
    ========================================================================== */
 
 :root {
-  --manager-bg: #09090b;
+  --manager-bg: transparent;
+  --manager-card-bg: var(--bg-secondary, #ffffff);
+  --manager-card-surface: var(--bg-tertiary, #f8f9fa);
+  --manager-card-hover: rgba(0, 0, 0, 0.03);
+  --manager-border: var(--border-color, #e2e8f0);
+  --manager-border-subtle: rgba(0, 0, 0, 0.06);
+  --manager-border-glow: rgba(99, 102, 241, 0.2);
+  
+  --manager-text: var(--text-primary, #0f172a);
+  --manager-text-secondary: var(--text-secondary, #475569);
+  --manager-text-muted: var(--text-muted, #64748b);
+  
+  --manager-accent: #6366f1;
+  --manager-accent-hover: #4f46e5;
+  --manager-accent-light: rgba(99, 102, 241, 0.1);
+  
+  --manager-danger: #ef4444;
+  --manager-danger-bg: rgba(239, 68, 68, 0.08);
+  --manager-danger-border: rgba(239, 68, 68, 0.25);
+  
+  --manager-success: #10b981;
+  --manager-success-bg: rgba(16, 185, 129, 0.08);
+  --manager-success-border: rgba(16, 185, 129, 0.25);
+  
+  --manager-warning: #f59e0b;
+  --manager-warning-bg: rgba(245, 158, 11, 0.08);
+  --manager-warning-border: rgba(245, 158, 11, 0.25);
+  
+  --manager-table-header-bg: #f8fafc;
+  --manager-table-row-hover: #f1f5f9;
+  
+  --manager-radius-sm: 8px;
+  --manager-radius-md: 12px;
+  --manager-radius-lg: 16px;
+  --manager-radius-full: 9999px;
+  
+  --manager-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
+  --manager-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+  --manager-shadow-glow: 0 0 16px rgba(99, 102, 241, 0.12);
+}
+
+[data-theme='dark'] {
+  --manager-bg: transparent;
   --manager-card-bg: #111218;
   --manager-card-surface: rgba(255, 255, 255, 0.03);
   --manager-card-hover: rgba(255, 255, 255, 0.06);
@@ -15,26 +57,14 @@
   --manager-text-secondary: #cbd5e1;
   --manager-text-muted: #94a3b8;
   
-  --manager-accent: #6366f1;
-  --manager-accent-hover: #4f46e5;
   --manager-accent-light: rgba(99, 102, 241, 0.15);
   
-  --manager-danger: #ef4444;
   --manager-danger-bg: rgba(239, 68, 68, 0.12);
-  --manager-danger-border: rgba(239, 68, 68, 0.25);
-  
-  --manager-success: #10b981;
   --manager-success-bg: rgba(16, 185, 129, 0.12);
-  --manager-success-border: rgba(16, 185, 129, 0.25);
-  
-  --manager-warning: #f59e0b;
   --manager-warning-bg: rgba(245, 158, 11, 0.12);
-  --manager-warning-border: rgba(245, 158, 11, 0.25);
   
-  --manager-radius-sm: 8px;
-  --manager-radius-md: 12px;
-  --manager-radius-lg: 16px;
-  --manager-radius-full: 9999px;
+  --manager-table-header-bg: rgba(255, 255, 255, 0.02);
+  --manager-table-row-hover: rgba(255, 255, 255, 0.05);
   
   --manager-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
   --manager-shadow-md: 0 8px 24px -4px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.06);
@@ -46,9 +76,10 @@
    ========================================================================== */
 .manager-container {
   width: 100%;
-  min-height: 100vh;
-  padding: 2rem;
-  background-color: var(--manager-bg);
+  max-width: 100%;
+  min-height: auto;
+  padding: 0.25rem 0 2rem 0;
+  background-color: transparent;
   color: var(--manager-text);
   box-sizing: border-box;
 }
@@ -58,29 +89,32 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2rem;
+  margin-bottom: 1.75rem;
   padding-bottom: 1.25rem;
   border-bottom: 1px solid var(--manager-border);
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
 .manager-title h1 {
-  font-size: 1.85rem;
+  font-size: 1.75rem;
   font-weight: 800;
   margin: 0;
-  letter-spacing: -0.03em;
-  color: #ffffff;
+  letter-spacing: -0.02em;
+  color: var(--manager-text) !important;
 }
 
 .manager-title p {
   margin: 0.35rem 0 0;
   color: var(--manager-text-muted);
-  font-size: 0.95rem;
+  font-size: 0.92rem;
 }
 
 .manager-actions {
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  flex-wrap: wrap;
 }
 
 /* Back Link Button */
@@ -88,8 +122,8 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  color: var(--manager-text-muted);
-  background: transparent;
+  color: var(--manager-text-secondary);
+  background: var(--manager-card-bg);
   border: 1px solid var(--manager-border);
   border-radius: var(--manager-radius-sm);
   padding: 0.45rem 0.85rem;
@@ -101,9 +135,9 @@
 }
 
 .manager-back-btn:hover {
-  color: #ffffff;
+  color: var(--manager-text);
   background: var(--manager-card-hover);
-  border-color: rgba(255, 255, 255, 0.15);
+  border-color: var(--manager-border);
 }
 
 /* ==========================================================================
@@ -187,7 +221,7 @@
   display: block;
   font-size: 1.75rem;
   font-weight: 800;
-  color: #ffffff;
+  color: var(--manager-text);
   line-height: 1.1;
   letter-spacing: -0.02em;
 }
@@ -199,9 +233,11 @@
   background: var(--manager-card-bg);
   border: 1px solid var(--manager-border);
   border-radius: var(--manager-radius-lg);
-  overflow: hidden;
+  overflow-x: auto;
   margin-bottom: 2rem;
   box-shadow: var(--manager-shadow-sm);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .manager-table {
@@ -212,7 +248,7 @@
 }
 
 .manager-table thead {
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--manager-table-header-bg);
   border-bottom: 1px solid var(--manager-border);
 }
 
@@ -249,7 +285,7 @@
 
 .event-cell-name {
   font-weight: 700;
-  color: #ffffff;
+  color: var(--manager-text);
   font-size: 0.95rem;
   line-height: 1.3;
 }
@@ -390,16 +426,22 @@
 }
 
 .tab-button:hover {
-  color: #ffffff;
+  color: var(--manager-text);
   background: var(--manager-card-hover);
 }
 
 .tab-button.active {
+  color: var(--manager-text);
+  background: var(--manager-card-hover);
+  border-color: var(--manager-accent);
+  box-shadow: 0 0 12px var(--manager-accent-light);
+  font-weight: 700;
+}
+
+[data-theme='dark'] .tab-button.active {
   color: #ffffff;
   background: rgba(99, 102, 241, 0.15);
   border-color: rgba(99, 102, 241, 0.35);
-  box-shadow: 0 0 15px rgba(99, 102, 241, 0.15);
-  font-weight: 700;
 }
 
 /* ==========================================================================
@@ -426,7 +468,7 @@
 .bento-card-title {
   font-size: 1.1rem;
   font-weight: 800;
-  color: #ffffff;
+  color: var(--manager-text);
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -448,7 +490,7 @@
   text-transform: uppercase;
   letter-spacing: 0.08em;
   border-bottom: 1px solid var(--manager-border);
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--manager-table-header-bg);
 }
 
 .functions-bento-table td {
@@ -515,6 +557,96 @@
   font-size: 0.9rem;
   margin-bottom: 1.25rem;
   line-height: 1.5;
+}
+
+/* ==========================================================================
+   Ticket Overview Progress & Mini Stats Bento
+   ========================================================================== */
+.ticket-overview {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.ticket-progress-container {
+  background: var(--manager-card-bg);
+  border: 1px solid var(--manager-border);
+  border-radius: var(--manager-radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--manager-shadow-sm);
+}
+
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.progress-header span:first-child {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--manager-text-muted);
+}
+
+.progress-header span:last-child {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--manager-text);
+}
+
+.progress-bar-bg {
+  width: 100%;
+  height: 12px;
+  background: var(--manager-border-subtle);
+  border-radius: var(--manager-radius-full);
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #6366f1, #818cf8);
+  border-radius: var(--manager-radius-full);
+  transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ticket-stats-mini-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--manager-border-subtle);
+}
+
+.mini-stat {
+  background: var(--manager-card-surface);
+  border: 1px solid var(--manager-border-subtle);
+  border-radius: var(--manager-radius-md);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.35rem;
+}
+
+.mini-stat-val {
+  font-size: 1.4rem;
+  font-weight: 800;
+  line-height: 1.1;
+  color: var(--manager-text);
+}
+
+.mini-stat-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--manager-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
 /* ==========================================================================

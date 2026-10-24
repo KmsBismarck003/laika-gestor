@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNotification } from '../../context/NotificationContext';
 import { Button, Modal } from '../../components';
+import Pagination from '../../components/Pagination/Pagination';
 import { merchService } from '../../services/merch.service';
 import api from '../../services/api';
 import { Plus, Edit, Trash, ShoppingBag, UploadCloud, Link as LinkIcon, Image as ImageIcon } from 'lucide-react';
@@ -11,6 +12,8 @@ const MerchandisePanel = ({ eventId, event }) => {
     const [merchItems, setMerchItems] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showModal, setShowModal] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+    const pageSize = 6;
     
     // Config settings check
     const [settings, setSettings] = useState(null);
@@ -213,70 +216,82 @@ const MerchandisePanel = ({ eventId, event }) => {
                     </Button>
                 </div>
             ) : (
-                <div className="merch-grid">
-                    {merchItems.map(item => {
-                        const img = item.imageUrl || item.image_url;
-                        const price = item.variants?.[0]?.price || '0';
-                        const stock = item.variants?.[0]?.stock || 0;
-                        const status = item.adminStatus || item.admin_status || 'approved';
+                <>
+                    <div className="merch-grid">
+                        {merchItems.slice((currentPage - 1) * pageSize, currentPage * pageSize).map(item => {
+                            const img = item.imageUrl || item.image_url;
+                            const price = item.variants?.[0]?.price || '0';
+                            const stock = item.variants?.[0]?.stock || 0;
+                            const status = item.adminStatus || item.admin_status || 'approved';
 
-                        return (
-                            <div key={item.id} className="merch-card">
-                                <div className="merch-image-wrapper">
-                                    {img ? (
-                                        <img src={img} alt={item.name} className="merch-img" />
-                                    ) : (
-                                        <div className="merch-no-img">
-                                            <ImageIcon size={32} />
-                                            <span>Sin Imagen</span>
-                                        </div>
-                                    )}
+                            return (
+                                <div key={item.id} className="merch-card">
+                                    <div className="merch-image-wrapper">
+                                        {img ? (
+                                            <img src={img} alt={item.name} className="merch-img" />
+                                        ) : (
+                                            <div className="merch-no-img">
+                                                <ImageIcon size={32} />
+                                                <span>Sin Imagen</span>
+                                            </div>
+                                        )}
 
-                                    {item.category && (
-                                        <span className="merch-badge-category">
-                                            {item.category}
+                                        {item.category && (
+                                            <span className="merch-badge-category">
+                                                {item.category}
+                                            </span>
+                                        )}
+
+                                        <span className={`merch-badge-status ${
+                                            status === 'approved' ? 'merch-badge-approved' :
+                                            status === 'pending_review' ? 'merch-badge-pending' : 'merch-badge-rejected'
+                                        }`}>
+                                            {status === 'approved' ? 'Publicado' :
+                                             status === 'pending_review' ? 'En Revisión' : 'Rechazado'}
                                         </span>
-                                    )}
-
-                                    <span className={`merch-badge-status ${
-                                        status === 'approved' ? 'merch-badge-approved' :
-                                        status === 'pending_review' ? 'merch-badge-pending' : 'merch-badge-rejected'
-                                    }`}>
-                                        {status === 'approved' ? 'Publicado' :
-                                         status === 'pending_review' ? 'En Revisión' : 'Rechazado'}
-                                    </span>
-                                </div>
-
-                                <div className="merch-body">
-                                    <h4 className="merch-title">{item.name}</h4>
-                                    <p className="merch-desc">{item.description}</p>
-                                    
-                                    <div className="merch-meta">
-                                        <span className="merch-price">${price}</span>
-                                        <span className="merch-stock">Stock: {stock} uds</span>
                                     </div>
 
-                                    <div className="merch-actions">
-                                        <button 
-                                            type="button" 
-                                            className="merch-btn-edit" 
-                                            onClick={() => handleEditClick(item)}
-                                        >
-                                            <Edit size={14} /> Editar
-                                        </button>
-                                        <button 
-                                            type="button" 
-                                            className="merch-btn-delete" 
-                                            onClick={() => handleDeleteClick(item.id)}
-                                        >
-                                            <Trash size={14} /> Eliminar
-                                        </button>
+                                    <div className="merch-body">
+                                        <h4 className="merch-title" style={{ color: 'var(--manager-text)' }}>{item.name}</h4>
+                                        <p className="merch-desc" style={{ color: 'var(--manager-text-secondary)' }}>{item.description}</p>
+                                        
+                                        <div className="merch-meta">
+                                            <span className="merch-price">${price}</span>
+                                            <span className="merch-stock">Stock: {stock} uds</span>
+                                        </div>
+
+                                        <div className="merch-actions">
+                                            <button 
+                                                type="button" 
+                                                className="merch-btn-edit" 
+                                                onClick={() => handleEditClick(item)}
+                                            >
+                                                <Edit size={14} /> Editar
+                                            </button>
+                                            <button 
+                                                type="button" 
+                                                className="merch-btn-delete" 
+                                                onClick={() => handleDeleteClick(item.id)}
+                                            >
+                                                <Trash size={14} /> Eliminar
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        );
-                    })}
-                </div>
+                            );
+                        })}
+                    </div>
+
+                    {Math.ceil(merchItems.length / pageSize) > 1 && (
+                        <div style={{ marginTop: '1.5rem' }}>
+                            <Pagination
+                                currentPage={currentPage}
+                                totalPages={Math.ceil(merchItems.length / pageSize)}
+                                onPageChange={setCurrentPage}
+                            />
+                        </div>
+                    )}
+                </>
             )}
 
             {/* Modal: Añadir o Editar Producto */}

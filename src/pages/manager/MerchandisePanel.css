@@ -1,10 +1,10 @@
 /* ==========================================================================
-   Merchandise Panel - Bento Box Style & Robust Dark Mode
+   Merchandise Panel - Bento Box Style & Theme-Adaptive Design
    ========================================================================== */
 
 .merch-panel {
   width: 100%;
-  margin-top: 1rem;
+  margin-top: 0.5rem;
 }
 
 /* Header */
@@ -14,7 +14,7 @@
   align-items: center;
   margin-bottom: 1.75rem;
   padding-bottom: 1.25rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid var(--manager-border, #e2e8f0);
   flex-wrap: wrap;
   gap: 1rem;
 }
@@ -22,14 +22,18 @@
 .merch-header-title {
   font-size: 1.4rem;
   font-weight: 800;
-  color: #ffffff;
+  color: var(--manager-text, #0f172a) !important;
   margin: 0;
   letter-spacing: -0.02em;
 }
 
+[data-theme='dark'] .merch-header-title {
+  color: #ffffff !important;
+}
+
 .merch-header-subtitle {
   font-size: 0.88rem;
-  color: #94a3b8;
+  color: var(--manager-text-muted, #64748b);
   margin: 0.25rem 0 0;
 }
 
@@ -37,10 +41,10 @@
 .merch-empty-state {
   text-align: center;
   padding: 3.5rem 2rem;
-  background: #111218;
-  border: 1px dashed rgba(255, 255, 255, 0.12);
+  background: var(--manager-card-bg, #ffffff);
+  border: 1px dashed var(--manager-border, #e2e8f0);
   border-radius: 16px;
-  color: #94a3b8;
+  color: var(--manager-text-muted, #64748b);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -48,21 +52,35 @@
   gap: 0.75rem;
 }
 
+[data-theme='dark'] .merch-empty-state {
+  background: #111218;
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
 .merch-notice-box {
   padding: 2.5rem;
   text-align: center;
-  color: #94a3b8;
-  border: 1px dashed rgba(255, 255, 255, 0.15);
+  color: var(--manager-text-muted, #64748b);
+  border: 1px dashed var(--manager-border, #e2e8f0);
   border-radius: 16px;
   margin-top: 1.5rem;
+  background: var(--manager-card-bg, #ffffff);
+}
+
+[data-theme='dark'] .merch-notice-box {
   background: #111218;
+  border-color: rgba(255, 255, 255, 0.15);
 }
 
 .merch-notice-title {
   font-size: 1.15rem;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--manager-text, #0f172a);
   margin-bottom: 0.5rem;
+}
+
+[data-theme='dark'] .merch-notice-title {
+  color: #ffffff;
 }
 
 /* Bento Products Grid */
@@ -75,23 +93,29 @@
 
 /* Merch Card */
 .merch-card {
-  background: #111218;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--manager-card-bg, #ffffff);
+  border: 1px solid var(--manager-border, #e2e8f0);
   border-radius: 16px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  box-shadow: var(--manager-shadow-sm);
   transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), 
               border-color 0.25s ease, 
               box-shadow 0.25s ease;
   position: relative;
 }
 
+[data-theme='dark'] .merch-card {
+  background: #111218;
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
 .merch-card:hover {
   transform: translateY(-4px);
   border-color: rgba(99, 102, 241, 0.4);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(99, 102, 241, 0.15);
+  box-shadow: var(--manager-shadow-md), 0 0 16px rgba(99, 102, 241, 0.12);
 }
 
 /* Image container */
@@ -100,10 +124,14 @@
   width: 100%;
   position: relative;
   overflow: hidden;
-  background: #181922;
+  background: var(--manager-card-surface, #f1f5f9);
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+[data-theme='dark'] .merch-image-wrapper {
+  background: #181922;
 }
 
 .merch-img {
@@ -118,7 +146,7 @@
 }
 
 .merch-no-img {
-  color: #64748b;
+  color: var(--manager-text-muted, #64748b);
   font-size: 0.85rem;
   font-weight: 600;
   display: flex;
@@ -131,7 +159,7 @@
   position: absolute;
   top: 12px;
   left: 12px;
-  background: rgba(0, 0, 0, 0.65);
+  background: rgba(15, 23, 42, 0.75);
   backdrop-filter: blur(8px);
   color: #c7d2fe;
   font-size: 0.72rem;
@@ -160,20 +188,32 @@
 
 .merch-badge-approved {
   background: rgba(16, 185, 129, 0.2);
-  color: #34d399;
+  color: #10b981;
   border: 1px solid rgba(16, 185, 129, 0.4);
+}
+
+[data-theme='dark'] .merch-badge-approved {
+  color: #34d399;
 }
 
 .merch-badge-pending {
   background: rgba(245, 158, 11, 0.2);
-  color: #fbbf24;
+  color: #f59e0b;
   border: 1px solid rgba(245, 158, 11, 0.4);
+}
+
+[data-theme='dark'] .merch-badge-pending {
+  color: #fbbf24;
 }
 
 .merch-badge-rejected {
   background: rgba(239, 68, 68, 0.2);
-  color: #f87171;
+  color: #ef4444;
   border: 1px solid rgba(239, 68, 68, 0.4);
+}
+
+[data-theme='dark'] .merch-badge-rejected {
+  color: #f87171;
 }
 
 /* Card Body */
@@ -184,24 +224,36 @@
   flex: 1;
 }
 
+.merch-card .merch-title,
 .merch-title {
-  font-size: 1.05rem;
-  font-weight: 800;
-  color: #ffffff;
-  margin: 0 0 0.5rem 0;
-  line-height: 1.3;
+  font-size: 1.05rem !important;
+  font-weight: 800 !important;
+  color: var(--manager-text, #0f172a) !important;
+  margin: 0 0 0.5rem 0 !important;
+  line-height: 1.3 !important;
 }
 
+[data-theme='dark'] .merch-card .merch-title,
+[data-theme='dark'] .merch-title {
+  color: #f8fafc !important;
+}
+
+.merch-card .merch-desc,
 .merch-desc {
-  font-size: 0.85rem;
-  color: #94a3b8;
-  line-height: 1.5;
-  margin: 0 0 1rem 0;
-  flex: 1;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  font-size: 0.85rem !important;
+  color: var(--manager-text-secondary, #64748b) !important;
+  line-height: 1.5 !important;
+  margin: 0 0 1rem 0 !important;
+  flex: 1 !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+}
+
+[data-theme='dark'] .merch-card .merch-desc,
+[data-theme='dark'] .merch-desc {
+  color: #94a3b8 !important;
 }
 
 /* Price & Stock */
@@ -210,9 +262,13 @@
   justify-content: space-between;
   align-items: center;
   padding: 0.75rem 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-top: 1px solid var(--manager-border-subtle, #f1f5f9);
+  border-bottom: 1px solid var(--manager-border-subtle, #f1f5f9);
   margin-bottom: 1rem;
+}
+
+[data-theme='dark'] .merch-meta {
+  border-color: rgba(255, 255, 255, 0.06);
 }
 
 .merch-price {
@@ -225,11 +281,17 @@
 .merch-stock {
   font-size: 0.78rem;
   font-weight: 600;
-  color: #cbd5e1;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--manager-text-secondary, #475569);
+  background: var(--manager-card-surface, #f8f9fa);
+  border: 1px solid var(--manager-border, #e2e8f0);
   padding: 0.25rem 0.65rem;
   border-radius: 6px;
+}
+
+[data-theme='dark'] .merch-stock {
+  color: #cbd5e1;
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.08);
 }
 
 /* Actions */
@@ -244,9 +306,9 @@
   border-radius: 8px;
   font-weight: 600;
   font-size: 0.82rem;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #f8fafc;
+  background: var(--manager-card-surface, #f8f9fa);
+  border: 1px solid var(--manager-border, #e2e8f0);
+  color: var(--manager-text, #0f172a);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -256,6 +318,18 @@
 }
 
 .merch-btn-edit:hover {
+  background: var(--manager-card-hover, #f1f5f9);
+  border-color: var(--manager-accent, #6366f1);
+  color: var(--manager-accent, #6366f1);
+}
+
+[data-theme='dark'] .merch-btn-edit {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: #f8fafc;
+}
+
+[data-theme='dark'] .merch-btn-edit:hover {
   background: rgba(99, 102, 241, 0.15);
   border-color: rgba(99, 102, 241, 0.4);
   color: #ffffff;
@@ -269,7 +343,7 @@
   font-size: 0.82rem;
   background: rgba(239, 68, 68, 0.08);
   border: 1px solid rgba(239, 68, 68, 0.2);
-  color: #f87171;
+  color: #ef4444;
   cursor: pointer;
   display: flex;
   align-items: center;

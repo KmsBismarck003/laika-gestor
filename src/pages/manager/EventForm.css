@@ -496,8 +496,30 @@
   transform: none;
 }
 
+/* ---------- CONFIG TAB CONTAINER ---------- */
+.config-tab {
+  background: var(--manager-card-bg, #ffffff);
+  border: 1px solid var(--manager-border, #e2e8f0);
+  border-radius: var(--manager-radius-lg, 16px);
+  padding: 1.75rem;
+  box-shadow: var(--manager-shadow-sm);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+[data-theme='dark'] .config-tab {
+  background: #111218;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.config-tab .event-form-container .form-scroll-area {
+  max-height: none !important;
+  overflow: visible !important;
+  padding-right: 0 !important;
+}
+
 /* ---------- RESPONSIVE ---------- */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .event-form-modal .modal__header {
     padding: 1.15rem 1.25rem 1rem;
   }

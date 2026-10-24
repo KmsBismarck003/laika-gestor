@@ -124,80 +124,153 @@ const RevenuePanel = ({ eventId, event }) => {
     const viability = getViabilityStatus();
 
     return (
-        <div className="revenue-panel" style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+        <div className="revenue-panel" style={{ display: 'flex', flexDirection: 'column', gap: '2rem', width: '100%', boxSizing: 'border-box' }}>
             
             {/* Reporte Financiero Real */}
             <div>
-                <h3 className="text-lg font-semibold mb-4" style={{ margin: '0 0 1rem 0' }}>Reporte Financiero Real</h3>
-                <div className="revenue-detail-grid">
-                    {/* Main Revenue Card */}
-                    <div className="revenue-main-card" style={{ background: '#0f172a', color: '#ffffff', padding: '1.5rem', borderRadius: '16px' }}>
-                        <span className="text-sm font-medium text-gray-400 uppercase tracking-wider">
-                            Ingreso Neto Total
-                        </span>
-                        <div className="total-revenue-display" style={{ fontSize: '2rem', fontWeight: 900, marginTop: '0.5rem', color: '#ffffff' }}>
-                            ${net.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN
+                <h3 style={{ fontSize: '1.25rem', fontWeight: 800, margin: '0 0 1.25rem 0', color: 'var(--manager-text)' }}>
+                    Reporte Financiero Real
+                </h3>
+                
+                {/* Hero Card: Ingreso Neto Total */}
+                <div style={{
+                    background: 'linear-gradient(135deg, #1e1b4b 0%, #0f172a 100%)',
+                    border: '1px solid rgba(99, 102, 241, 0.35)',
+                    borderRadius: '16px',
+                    padding: '1.75rem',
+                    color: '#ffffff',
+                    marginBottom: '1.25rem',
+                    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.15)',
+                    position: 'relative',
+                    overflow: 'hidden'
+                }}>
+                    <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#a5b4fc', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                        Ingreso Neto Total
+                    </span>
+                    <div style={{ fontSize: '2.4rem', fontWeight: 900, marginTop: '0.5rem', color: '#ffffff', letterSpacing: '-0.02em', wordBreak: 'break-word' }}>
+                        ${net.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN
+                    </div>
+                    <p style={{ fontSize: '0.85rem', color: '#94a3b8', marginTop: '0.5rem', marginBottom: 0 }}>
+                        Monto acumulado neto de reembolsos y cancelaciones
+                    </p>
+                </div>
+
+                {/* 3 Sub-Cards Bento Grid */}
+                <div style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+                    gap: '1rem',
+                    width: '100%'
+                }}>
+                    {/* Ventas Brutas */}
+                    <div style={{
+                        background: 'var(--manager-card-bg)',
+                        border: '1px solid var(--manager-border)',
+                        borderLeft: '4px solid #6366f1',
+                        borderRadius: '12px',
+                        padding: '1.25rem',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'space-between',
+                        gap: '0.75rem',
+                        boxShadow: 'var(--manager-shadow-sm)'
+                    }}>
+                        <div>
+                            <span style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--manager-text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', display: 'block' }}>
+                                Ventas Brutas
+                            </span>
+                            <span style={{ fontSize: '0.82rem', color: 'var(--manager-text-secondary)', marginTop: '2px', display: 'block' }}>
+                                {tickets_sold} boletos vendidos
+                            </span>
                         </div>
-                        <p className="text-xs text-gray-400 mt-2">
-                            Monto acumulado neto de reembolsos
-                        </p>
+                        <div style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--manager-text)', letterSpacing: '-0.01em' }}>
+                            +${gross.toLocaleString('es-MX', { minimumFractionDigits: 2 })}
+                        </div>
                     </div>
 
-                    {/* Breakdown List */}
-                    <div className="revenue-breakdown" style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                        <div className="breakdown-item" style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 14px', borderLeft: '4px solid #475569', background: '#f8fafc', borderRadius: '8px' }}>
-                            <div className="flex flex-col">
-                                <span className="text-xs font-semibold text-gray-500 uppercase">Ventas Brutas</span>
-                                <span className="text-xs text-gray-400">{tickets_sold} boletos vendidos</span>
-                            </div>
-                            <span className="font-bold text-gray-800">
-                                +${gross.toLocaleString('es-MX', { minimumFractionDigits: 2 })}
+                    {/* Reembolsos */}
+                    <div style={{
+                        background: 'var(--manager-card-bg)',
+                        border: '1px solid var(--manager-danger-border)',
+                        borderLeft: '4px solid #ef4444',
+                        borderRadius: '12px',
+                        padding: '1.25rem',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'space-between',
+                        gap: '0.75rem',
+                        boxShadow: 'var(--manager-shadow-sm)'
+                    }}>
+                        <div>
+                            <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#ef4444', textTransform: 'uppercase', letterSpacing: '0.05em', display: 'block' }}>
+                                Reembolsos
+                            </span>
+                            <span style={{ fontSize: '0.82rem', color: 'var(--manager-text-secondary)', marginTop: '2px', display: 'block' }}>
+                                {tickets_refunded} cancelados
                             </span>
                         </div>
+                        <div style={{ fontSize: '1.4rem', fontWeight: 800, color: '#ef4444', letterSpacing: '-0.01em' }}>
+                            -${refunded_amount.toLocaleString('es-MX', { minimumFractionDigits: 2 })}
+                        </div>
+                    </div>
 
-                        <div className="breakdown-item" style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 14px', borderLeft: '4px solid #ef4444', background: '#fef2f2', borderRadius: '8px' }}>
-                            <div className="flex flex-col">
-                                <span className="text-xs font-semibold text-red-700 uppercase">Reembolsos</span>
-                                <span className="text-xs text-gray-400">{tickets_refunded} cancelados</span>
-                            </div>
-                            <span className="font-bold text-red-600">
-                                -${refunded_amount.toLocaleString('es-MX', { minimumFractionDigits: 2 })}
+                    {/* Proyección Total */}
+                    <div style={{
+                        background: 'var(--manager-card-bg)',
+                        border: '1px solid var(--manager-success-border)',
+                        borderLeft: '4px solid #10b981',
+                        borderRadius: '12px',
+                        padding: '1.25rem',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'space-between',
+                        gap: '0.75rem',
+                        boxShadow: 'var(--manager-shadow-sm)'
+                    }}>
+                        <div>
+                            <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#10b981', textTransform: 'uppercase', letterSpacing: '0.05em', display: 'block' }}>
+                                Proyección Total
+                            </span>
+                            <span style={{ fontSize: '0.82rem', color: 'var(--manager-text-secondary)', marginTop: '2px', display: 'block' }}>
+                                Escenario 100% Vendido
                             </span>
                         </div>
-
-                        <div className="breakdown-item" style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 14px', borderLeft: '4px solid #10b981', background: '#f0fdf4', borderRadius: '8px' }}>
-                            <div className="flex flex-col">
-                                <span className="text-xs font-semibold text-green-700 uppercase">Proyección Total</span>
-                                <span className="text-xs text-gray-400">Escenario 100% Vendido</span>
-                            </div>
-                            <span className="font-bold text-green-600">
-                                ${projected_total.toLocaleString('es-MX', { minimumFractionDigits: 2 })}
-                            </span>
+                        <div style={{ fontSize: '1.4rem', fontWeight: 800, color: '#10b981', letterSpacing: '-0.01em' }}>
+                            ${projected_total.toLocaleString('es-MX', { minimumFractionDigits: 2 })}
                         </div>
                     </div>
                 </div>
             </div>
 
             {/* Simulador Predictivo Local */}
-            <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '24px', padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
+            <div style={{
+                background: 'var(--manager-card-bg)',
+                border: '1px solid var(--manager-border)',
+                borderRadius: '16px',
+                padding: '1.5rem',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '1.25rem',
+                boxShadow: 'var(--manager-shadow-sm)'
+            }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <Sliders size={20} color="#0f172a" />
-                    <h3 style={{ fontSize: '1rem', fontWeight: 800, margin: 0, color: '#0f172a' }}>
+                    <Sliders size={20} color="#6366f1" />
+                    <h3 style={{ fontSize: '1.1rem', fontWeight: 800, margin: 0, color: 'var(--manager-text)' }}>
                         Simulador Predictivo de Tarifas y Aforo
                     </h3>
                 </div>
-                <p style={{ fontSize: '0.78rem', color: '#64748b', margin: 0, lineHeight: '1.4' }}>
-                    Simula la recaudación del evento ajustando los precios y el aforo. El cálculo se realiza localmente con inteligencia artificial basada en el comportamiento histórico del club.
+                <p style={{ fontSize: '0.85rem', color: 'var(--manager-text-muted)', margin: 0, lineHeight: '1.5' }}>
+                    Simula la recaudación del evento ajustando los precios y el aforo. El cálculo se realiza con el modelo predictivo de Machine Learning basado en el comportamiento del club.
                 </p>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', alignItems: 'start', marginTop: '0.5rem' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2rem', alignItems: 'start', marginTop: '0.5rem' }}>
                     
                     {/* Controles de Entrada */}
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', fontWeight: 700, color: '#475569' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', fontWeight: 700, color: 'var(--manager-text-secondary)' }}>
                                 <span>Aforo Estimado</span>
-                                <span style={{ color: '#0f172a' }}>{simTickets.toLocaleString()} boletos</span>
+                                <span style={{ color: 'var(--manager-text)', fontWeight: 800 }}>{simTickets.toLocaleString()} boletos</span>
                             </div>
                             <input 
                                 type="range" 
@@ -205,18 +278,18 @@ const RevenuePanel = ({ eventId, event }) => {
                                 max={totalTicketsCapacity} 
                                 value={simTickets} 
                                 onChange={(e) => setSimTickets(parseInt(e.target.value))}
-                                style={{ accentColor: '#0f172a', cursor: 'pointer', width: '100%' }}
+                                style={{ accentColor: '#6366f1', cursor: 'pointer', width: '100%' }}
                             />
-                            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.65rem', color: '#94a3b8' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.72rem', color: 'var(--manager-text-muted)' }}>
                                 <span>0</span>
                                 <span>Capacidad Máxima: {totalTicketsCapacity}</span>
                             </div>
                         </div>
 
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', fontWeight: 700, color: '#475569' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', fontWeight: 700, color: 'var(--manager-text-secondary)' }}>
                                 <span>Tarifa Promedio del Boleto</span>
-                                <span style={{ color: '#0f172a' }}>${simTicketPrice} MXN</span>
+                                <span style={{ color: 'var(--manager-text)', fontWeight: 800 }}>${simTicketPrice} MXN</span>
                             </div>
                             <input 
                                 type="range" 
@@ -225,18 +298,18 @@ const RevenuePanel = ({ eventId, event }) => {
                                 step="25"
                                 value={simTicketPrice} 
                                 onChange={(e) => setSimTicketPrice(parseInt(e.target.value))}
-                                style={{ accentColor: '#0f172a', cursor: 'pointer', width: '100%' }}
+                                style={{ accentColor: '#6366f1', cursor: 'pointer', width: '100%' }}
                             />
-                            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.65rem', color: '#94a3b8' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.72rem', color: 'var(--manager-text-muted)' }}>
                                 <span>$50</span>
                                 <span>$5,000</span>
                             </div>
                         </div>
 
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', fontWeight: 700, color: '#475569' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', fontWeight: 700, color: 'var(--manager-text-secondary)' }}>
                                 <span>Costos Operativos / Producción</span>
-                                <span style={{ color: '#0f172a' }}>${simFixedCosts.toLocaleString()} MXN</span>
+                                <span style={{ color: 'var(--manager-text)', fontWeight: 800 }}>${simFixedCosts.toLocaleString()} MXN</span>
                             </div>
                             <input 
                                 type="range" 
@@ -245,9 +318,9 @@ const RevenuePanel = ({ eventId, event }) => {
                                 step="5000"
                                 value={simFixedCosts} 
                                 onChange={(e) => setSimFixedCosts(parseInt(e.target.value))}
-                                style={{ accentColor: '#0f172a', cursor: 'pointer', width: '100%' }}
+                                style={{ accentColor: '#6366f1', cursor: 'pointer', width: '100%' }}
                             />
-                            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.65rem', color: '#94a3b8' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.72rem', color: 'var(--manager-text-muted)' }}>
                                 <span>$0</span>
                                 <span>$200,000</span>
                             </div>
@@ -257,45 +330,61 @@ const RevenuePanel = ({ eventId, event }) => {
                     {/* Proyecciones de Salida */}
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                         
-                        <div style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '18px', padding: '1.2rem', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                        <div style={{
+                            background: 'var(--manager-card-surface)',
+                            border: '1px solid var(--manager-border)',
+                            borderRadius: '14px',
+                            padding: '1.25rem',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: '12px'
+                        }}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#64748b' }}>Ingreso Proyectado (ML)</span>
-                                <span style={{ fontSize: '0.95rem', fontWeight: 800, color: '#0f172a' }}>
+                                <span style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--manager-text-secondary)' }}>Ingreso Proyectado (ML)</span>
+                                <span style={{ fontSize: '1.05rem', fontWeight: 800, color: 'var(--manager-text)' }}>
                                     ${simulatedRevenue.toLocaleString()} MXN
                                 </span>
                             </div>
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#64748b' }}>Gastos de Producción</span>
-                                <span style={{ fontSize: '0.95rem', fontWeight: 800, color: '#ef4444' }}>
+                                <span style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--manager-text-secondary)' }}>Gastos de Producción</span>
+                                <span style={{ fontSize: '1.05rem', fontWeight: 800, color: '#ef4444' }}>
                                     -${simFixedCosts.toLocaleString()} MXN
                                 </span>
                             </div>
                             
-                            <div style={{ borderTop: '1px solid #e2e8f0', paddingTop: '10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                <span style={{ fontSize: '0.8rem', fontWeight: 800, color: '#475569' }}>Beneficio Neto Estimado</span>
-                                <span style={{ fontSize: '1.2rem', fontWeight: 900, color: simulatedNetBenefit >= 0 ? '#10b981' : '#ef4444' }}>
+                            <div style={{ borderTop: '1px solid var(--manager-border-subtle)', paddingTop: '10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                <span style={{ fontSize: '0.85rem', fontWeight: 800, color: 'var(--manager-text)' }}>Beneficio Neto Estimado</span>
+                                <span style={{ fontSize: '1.3rem', fontWeight: 900, color: simulatedNetBenefit >= 0 ? '#10b981' : '#ef4444' }}>
                                     ${simulatedNetBenefit.toLocaleString()} MXN
                                 </span>
                             </div>
 
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '0.68rem', color: '#64748b', borderTop: '1px dashed #e2e8f0', paddingTop: '8px', marginTop: '2px' }}>
-                                <ShieldCheck size={13} color="#10b981" style={{ flexShrink: 0 }} />
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.72rem', color: 'var(--manager-text-muted)', borderTop: '1px dashed var(--manager-border-subtle)', paddingTop: '8px', marginTop: '2px' }}>
+                                <ShieldCheck size={14} color="#10b981" style={{ flexShrink: 0 }} />
                                 <span>Margen de confiabilidad de la IA: ±${Math.round(maeError).toLocaleString()} MXN</span>
                             </div>
                         </div>
 
                         {/* Estado de Viabilidad */}
-                        <div style={{ background: '#ffffff', border: `1px solid ${viability.color}`, borderRadius: '18px', padding: '1rem', display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
+                        <div style={{
+                            background: 'var(--manager-card-surface)',
+                            border: `1px solid ${viability.color}`,
+                            borderRadius: '14px',
+                            padding: '1rem',
+                            display: 'flex',
+                            gap: '10px',
+                            alignItems: 'flex-start'
+                        }}>
                             {simulatedNetBenefit < 0 ? (
-                                <AlertTriangle size={18} color={viability.color} style={{ flexShrink: 0, marginTop: '2px' }} />
+                                <AlertTriangle size={20} color={viability.color} style={{ flexShrink: 0, marginTop: '2px' }} />
                             ) : (
-                                <TrendingUp size={18} color={viability.color} style={{ flexShrink: 0, marginTop: '2px' }} />
+                                <TrendingUp size={20} color={viability.color} style={{ flexShrink: 0, marginTop: '2px' }} />
                             )}
                             <div>
-                                <h4 style={{ margin: 0, fontSize: '0.78rem', fontWeight: 800, color: viability.color }}>
+                                <h4 style={{ margin: 0, fontSize: '0.85rem', fontWeight: 800, color: viability.color }}>
                                     {viability.label}
                                 </h4>
-                                <p style={{ margin: '3px 0 0 0', fontSize: '0.7rem', color: '#64748b', lineHeight: '1.3' }}>
+                                <p style={{ margin: '4px 0 0 0', fontSize: '0.78rem', color: 'var(--manager-text-secondary)', lineHeight: '1.4' }}>
                                     {viability.desc}
                                 </p>
                             </div>
@@ -303,18 +392,36 @@ const RevenuePanel = ({ eventId, event }) => {
                     </div>
                 </div>
 
-                <div style={{ display: 'flex', gap: '8px', alignItems: 'center', background: '#eff6ff', border: '1px solid #bfdbfe', borderRadius: '12px', padding: '10px 14px', fontSize: '0.72rem', color: '#1e3a8a', marginTop: '0.5rem' }}>
-                    <HelpCircle size={16} color="#3b82f6" style={{ flexShrink: 0 }} />
-                    <span>
+                <div style={{
+                    display: 'flex',
+                    gap: '10px',
+                    alignItems: 'center',
+                    background: 'rgba(99, 102, 241, 0.08)',
+                    border: '1px solid rgba(99, 102, 241, 0.25)',
+                    borderRadius: '12px',
+                    padding: '12px 16px',
+                    fontSize: '0.8rem',
+                    color: 'var(--manager-text)',
+                    marginTop: '0.5rem'
+                }}>
+                    <HelpCircle size={18} color="#6366f1" style={{ flexShrink: 0 }} />
+                    <span style={{ lineHeight: '1.4' }}>
                         <b>Recomendación comercial:</b> Esta simulación ayuda a predecir si el show será rentable según la elasticidad observada en eventos anteriores. Si subes demasiado la tarifa, la IA calcula la pérdida potencial de aforo promedio.
                     </span>
                 </div>
             </div>
 
             {/* Pie de Nota Informativo */}
-            <div style={{ p: '1rem', background: '#f8fafc', borderRadius: '12px', border: '1px solid #e2e8f0', fontSize: '0.75rem', color: '#64748b' }}>
+            <div style={{
+                padding: '1rem 1.25rem',
+                background: 'var(--manager-card-surface)',
+                borderRadius: '12px',
+                border: '1px solid var(--manager-border)',
+                fontSize: '0.8rem',
+                color: 'var(--manager-text-muted)'
+            }}>
                 <p style={{ margin: 0 }}>
-                    <strong>Nota:</strong> Los ingresos reales mostrados en el reporte son brutos antes de comisiones bancarias. La simulación utiliza el algoritmo de Regresión Lineal de Spark/Fallbacks entrenado dinámicamente.
+                    <strong>Nota:</strong> Los ingresos reales mostrados en el reporte son brutos antes de comisiones bancarias. La simulación utiliza el algoritmo de Regresión Lineal de Machine Learning entrenado con métricas históricas.
                 </p>
             </div>
         </div>

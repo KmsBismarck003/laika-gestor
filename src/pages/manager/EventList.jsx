@@ -6,6 +6,7 @@ import api from '../../services/api';
 import Card from '../../components/Card';
 import Button from '../../components/Button';
 import Modal from '../../components/Modal';
+import Pagination from '../../components/Pagination/Pagination';
 import EventForm from './EventForm';
 import ManagerStatsCards from './components/ManagerStatsCards';
 import '../../styles/manager.css';
@@ -59,8 +60,10 @@ const EventList = () => {
     const [loading, setLoading] = useState(true);
     const [showCreateModal, setShowCreateModal] = useState(false);
 
-    // Filtros de estado
+    // Filtros de estado y paginación
     const [filterStatus, setFilterStatus] = useState('all');
+    const [currentPage, setCurrentPage] = useState(1);
+    const pageSize = 8;
 
     useEffect(() => {
         fetchEvents();
@@ -167,7 +170,7 @@ const EventList = () => {
                         </thead>
                         <tbody>
                             {filteredEvents.length > 0 ? (
-                                filteredEvents.map(event => (
+                                filteredEvents.slice((currentPage - 1) * pageSize, currentPage * pageSize).map(event => (
                                     <tr key={event.id} style={{ cursor: 'pointer' }} onClick={() => navigate(`/events/manage/${event.id}`)}>
                                         <td>
                                             <div className="event-cell-name">{event.name}</div>
@@ -217,7 +220,7 @@ const EventList = () => {
                                     <td colSpan="6" style={{ textAlign: 'center', padding: '3rem' }}>
                                         <p className="text-muted">No tienes eventos registrados aún.</p>
                                         <Button variant="outline" onClick={() => setShowCreateModal(true)}>
-                                            Crear mi primer evento
+                                             Crear mi primer evento
                                         </Button>
                                     </td>
                                 </tr>
@@ -226,6 +229,16 @@ const EventList = () => {
                     </table>
                 )}
             </div>
+
+            {Math.ceil(filteredEvents.length / pageSize) > 1 && (
+                <div style={{ marginBottom: '2rem' }}>
+                    <Pagination
+                        currentPage={currentPage}
+                        totalPages={Math.ceil(filteredEvents.length / pageSize)}
+                        onPageChange={setCurrentPage}
+                    />
+                </div>
+            )}
 
             {/* Create Modal */}
             <Modal

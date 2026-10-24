@@ -38,7 +38,8 @@
   background: #e5e7eb;
 }
 
-.merch-title {
+.manager-merch-header .merch-title,
+.merch-builder-container .merch-title {
   font-size: 2rem;
   font-weight: 700;
   color: #1a1a1a;

@@ -91,7 +91,7 @@ const EventDetail = () => {
                             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
                             Volver
                         </button>
-                        <h1 style={{ fontSize: '1.75rem', fontWeight: 800, color: '#ffffff', margin: 0, letterSpacing: '-0.02em' }}>
+                        <h1 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--manager-text)', margin: 0, letterSpacing: '-0.02em' }}>
                             {event?.name || 'Evento'}
                         </h1>
                         <span className={`status-badge status-${event?.status || 'draft'}`}>
@@ -233,7 +233,7 @@ const EventDetail = () => {
                                                     <td>
                                                         <span className="time-badge">{String(f.time).substring(0, 5)} hrs</span>
                                                     </td>
-                                                    <td style={{ fontWeight: 600, color: '#ffffff' }}>
+                                                    <td style={{ fontWeight: 600, color: 'var(--manager-text)' }}>
                                                         {f.venue_name || event.venue || 'Recinto Principal'}
                                                     </td>
                                                     <td>
