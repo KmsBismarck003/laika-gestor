@@ -27,6 +27,17 @@ const DashboardLayout = () => {
   })
   const { showSkeleton } = useSkeletonContext()
   const [searchTerm, setSearchTerm] = useState('')
+  const [isSidebarPinned, setIsSidebarPinned] = useState(() => {
+    return localStorage.getItem('sidebar_pinned') === 'true';
+  })
+
+  const toggleSidebarPin = () => {
+    setIsSidebarPinned(prev => {
+      const next = !prev;
+      localStorage.setItem('sidebar_pinned', String(next));
+      return next;
+    });
+  }
 
 
   const defaultAdminSections = [
@@ -284,7 +295,7 @@ const DashboardLayout = () => {
 
   return (
     <div className={`dashboard-layout${showSkeleton ? ' app-skeleton' : ''}`}>
-      <aside className="sidebar">
+      <aside className={`sidebar ${isSidebarPinned ? 'sidebar--pinned' : 'sidebar--auto-collapse'}`}>
         <div className='sidebar-header'>
           <div className='sidebar-brand' onClick={() => navigate('/')}>
             <img
@@ -295,6 +306,18 @@ const DashboardLayout = () => {
             />
             <span className='sidebar-brand-name'>LAIKA</span>
           </div>
+          <button
+            type="button"
+            className={`sidebar-pin-btn ${isSidebarPinned ? 'active' : ''}`}
+            onClick={(e) => {
+              e.stopPropagation();
+              toggleSidebarPin();
+            }}
+            title={isSidebarPinned ? "Desfijar menú (se contraerá automáticamente)" : "Fijar menú expandido"}
+            aria-label="Fijar menú lateral"
+          >
+            <Icon name={isSidebarPinned ? "pin" : "chevronLeft"} size={14} />
+          </button>
         </div>
 
         <nav className='sidebar-nav'>

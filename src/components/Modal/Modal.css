@@ -7,13 +7,14 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.94); /* Very deep dark overlay */
-  backdrop-filter: none !important; /* NO BLUR EFFECT */
+  background: rgba(0, 0, 0, 0.8) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
   display: flex;
-  align-items: center; /* Centrado vertical */
+  align-items: center;
   justify-content: center;
-  z-index: var(--z-modal-backdrop);
-  padding: 2rem 1rem; /* Padding uniforme */
+  z-index: 99999 !important;
+  padding: 2rem 1rem;
   animation: fadeIn 0.3s ease;
 }
 
@@ -71,8 +72,9 @@
 
 .modal__content,
 .modal-content {
-  background: #fff !important;
-  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+  background: var(--bg-card, var(--bg-secondary, #ffffff)) !important;
+  color: var(--text-primary, #0f172a);
+  border: 1px solid var(--border-color, rgba(0, 0, 0, 0.1)) !important;
   border-radius: 16px !important;
   box-shadow:
     0 24px 80px rgba(0, 0, 0, 0.45),
@@ -84,6 +86,7 @@
   animation: slideUp 0.5s cubic-bezier(0.19, 1, 0.22, 1);
   position: relative;
   overflow: hidden;
+  z-index: 100000 !important;
 }
 
 @keyframes slideUp {

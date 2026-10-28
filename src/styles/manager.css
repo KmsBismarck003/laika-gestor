@@ -44,7 +44,7 @@
   --manager-shadow-glow: 0 0 16px rgba(99, 102, 241, 0.12);
 }
 
-[data-theme='dark'] {
+[data-theme='dark']:not([data-sidebar-only='true']) {
   --manager-bg: transparent;
   --manager-card-bg: #111218;
   --manager-card-surface: rgba(255, 255, 255, 0.03);
@@ -400,12 +400,16 @@
    ========================================================================== */
 .manager-tabs {
   display: flex;
-  gap: 0.5rem;
-  border-bottom: 1px solid var(--manager-border);
+  gap: 0.35rem;
   margin-bottom: 2rem;
-  padding-bottom: 0.5rem;
+  padding: 0.35rem;
+  background: var(--manager-card-surface, rgba(0, 0, 0, 0.03));
+  border: 1px solid var(--manager-border);
+  border-radius: var(--manager-radius-lg);
   overflow-x: auto;
   scrollbar-width: none;
+  width: fit-content;
+  max-width: 100%;
 }
 
 .manager-tabs::-webkit-scrollbar {
@@ -416,13 +420,16 @@
   background: transparent;
   border: 1px solid transparent;
   border-radius: var(--manager-radius-md);
-  padding: 0.65rem 1.25rem;
+  padding: 0.6rem 1.15rem;
   font-size: 0.88rem;
   font-weight: 600;
   color: var(--manager-text-muted);
   cursor: pointer;
   white-space: nowrap;
-  transition: all 0.2s ease;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .tab-button:hover {
@@ -431,23 +438,26 @@
 }
 
 .tab-button.active {
-  color: var(--manager-text);
-  background: var(--manager-card-hover);
-  border-color: var(--manager-accent);
-  box-shadow: 0 0 12px var(--manager-accent-light);
+  color: var(--manager-accent, #6366f1);
+  background: var(--manager-card-bg, #ffffff);
+  border-color: var(--manager-border);
+  box-shadow: var(--manager-shadow-sm);
   font-weight: 700;
 }
 
-[data-theme='dark'] .tab-button.active {
+[data-theme='dark']:not([data-sidebar-only='true']) .tab-button.active {
   color: #ffffff;
-  background: rgba(99, 102, 241, 0.15);
-  border-color: rgba(99, 102, 241, 0.35);
+  background: rgba(99, 102, 241, 0.2);
+  border-color: rgba(99, 102, 241, 0.4);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 /* ==========================================================================
    Detail Card & Functions Bento Table
    ========================================================================== */
-.bento-card {
+.manager-container .bento-card,
+.event-detail-container .bento-card,
+.event-detail-page .bento-card {
   background: var(--manager-card-bg);
   border: 1px solid var(--manager-border);
   border-radius: var(--manager-radius-lg);

@@ -10,6 +10,7 @@ export const ThemeProvider = ({ children }) => {
   useEffect(() => {
     const root = document.documentElement;
     root.setAttribute('data-theme', theme);
+    root.setAttribute('data-sidebar-only', sidebarOnly ? 'true' : 'false');
     localStorage.setItem('theme', theme);
     localStorage.setItem('themeColor', customColor);
     localStorage.setItem('sidebarOnly', sidebarOnly ? 'true' : 'false');
@@ -31,23 +32,50 @@ export const ThemeProvider = ({ children }) => {
         // Modo Solo Sidebar: El contenido de la página se queda en blanco (Light Mode)
         root.style.setProperty('--bg-primary', '#F8FAFC');
         root.style.setProperty('--bg-card', '#FFFFFF');
-        root.style.setProperty('--text-primary', '#000000');
-        root.style.setProperty('--border-color', '#000000'); // alto contraste
+        root.style.setProperty('--bg-secondary', '#FFFFFF');
+        root.style.setProperty('--bg-tertiary', '#F1F5F9');
+        root.style.setProperty('--text-primary', '#0F172A');
+        root.style.setProperty('--text-secondary', '#475569');
+        root.style.setProperty('--text-muted', '#64748B');
+        root.style.setProperty('--border-color', '#E2E8F0');
+        root.style.setProperty('--manager-card-bg', '#FFFFFF');
+        root.style.setProperty('--manager-text', '#0F172A');
+        root.style.setProperty('--manager-text-secondary', '#475569');
+        root.style.setProperty('--manager-text-muted', '#64748B');
+        root.style.setProperty('--manager-border', '#E2E8F0');
       } else {
         // Modo Oscuro Completo en Todo el Sistema
         root.style.setProperty('--bg-primary', colors.bg);
         root.style.setProperty('--bg-card', colors.card);
+        root.style.setProperty('--bg-secondary', colors.card);
+        root.style.setProperty('--bg-tertiary', '#18181b');
         root.style.setProperty('--text-primary', colors.text);
+        root.style.setProperty('--text-secondary', '#CBD5E1');
+        root.style.setProperty('--text-muted', '#94A3B8');
         root.style.setProperty('--border-color', colors.border);
+        root.style.setProperty('--manager-card-bg', colors.card);
+        root.style.setProperty('--manager-text', colors.text);
+        root.style.setProperty('--manager-text-secondary', '#CBD5E1');
+        root.style.setProperty('--manager-text-muted', '#94A3B8');
+        root.style.setProperty('--manager-border', colors.border);
       }
     } else {
       // Light Mode (Predeterminado - Alto contraste)
       root.style.setProperty('--bg-primary', '#F8FAFC');
       root.style.setProperty('--bg-card', '#FFFFFF');
-      root.style.setProperty('--text-primary', '#000000');
+      root.style.setProperty('--bg-secondary', '#FFFFFF');
+      root.style.setProperty('--bg-tertiary', '#F1F5F9');
+      root.style.setProperty('--text-primary', '#0F172A');
+      root.style.setProperty('--text-secondary', '#475569');
+      root.style.setProperty('--text-muted', '#64748B');
       root.style.setProperty('--bg-sidebar', '#1A1A1A');
       root.style.setProperty('--text-sidebar', '#FFFFFF');
-      root.style.setProperty('--border-color', '#000000');
+      root.style.setProperty('--border-color', '#E2E8F0');
+      root.style.setProperty('--manager-card-bg', '#FFFFFF');
+      root.style.setProperty('--manager-text', '#0F172A');
+      root.style.setProperty('--manager-text-secondary', '#475569');
+      root.style.setProperty('--manager-text-muted', '#64748B');
+      root.style.setProperty('--manager-border', '#E2E8F0');
     }
   }, [theme, customColor, sidebarOnly]);
 

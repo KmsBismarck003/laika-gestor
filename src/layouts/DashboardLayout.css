@@ -59,31 +59,94 @@
    SIDEBAR
    ============================================ */
 .sidebar {
-  width: var(--sidebar-width);
+  width: var(--sidebar-width, 240px);
   background: var(--bg-sidebar);
   border-right: 1px solid rgba(255, 255, 255, 0.06);
   display: flex;
   flex-direction: column;
-  transition: background-color var(--transition-base);
+  transition: width 0.28s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.28s ease, background-color var(--transition-base);
   z-index: 100;
   overflow: hidden;
   height: 100vh;
   flex-shrink: 0;
+  position: relative;
 }
 
-/* Desktop: Sidebar always visible */
-/* Desktop: Sidebar default behavior (now collapsible triggers apply globally) */
-/* Standard flow pushing content */
+/* Modo Auto-Colapso: Contraído a 68px cuando no se usa, expandido a 240px al pasar el cursor */
+.sidebar.sidebar--auto-collapse {
+  width: var(--sidebar-collapsed-width, 68px);
+}
+
+.sidebar.sidebar--auto-collapse:hover,
+.sidebar.sidebar--auto-collapse:focus-within {
+  width: var(--sidebar-width, 240px);
+  box-shadow: 10px 0 32px rgba(0, 0, 0, 0.45);
+}
+
+.sidebar.sidebar--pinned {
+  width: var(--sidebar-width, 240px);
+}
+
+/* Ocultamiento suave de etiquetas cuando el sidebar no está en uso */
+.sidebar.sidebar--auto-collapse:not(:hover):not(:focus-within) .sidebar-label,
+.sidebar.sidebar--auto-collapse:not(:hover):not(:focus-within) .sidebar-brand-name,
+.sidebar.sidebar--auto-collapse:not(:hover):not(:focus-within) .sidebar-section-label,
+.sidebar.sidebar--auto-collapse:not(:hover):not(:focus-within) .sidebar-pin-btn {
+  opacity: 0;
+  width: 0;
+  max-width: 0;
+  overflow: hidden;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.sidebar.sidebar--auto-collapse:not(:hover):not(:focus-within) .sidebar-link {
+  justify-content: center;
+  padding: 0.6rem 0;
+  width: 44px;
+  margin: 0 auto;
+}
+
+.sidebar.sidebar--auto-collapse:not(:hover):not(:focus-within) .sidebar-header {
+  justify-content: center;
+  padding: 0 0.5rem;
+}
+
+.sidebar.sidebar--auto-collapse:not(:hover):not(:focus-within) .sidebar-brand {
+  justify-content: center;
+}
+
+.sidebar-pin-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #fff;
+  border-radius: 6px;
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-pin-btn:hover {
+  background: #ff6b00;
+  border-color: #ff6b00;
+}
+
+.sidebar-pin-btn.active {
+  background: #ff6b00;
+  border-color: #ff6b00;
+}
+
+/* Desktop: Sidebar default behavior */
 @media (min-width: 769px) {
   .dashboard-main {
     margin-left: 0;
-    /* Reset margins as flex handles it */
     transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  /* When sidebar is hovered, push the content */
-  .dashboard-layout:has(.sidebar:hover) .dashboard-main {
-    margin-left: 0;
   }
 }
 

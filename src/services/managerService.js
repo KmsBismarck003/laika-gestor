@@ -6,6 +6,14 @@ import { apiClient } from './apiClient'
 export const managerAPI = {
     getMyEvents: () => apiClient.get('/manager/events'),
     getEventDetail: id => apiClient.get(`/events/${id}`),
+    getEventFunctions: async id => {
+        try {
+            return await apiClient.get(`/events/${id}/functions`);
+        } catch {
+            const ev = await apiClient.get(`/events/${id}`);
+            return ev?.functions || [];
+        }
+    },
     getEventTickets: id => apiClient.get(`/manager/events/${id}/tickets`),
     getEventRevenue: id => apiClient.get(`/manager/events/${id}/revenue`),
     getAnalytics: () => apiClient.get('/stats/manager/dashboard'),

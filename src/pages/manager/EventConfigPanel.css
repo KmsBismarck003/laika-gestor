@@ -1,0 +1,397 @@
+/* ==========================================================================
+   Event Configuration Panel - Tier-1 Bento Architecture
+   ========================================================================== */
+
+.event-config-bento {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+/* Hero Header Card */
+.config-hero-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--manager-card-bg, #ffffff);
+  border: 1px solid var(--manager-border, #e2e8f0);
+  border-radius: var(--manager-radius-lg, 16px);
+  padding: 1.5rem 1.75rem;
+  box-shadow: var(--manager-shadow-sm, 0 1px 3px rgba(0,0,0,0.05));
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.config-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--manager-accent, #6366f1);
+  background: rgba(99, 102, 241, 0.1);
+  padding: 0.3rem 0.65rem;
+  border-radius: 9999px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.5rem;
+}
+
+.config-hero-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--manager-text, #0f172a);
+  margin: 0 0 0.35rem 0;
+  letter-spacing: -0.02em;
+}
+
+.config-hero-subtitle {
+  font-size: 0.88rem;
+  color: var(--manager-text-muted, #64748b);
+  margin: 0;
+  max-width: 600px;
+  line-height: 1.45;
+}
+
+/* Grid of Settings Cards */
+.config-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.config-bento-card {
+  background: var(--manager-card-bg, #ffffff);
+  border: 1px solid var(--manager-border, #e2e8f0);
+  border-radius: var(--manager-radius-lg, 16px);
+  padding: 1.5rem;
+  box-shadow: var(--manager-shadow-sm, 0 1px 3px rgba(0,0,0,0.05));
+  display: flex;
+  flex-direction: column;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.config-bento-card:hover {
+  border-color: rgba(99, 102, 241, 0.35);
+  box-shadow: 0 8px 20px -4px rgba(0, 0, 0, 0.06);
+}
+
+.config-card-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  margin-bottom: 1.25rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--manager-border-subtle, #f1f5f9);
+}
+
+.config-icon-badge {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.config-icon-badge--purple {
+  background: rgba(99, 102, 241, 0.12);
+  color: #6366f1;
+}
+
+.config-icon-badge--blue {
+  background: rgba(59, 130, 246, 0.12);
+  color: #3b82f6;
+}
+
+.config-icon-badge--green {
+  background: rgba(16, 185, 129, 0.12);
+  color: #10b981;
+}
+
+.config-icon-badge--red {
+  background: rgba(239, 68, 68, 0.12);
+  color: #ef4444;
+}
+
+.config-card-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--manager-text, #0f172a);
+  margin: 0 0 0.2rem 0;
+  letter-spacing: -0.01em;
+}
+
+.config-card-desc {
+  font-size: 0.82rem;
+  color: var(--manager-text-muted, #64748b);
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Toggle Lists */
+.config-toggle-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+}
+
+.config-toggle-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--manager-border-subtle, #f8fafc);
+}
+
+.config-toggle-item:last-child {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.toggle-info {
+  flex: 1;
+}
+
+.toggle-label-group {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-bottom: 0.25rem;
+}
+
+.toggle-icon {
+  color: var(--manager-accent, #6366f1);
+}
+
+.toggle-label {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--manager-text, #0f172a);
+}
+
+.toggle-desc {
+  font-size: 0.8rem;
+  color: var(--manager-text-muted, #64748b);
+  margin: 0;
+  line-height: 1.45;
+}
+
+/* Subfield inside toggle */
+.config-subfield {
+  margin-top: 0.65rem;
+  padding: 0.65rem 0.85rem;
+  background: var(--manager-card-surface, #f8fafc);
+  border: 1px solid var(--manager-border, #e2e8f0);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.subfield-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--manager-text-secondary, #475569);
+}
+
+.config-select-sm {
+  background: var(--manager-card-bg, #ffffff);
+  border: 1px solid var(--manager-border, #e2e8f0);
+  border-radius: 6px;
+  padding: 0.4rem 0.65rem;
+  color: var(--manager-text, #0f172a);
+  font-size: 0.82rem;
+  font-weight: 600;
+  outline: none;
+}
+
+/* Form Fields List */
+.config-fields-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+}
+
+.config-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.config-field-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--manager-text-secondary, #475569);
+}
+
+.config-select {
+  width: 100%;
+  background: var(--manager-card-surface, #f8fafc);
+  border: 1px solid var(--manager-border, #e2e8f0);
+  border-radius: 8px;
+  padding: 0.65rem 0.85rem;
+  color: var(--manager-text, #0f172a);
+  font-size: 0.88rem;
+  font-weight: 600;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.config-select:focus {
+  border-color: var(--manager-accent, #6366f1);
+}
+
+.field-hint {
+  font-size: 0.76rem;
+  color: var(--manager-text-muted, #64748b);
+  line-height: 1.4;
+}
+
+/* Modern Switch */
+.config-switch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.config-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.switch-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--manager-border, #cbd5e1);
+  transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  border-radius: 24px;
+}
+
+.switch-slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+.config-switch input:checked + .switch-slider {
+  background-color: var(--manager-accent, #6366f1);
+}
+
+.config-switch input:checked + .switch-slider:before {
+  transform: translateX(20px);
+}
+
+/* Status Box */
+.config-status-box {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.status-current-badge-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.status-explanation {
+  font-size: 0.85rem;
+  color: var(--manager-text-muted, #64748b);
+  line-height: 1.45;
+}
+
+.status-actions-row {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+/* Danger Zone Card */
+.config-bento-card--danger {
+  border-color: rgba(239, 68, 68, 0.35);
+  background: var(--manager-danger-bg, rgba(239, 68, 68, 0.04));
+}
+
+.danger-zone-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.danger-warning-text {
+  font-size: 0.85rem;
+  color: var(--manager-text-secondary, #475569);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.danger-already-cancelled {
+  padding: 0.85rem 1rem;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 8px;
+  color: #ef4444;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+/* Accordion Full Editor */
+.config-full-editor-accordion {
+  background: var(--manager-card-bg, #ffffff);
+  border: 1px solid var(--manager-border, #e2e8f0);
+  border-radius: var(--manager-radius-lg, 16px);
+  overflow: hidden;
+  box-shadow: var(--manager-shadow-sm, 0 1px 3px rgba(0,0,0,0.05));
+}
+
+.full-editor-trigger {
+  width: 100%;
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  color: var(--manager-text, #0f172a);
+}
+
+.full-editor-trigger:hover {
+  background: var(--manager-card-surface, #f8fafc);
+}
+
+.full-editor-body {
+  padding: 1.5rem;
+  border-top: 1px solid var(--manager-border, #e2e8f0);
+}
+
+@media (max-width: 640px) {
+  .config-grid {
+    grid-template-columns: 1fr;
+  }
+}

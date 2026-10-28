@@ -26,3 +26,4 @@ export { default as AdCarousel } from './AdCarousel/AdCarousel';
 export { default as UserPreviewModal } from './Modals/UserPreviewModal/UserPreviewModal';
 export { default as WelcomeOverlay } from './Overlays/WelcomeOverlay/WelcomeOverlay';
 export { default as LoadingScreen } from './LoadingScreen/LoadingScreen';
+export { BentoGrid, BentoCard, BentoHeader, BentoMetric, BentoBadge } from './Bento';
