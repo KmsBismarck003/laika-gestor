@@ -383,6 +383,9 @@
   border-radius: 50%;
   animation: avm-spin 1s linear infinite;
 }
+
+@keyframes avm-spin {
+  to { transform: rotate(360deg); }
 }
 
 /* Form Styles */
