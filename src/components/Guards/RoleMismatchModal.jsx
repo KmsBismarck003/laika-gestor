@@ -21,9 +21,17 @@ const RoleMismatchModal = ({ user, onContinue, onLogout }) => {
   const targetPath = ROLE_PATHS[userRole] || '/';
 
   const handleGoToTargetPortal = () => {
-    const token = localStorage.getItem('token') || sessionStorage.getItem('token');
-    const b64User = btoa(encodeURIComponent(JSON.stringify(user)));
-    window.location.href = `http://localhost:${targetPort}/auth-sync?token=${token}&user=${b64User}&redirect=${encodeURIComponent(targetPath)}`;
+    const isLocalhost = typeof window !== 'undefined' && (
+      window.location.hostname === 'localhost' ||
+      window.location.hostname === '127.0.0.1'
+    );
+    if (isLocalhost) {
+      const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+      const b64User = btoa(encodeURIComponent(JSON.stringify(user)));
+      window.location.href = `http://localhost:${targetPort}/auth-sync?token=${token}&user=${b64User}&redirect=${encodeURIComponent(targetPath)}`;
+    } else {
+      window.location.href = targetPath;
+    }
   };
 
   return (
