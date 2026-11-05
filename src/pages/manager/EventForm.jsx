@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
-import { Badge, Icon, Modal } from '../../components';
+import { Icon, Modal } from '../../components';
 import api, { venueAPI } from '../../services/api';
 import { useNotification } from '../../context/NotificationContext';
 import { useAuth } from '../../context/AuthContext';
 import EventCardPreview from './EventCardPreview';
+import './EventForm.css';
 import { PresaleSection } from '../../features/presale';
 
 const formatTime = (time) => {
@@ -501,13 +502,12 @@ const EventForm = ({ event = null, onSuccess, onClose }) => {
 
                         {/* Venue Selection */}
                         <div className="form-group mb-4">
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Recinto Principal</label>
+                            <label className="event-label">Recinto Principal *</label>
                             <select
                                 name="venue_id"
                                 value={formData.venue_id}
                                 onChange={handleVenueChange}
-                                className="w-full p-2 border border-gray-300 rounded-md"
-                                style={{ width: '100%', padding: '0.625rem', borderRadius: '0.5rem', border: '1px solid #e2e8f0' }}
+                                className="event-input"
                             >
                                 <option value="">-- Seleccionar Recinto --</option>
                                 {venues.map(v => (
@@ -517,14 +517,14 @@ const EventForm = ({ event = null, onSuccess, onClose }) => {
                         </div>
 
                         {formData.venue_id && rooms.length > 0 && (
-                            <div className="form-group mb-4" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', background: '#f8fafc', padding: '1rem', borderRadius: '0.5rem', border: '1px solid #e2e8f0' }}>
+                            <div className="form-group venue-chip-grid">
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Sala del Recinto</label>
+                                    <label className="event-label">Sala del Recinto</label>
                                     <select
                                         name="room_id"
                                         value={formData.room_id}
                                         onChange={handleChange}
-                                        className="w-full p-2 border border-gray-300 rounded-md"
+                                        className="event-input"
                                     >
                                         <option value="">-- Sin Sala Específica --</option>
                                         {rooms.map(r => (
@@ -553,15 +553,14 @@ const EventForm = ({ event = null, onSuccess, onClose }) => {
                             </div>
                         )}
 
-                        <div className="form-row grid grid-cols-2 gap-4 mb-4" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                        <div className="form-row form-row--pair">
                             <div className="form-group">
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Categoría</label>
+                                <label className="event-label">Categoría</label>
                                 <select
                                     name="category"
                                     value={formData.category}
                                     onChange={handleChange}
-                                    className="w-full p-2 border border-gray-300 rounded-md"
-                                    style={{ width: '100%', padding: '0.625rem', borderRadius: '0.5rem', border: '1px solid #e2e8f0' }}
+                                    className="event-input"
                                 >
                                     <option value="concert">Concierto</option>
                                     <option value="sport">Deporte</option>
@@ -588,13 +587,13 @@ const EventForm = ({ event = null, onSuccess, onClose }) => {
                         </div>
 
                         {/* Functions / Scheduling Section */}
-                        <div className="form-group mb-6 p-4 border rounded bg-gray-50" style={{ border: '1px solid #eee', background: '#f9fafb', borderRadius: '8px', padding: '1rem' }}>
-                            <label className="block text-sm font-bold text-gray-700 mb-3">Fechas, Recintos y Salas (Multifunción)</label>
+                        <div className="form-group functions-box">
+                            <label className="event-section-label">Fechas, Recintos y Salas (Multifunción)</label>
 
                             {functions.length > 0 && (
-                                <ul className="mb-4 space-y-2">
+                                <ul className="function-list">
                                     {functions.map((f, idx) => (
-                                        <li key={f.tempId || idx} className="flex justify-between items-center bg-white p-2 rounded border text-sm" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px', background: '#fff', border: '1px solid #ddd', padding: '0.5rem' }}>
+                                        <li key={f.tempId || idx} className="function-chip">
                                             <span>
                                                  <strong>{f.date}</strong> ⏰ {f.time} <br/>
                                                 <small style={{ color: '#666' }}>📍 {getVenueName(f.venue_id)} {f.room_id ? `| 🚪 ${getRoomName(f.room_id)}` : ''}</small>
@@ -605,25 +604,25 @@ const EventForm = ({ event = null, onSuccess, onClose }) => {
                                 </ul>
                             )}
 
-                            <div className="add-function-grid" style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr 1.5fr 1.2fr auto', gap: '0.5rem', alignItems: 'end' }}>
+                            <div className="add-function-grid">
                                 <div className="form-group">
-                                    <label className="text-xs font-bold">Fecha</label>
-                                    <input type="date" value={newFunction.date} onChange={e => setNewFunction({ ...newFunction, date: e.target.value })} className="w-full p-1 border rounded text-sm" />
+                                    <label className="event-label event-label--xs">Fecha</label>
+                                    <input type="date" value={newFunction.date} onChange={e => setNewFunction({ ...newFunction, date: e.target.value })} className="event-input" />
                                 </div>
                                 <div className="form-group">
-                                    <label className="text-xs font-bold">Hora</label>
-                                    <input type="time" value={newFunction.time} onChange={e => setNewFunction({ ...newFunction, time: e.target.value })} className="w-full p-1 border rounded text-sm" />
+                                    <label className="event-label event-label--xs">Hora</label>
+                                    <input type="time" value={newFunction.time} onChange={e => setNewFunction({ ...newFunction, time: e.target.value })} className="event-input" />
                                 </div>
                                 <div className="form-group">
-                                    <label className="text-xs font-bold">Recinto</label>
-                                    <select value={newFunction.venue_id} onChange={e => handleFunctionVenueChange(e.target.value)} className="w-full p-1 border rounded text-sm">
+                                    <label className="event-label event-label--xs">Recinto</label>
+                                    <select value={newFunction.venue_id} onChange={e => handleFunctionVenueChange(e.target.value)} className="event-input">
                                         <option value="">Recinto</option>
                                         {venues.map(v => <option key={v.id} value={v.id}>{v.name}</option>)}
                                     </select>
                                 </div>
                                 <div className="form-group">
-                                    <label className="text-xs font-bold">Sala (Opcional)</label>
-                                    <select value={newFunction.room_id} onChange={e => setNewFunction({ ...newFunction, room_id: e.target.value })} className="w-full p-1 border rounded text-sm">
+                                    <label className="event-label event-label--xs">Sala (Opcional)</label>
+                                    <select value={newFunction.room_id} onChange={e => setNewFunction({ ...newFunction, room_id: e.target.value })} className="event-input">
                                         <option value="">General</option>
                                         {newFunctionRooms.map(r => <option key={r.id} value={r.id}>{r.name}</option>)}
                                     </select>
@@ -634,7 +633,7 @@ const EventForm = ({ event = null, onSuccess, onClose }) => {
                         </div>
 
 
-                        <div className="form-row grid grid-cols-2 gap-4 mb-4" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                        <div className="form-row form-row--pair">
                             <div className="form-group">
                                 <Input
                                     label="Precio del Boleto *"
@@ -661,34 +660,22 @@ const EventForm = ({ event = null, onSuccess, onClose }) => {
                         </div>
 
                         <div className="form-group mb-4">
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Descripción</label>
+                            <label className="event-label">Descripción</label>
                             <textarea
                                 name="description"
                                 value={formData.description}
                                 onChange={handleChange}
-                                rows="4"
-                                className="w-full p-2 border border-gray-300 rounded-md"
-                                style={{ width: '100%', padding: '0.625rem', borderRadius: '0.5rem', border: '1px solid #e2e8f0' }}
+                                rows="6"
+                                className="event-input event-textarea"
                                 placeholder="Detalles del evento..."
                             ></textarea>
                         </div>
 
                         <div className="form-group mb-6">
-                            <label className="block text-sm font-bold text-gray-700 mb-3">Imagen del Evento (Vector Preview)</label>
+                            <label className="event-section-label">Imagen del Evento (Vector Preview)</label>
 
                             <div
                                 className="image-upload-dropzone"
-                                style={{
-                                    border: '2px dashed #e2e8f0',
-                                    borderRadius: '12px',
-                                    padding: '2rem',
-                                    textAlign: 'center',
-                                    cursor: 'pointer',
-                                    background: '#f8fafc',
-                                    transition: 'all 0.2s ease',
-                                    position: 'relative',
-                                    overflow: 'hidden'
-                                }}
                                 onClick={() => document.getElementById('event-image-upload').click()}
                             >
                                 <input
@@ -718,7 +705,7 @@ const EventForm = ({ event = null, onSuccess, onClose }) => {
                                     </div>
                                 ) : (
                                     <div className="upload-placeholder">
-                                        <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>📸</div>
+                                        <Icon name="camera" size={40} className="upload-camera-icon" />
                                         <p style={{ fontWeight: '600', color: '#1e293b' }}>
                                             {uploading ? 'Subiendo...' : 'Haz clic para subir la foto del evento'}
                                         </p>
@@ -742,16 +729,16 @@ const EventForm = ({ event = null, onSuccess, onClose }) => {
                         </div>
 
                         {/* --- GPS & MAPS --- */}
-                        <div className="advanced-toggle" style={{ marginBottom: '1rem' }}>
+                        <div className="advanced-toggle">
                             <Button type="button" variant="ghost" size="small" onClick={() => setShowAdvanced(!showAdvanced)}>
                                 {showAdvanced ? (
                                     <React.Fragment key="adv-hide-branch">
-                                        <Icon name="chevron-up" size={14} className="mr-2" />
+                                        <Icon name="chevron-up" size={14} />
                                         <span>Ocultar Configuración Avanzada</span>
                                     </React.Fragment>
                                 ) : (
                                     <React.Fragment key="adv-show-branch">
-                                        <Icon name="settings" size={14} className="mr-2" />
+                                        <Icon name="settings" size={14} />
                                         <span>Ajustes de Ubicación y Mapas (Opcional)</span>
                                     </React.Fragment>
                                 )}
@@ -759,9 +746,9 @@ const EventForm = ({ event = null, onSuccess, onClose }) => {
                         </div>
 
                         {showAdvanced && (
-                            <div className="form-group mb-6 p-4 border rounded bg-blue-50" style={{ border: '1px solid #dbeafe', background: '#eff6ff', borderRadius: '8px', padding: '1rem' }}>
-                                <label className="block text-sm font-bold text-blue-700 mb-3">📍 Ubicación y Mapas Especiales</label>
-                                <div className="grid grid-cols-1 gap-4">
+                            <div className="form-group advanced-box">
+                                <label className="event-section-label">📍 Ubicación y Mapas Especiales</label>
+                                <div className="advanced-box-grid">
                                     <Input 
                                         label="Google Maps URL (Embed/Directa)" 
                                         name="map_url" 
@@ -795,56 +782,48 @@ const EventForm = ({ event = null, onSuccess, onClose }) => {
                         />
 
                         {/* --- ENABLED FEATURES (READ ONLY FOR MANAGER) --- */}
-                        <div className="form-group mb-6 p-4 border rounded bg-purple-50" style={{ border: '1px solid #e9d5ff', background: '#f5f3ff', borderRadius: '8px', padding: '1rem' }}>
-                            <label className="block text-sm font-bold text-purple-700 mb-3">🚀 Características Habilitadas (Configuradas por Admin)</label>
-                            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-                                <Badge variant={formData.ads_enabled ? 'success' : 'default'} rounded>
-                                    <Icon name="image" size={12} className="mr-1" /> ANUNCIOS: {formData.ads_enabled ? `SÍ (${formData.max_ads} máx)` : 'NO'}
-                                </Badge>
-                                <Badge variant={formData.metrics_enabled ? 'success' : 'default'} rounded>
-                                    <Icon name="activity" size={12} className="mr-1" /> MÉTRICAS: {formData.metrics_enabled ? 'SÍ' : 'NO'}
-                                </Badge>
-                                <Badge variant={formData.merch_enabled ? 'success' : 'default'} rounded>
-                                    <Icon name="shopping-bag" size={12} className="mr-1" /> MERCANCÍA: {formData.merch_enabled ? 'SÍ' : 'NO'}
-                                </Badge>
+                        <div className="form-group features-box">
+                            <div className="event-section-label">
+                                🚀 Características Habilitadas
+                                <span className="event-section-subtitle">(Configuradas por Admin)</span>
+                            </div>
+                            <div className="features-pills">
+                                <span className={`feature-pill ${formData.ads_enabled ? 'feature-pill--on' : ''}`}>
+                                    <Icon name="image" size={12} /> ANUNCIOS {formData.ads_enabled ? `· SÍ (${formData.max_ads} máx)` : '· NO'}
+                                </span>
+                                <span className={`feature-pill ${formData.metrics_enabled ? 'feature-pill--on' : ''}`}>
+                                    <Icon name="activity" size={12} /> MÉTRICAS {formData.metrics_enabled ? '· SÍ' : '· NO'}
+                                </span>
+                                <span className={`feature-pill ${formData.merch_enabled ? 'feature-pill--on' : ''}`}>
+                                    <Icon name="shopping-bag" size={12} /> MERCANCÍA {formData.merch_enabled ? '· SÍ' : '· NO'}
+                                </span>
                             </div>
                             {formData.ads_enabled && event && (
-                                <div style={{ marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid #ddd' }}>
+                                <div className="features-ads-link">
                                     <Button type="button" size="small" variant="info" onClick={() => window.location.href = `/manager/events/${event.id}/ads`}>
-                                        <Icon name="external-link" size={12} className="mr-1" /> Gestionar Anuncios del Evento
+                                        <Icon name="external-link" size={12} /> Gestionar Anuncios del Evento
                                     </Button>
                                 </div>
                             )}
                         </div>
                     </div>
 
-                    <div className="form-actions" style={{ 
-                            display: 'flex', 
-                            justifyContent: 'flex-end', 
-                            gap: '1rem', 
-                            marginTop: 'auto',
-                            padding: '1.5rem 0 0.5rem 0',
-                            borderTop: '1px solid #eee',
-                            background: '#fff',
-                            position: 'sticky',
-                            bottom: 0,
-                            zIndex: 10
-                        }}>
-                            {onClose && (
-                                <Button type="button" variant="outline" onClick={onClose}>
-                                    Cancelar
-                                </Button>
-                            )}
-                            <Button type="submit" variant="primary" loading={loading} disabled={uploading}>
-                                {event ? 'Guardar Cambios' : 'Crear Evento'}
+                    <div className="form-actions">
+                        {onClose && (
+                            <Button type="button" variant="outline" onClick={onClose}>
+                                Cancelar
                             </Button>
-                        </div>
+                        )}
+                        <Button type="submit" variant="primary" loading={loading} disabled={uploading}>
+                            Guardar Evento
+                        </Button>
+                    </div>
                     </form>
                 </div>
 
                 {/* Right Column: Live Preview */}
                 <div className="preview-column">
-                    <h3 className="text-lg font-semibold mb-3">Vista Previa</h3>
+                    <h3 className="event-section-label">Vista Previa</h3>
                     <EventCardPreview eventData={formData} />
                     <p className="text-sm text-muted text-center mt-2">
                         Así se verá tu evento en la página principal.
@@ -856,7 +835,7 @@ const EventForm = ({ event = null, onSuccess, onClose }) => {
 
     if (onClose) {
         return (
-            <Modal isOpen={true} onClose={onClose} title={event ? "Editar Evento" : "Crear Nuevo Evento"} size="large">
+            <Modal isOpen={true} onClose={onClose} title={event ? "Editar Evento" : "Crear Nuevo Evento"} size="large" className="event-form-modal">
                 {formContent}
             </Modal>
         );

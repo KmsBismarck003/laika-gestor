@@ -1,17 +1,16 @@
-/* PresaleSection.css — Estilos del panel de configuración de preventa */
+/* PresaleSection.css — Panel de configuración de preventa (tema claro) */
 
 .presale-section {
-  background: rgba(99, 102, 241, 0.04);
-  border: 1px solid rgba(99, 102, 241, 0.2);
-  border-radius: 16px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
   padding: 1.25rem;
-  margin-bottom: 1.5rem;
-  transition: border-color 0.2s;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .presale-section:has(#presale-enabled-toggle:checked) {
-  border-color: rgba(99, 102, 241, 0.4);
-  background: rgba(99, 102, 241, 0.06);
+  border-color: rgba(255, 107, 0, 0.4);
+  box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.06);
 }
 
 /* Header row */
@@ -30,26 +29,28 @@
 }
 
 .presale-section-icon {
-  font-size: 1.4rem;
+  font-size: 1.3rem;
+  line-height: 1.2;
   flex-shrink: 0;
 }
 
 .presale-section-title {
-  font-size: 0.9rem;
-  font-weight: 800;
-  color: #c7d2fe;
-  margin: 0 0 0.2rem 0;
-  letter-spacing: -0.01em;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 0.25rem 0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .presale-section-subtitle {
   font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.4);
+  color: #6b7280;
   margin: 0;
   line-height: 1.4;
 }
 
-/* Toggle */
+/* Toggle (alineado a la derecha, activo naranja) */
 .presale-toggle-label {
   display: flex;
   align-items: center;
@@ -65,16 +66,16 @@
   position: relative;
   width: 44px;
   height: 24px;
-  background: rgba(255, 255, 255, 0.1);
+  background: #e5e7eb;
+  border: 1px solid #d1d5db;
   border-radius: 100px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  transition: background 0.2s;
+  transition: background 0.2s, border-color 0.2s;
   display: block;
 }
 
 .presale-toggle-input:checked + .presale-toggle-track {
-  background: #6366f1;
-  border-color: #6366f1;
+  background: #ff6b00;
+  border-color: #ff6b00;
 }
 
 .presale-toggle-thumb {
@@ -84,10 +85,10 @@
   transform: translateY(-50%);
   width: 16px;
   height: 16px;
-  background: white;
+  background: #fff;
   border-radius: 50%;
   transition: left 0.2s;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
 }
 
 .presale-toggle-input:checked + .presale-toggle-track .presale-toggle-thumb {
@@ -101,7 +102,7 @@
   gap: 1rem;
   margin-top: 1.25rem;
   padding-top: 1.25rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-top: 1px solid #eef0f2;
 }
 
 .presale-field {
@@ -115,18 +116,18 @@
 }
 
 .presale-field-label {
-  font-size: 0.72rem;
-  font-weight: 700;
-  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #4b5563;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.08em;
 }
 
 .presale-field-hint {
   font-weight: 400;
   text-transform: none;
   letter-spacing: 0;
-  color: rgba(255, 255, 255, 0.3);
+  color: #9ca3af;
 }
 
 /* Bank chips */
@@ -140,22 +141,22 @@
   display: flex;
   align-items: center;
   gap: 0.35rem;
-  padding: 0.35rem 0.7rem;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.4rem 0.75rem;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.15s;
 }
 
 .presale-bank-chip:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.2);
+  background: #f3f4f6;
+  border-color: #d1d5db;
 }
 
 .presale-bank-chip--active {
-  background: rgba(99, 102, 241, 0.2);
-  border-color: rgba(99, 102, 241, 0.5);
+  background: rgba(255, 107, 0, 0.07);
+  border-color: #ff6b00;
 }
 
 .presale-bank-chip-logo {
@@ -164,35 +165,42 @@
 
 .presale-bank-chip-name {
   font-size: 0.72rem;
-  font-weight: 700;
-  color: rgba(255, 255, 255, 0.75);
+  font-weight: 600;
+  color: #4b5563;
 }
 
 .presale-bank-chip--active .presale-bank-chip-name {
-  color: #a5b4fc;
+  color: #c2410c;
 }
 
 /* Text inputs */
 .presale-text-input {
   width: 100%;
-  padding: 0.6rem 0.85rem;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 10px;
-  color: #ffffff;
-  font-size: 0.82rem;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  padding: 0.625rem 0.75rem;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  color: #1a1a1a;
+  font-size: 0.875rem;
+  font-family: inherit;
+  font-weight: 500;
+  transition: border-color 0.2s, box-shadow 0.2s, background-color 0.2s;
   outline: none;
   box-sizing: border-box;
 }
 
+.presale-text-input:hover {
+  border-color: #d1d5db;
+}
+
 .presale-text-input:focus {
-  border-color: rgba(99, 102, 241, 0.5);
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+  border-color: #ff6b00;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.12);
 }
 
 .presale-text-input::placeholder {
-  color: rgba(255, 255, 255, 0.2);
+  color: #9ca3af;
 }
 
 .presale-textarea {
@@ -202,8 +210,8 @@
 }
 
 .presale-bins-hint {
-  font-size: 0.7rem;
-  color: rgba(255, 255, 255, 0.3);
+  font-size: 0.72rem;
+  color: #6b7280;
   margin: 0;
   line-height: 1.5;
 }
@@ -214,23 +222,23 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.65rem 0.9rem;
-  background: rgba(99, 102, 241, 0.1);
-  border: 1px solid rgba(99, 102, 241, 0.25);
+  background: rgba(255, 107, 0, 0.06);
+  border: 1px solid rgba(255, 107, 0, 0.25);
   border-radius: 10px;
   font-size: 0.78rem;
-  color: rgba(255, 255, 255, 0.6);
+  color: #4b5563;
   line-height: 1.5;
 }
 
 .presale-config-preview strong {
-  color: #a5b4fc;
+  color: #c2410c;
 }
 
 .presale-preview-dot {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: #818cf8;
+  background: #ff6b00;
   flex-shrink: 0;
   animation: presaleBadgePulse 1.8s ease-in-out infinite;
 }
@@ -238,4 +246,11 @@
 @keyframes presaleBadgePulse {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.4; }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .presale-config-grid {
+    grid-template-columns: 1fr;
+  }
 }

@@ -8,6 +8,9 @@ import EventList from '../manager/EventList';
 import { useSearchParams } from 'react-router-dom';
 import VenueMapSVG from '../../components/VenueMapSVG';
 import './EventManagerDashboard.css';
+=======
+
+>>>>>>> origin/features
 
 const EventManagerDashboard = () => {
     const navigate = useNavigate();
@@ -154,6 +157,7 @@ const EventManagerDashboard = () => {
                 </p>
             </header>
 
+<<<<<<< HEAD
             {/* Stats Grid - Bento Style */}
             <div className="bento-grid-stats">
                 <div className="bento-card bento-stat-card">
@@ -338,6 +342,130 @@ const EventManagerDashboard = () => {
                     </div>
                 </div>
             </Modal>
+<<<<<<< HEAD
+=======
+            
+            <style>{`
+                .section-title { font-size: 0.8rem; font-weight: 900; letter-spacing: 0.15em; color: #000; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.5rem; border-bottom: 1px solid #eee; padding-bottom: 0.5rem; }
+                .health-label { font-size: 0.6rem; font-weight: 800; color: #999; }
+                .health-value { font-size: 0.75rem; font-weight: 800; color: #000; }
+                
+                .venues-horizontal-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; margin-top: 1rem; }
+                .venue-mini-card { border: 1px solid #f0f0f0; transition: transform 0.2s; background: #fff; }
+                .venue-mini-card:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+                .venue-card-content { display: flex; flex-direction: column; gap: 1rem; }
+                .venue-name-h4 { font-size: 0.9rem; font-weight: 800; color: #1a1a1a; margin: 0; }
+                .venue-location-p { font-size: 0.75rem; color: #666; margin: 0.2rem 0 0 0; display: flex; align-items: center; gap: 4px; }
+                .venue-card-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; border-top: 1px solid #f9f9f9; padding-top: 0.75rem; }
+                .quick-event-btn { width: 100%; font-weight: 700; font-size: 0.7rem; }
+                .empty-venues-msg { padding: 2rem; text-align: center; color: #999; font-size: 0.8rem; background: #fcfcfc; border-radius: 10px; border: 1px dashed #ddd; width: 100%; }
+
+                /* Rooms & Map Modal Styles */
+                .rooms-modal-layout {
+                    display: flex;
+                    gap: 1.5rem;
+                    min-height: 400px;
+                }
+                .rooms-list-panel {
+                    flex: 2;
+                    border-right: 1px solid #f0f0f0;
+                    padding-right: 1.5rem;
+                    max-height: 500px;
+                    overflow-y: auto;
+                }
+                .map-preview-panel {
+                    flex: 3;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    background: #fafafa;
+                    border-radius: 12px;
+                    padding: 1rem;
+                    border: 1px solid #eaeaea;
+                    min-height: 400px;
+                }
+                .room-item-card {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 0.75rem 1rem;
+                    border: 1px solid #eee;
+                    border-radius: 8px;
+                    margin-bottom: 0.75rem;
+                    background: #fff;
+                    cursor: pointer;
+                    transition: all 0.2s;
+                }
+                .room-item-card:hover {
+                    border-color: #a855f7;
+                    background: #fbf8ff;
+                    transform: translateY(-2px);
+                    box-shadow: 0 4px 12px rgba(168,85,247,0.05);
+                }
+                .room-item-card.active {
+                    border-color: #a855f7;
+                    background: #f3e8ff;
+                    box-shadow: 0 4px 12px rgba(168,85,247,0.08);
+                }
+                .room-item-info {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 4px;
+                }
+                .room-item-name {
+                    font-weight: 700;
+                    font-size: 0.85rem;
+                    color: #1a1a1a;
+                }
+                .room-item-capacity {
+                    font-size: 0.75rem;
+                    color: #666;
+                    display: flex;
+                    align-items: center;
+                    gap: 4px;
+                }
+                .room-item-actions {
+                    display: flex;
+                    gap: 8px;
+                }
+                .modal-no-map {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 1rem;
+                    color: #666;
+                    text-align: center;
+                    padding: 2rem;
+                }
+                .modal-no-map-icon {
+                    font-size: 2.5rem;
+                    opacity: 0.5;
+                }
+                .modal-no-map-title {
+                    font-weight: 700;
+                    font-size: 0.95rem;
+                    color: #333;
+                }
+                .modal-no-map-desc {
+                    font-size: 0.8rem;
+                    color: #888;
+                    max-width: 250px;
+                }
+                .avm-loading-spinner {
+                    width: 28px;
+                    height: 28px;
+                    border: 3px solid rgba(0,0,0,0.1);
+                    border-top-color: #a855f7;
+                    border-radius: 50%;
+                    animation: avm-spin 1s linear infinite;
+                }
+                @keyframes avm-spin {
+                    to { transform: rotate(360deg); }
+                }
+            `}</style>
+>>>>>>> origin/features
         </div>
     );
 };
