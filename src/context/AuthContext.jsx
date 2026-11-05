@@ -13,8 +13,18 @@ const AuthContext = createContext(null)
 export const AuthProvider = ({ children }) => {
   const standardizeUser = (u) => {
     if (!u) return null;
+    const rawRole = (u.role || (Array.isArray(u.roles) ? u.roles[0] : null) || 'usuario')
+      .toString()
+      .toLowerCase()
+      .trim()
+      .replace(/^role_/, '');
+    const canonicalRole = (rawRole === 'manager' || rawRole === 'organizador' || rawRole === 'event_manager')
+      ? 'gestor'
+      : rawRole;
+
     return {
       ...u,
+      role: canonicalRole,
       firstName: u.firstName || u.first_name || '',
       lastName: u.lastName || u.last_name || '',
       avatarUrl: u.avatarUrl || u.avatar_url || '',

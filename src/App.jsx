@@ -51,7 +51,7 @@ function AppContent() {
               <Route path='/login' element={<Login />} />
               <Route path='/auth-sync' element={<AuthSync />} />
               <Route path='/' element={
-                user && (user.role === 'gestor' || user.role === 'admin') 
+                user 
                 ? <Navigate to="/events/manage" replace /> 
                 : <Navigate to="/login" replace />
               } />

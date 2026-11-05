@@ -30,14 +30,15 @@ const ProtectedRoute = ({ children, allowedRoles = null }) => {
     return <Navigate to="/maintenance" replace />
   }
 
-  // Si el rol no es el nativo de este portal ('gestor')
-  const isMismatch = user.role !== 'gestor'
+  // En este portal, los roles autorizados son 'gestor' y 'admin'
+  const isAuthorizedRole = user.role === 'gestor' || user.role === 'admin'
+  const isMismatch = !isAuthorizedRole
 
   if (isMismatch && !allowOverride) {
     return (
       <RoleMismatchModal
         user={user}
-        onContinue={user.role === 'admin' ? () => setAllowOverride(true) : null}
+        onContinue={() => setAllowOverride(true)}
         onLogout={() => logout()}
       />
     )
@@ -47,6 +48,7 @@ const ProtectedRoute = ({ children, allowedRoles = null }) => {
     return (
       <RoleMismatchModal
         user={user}
+        onContinue={() => setAllowOverride(true)}
         onLogout={() => logout()}
       />
     )

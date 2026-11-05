@@ -113,25 +113,29 @@ const DashboardLayout = () => {
 
     // Roles Operativos (No Admin)
     if (user.role !== 'admin') {
+      const gestorItems = [
+        {
+          id: 'g_main',
+          label: 'GESTIÓN GESTOR',
+          items: [
+            { id: 'g_main_hub', path: '/events/manage', icon: 'dashboard', label: 'Mi Panel' },
+            { id: 'g_create', path: '/events/create', icon: 'plus', label: 'Crear Evento' },
+            { id: 'g_events', path: '/events/manage?tab=list', icon: 'calendar', label: 'Mis Eventos' },
+            { id: 'g_historical', path: '/events/history', icon: 'history', label: 'Historial' },
+            { id: 'g_venue_map', path: '/events/manage?tab=venues', icon: 'map', label: 'Diseñar Lugar' },
+            { id: 'g_stats', path: '/manager/analytics', icon: 'chart', label: 'Analíticas' },
+            { id: 'g_transactions', path: '/manager/transactions', icon: 'dollarSign', label: 'Ventas' },
+            { id: 'g_attendees', path: '/manager/attendees', icon: 'users', label: 'Asistentes' },
+            { id: 'g_ads', path: '/manager/ads', icon: 'image', label: 'Anuncios' },
+            { id: 'g_merchandise', path: '/manager/merchandise', icon: 'shoppingBag', label: 'Tienda / Souvenirs' }
+          ]
+        }
+      ]
+
       const roleItems = {
-        gestor: [
-          {
-            id: 'g_main',
-            label: 'GESTIÓN GESTOR',
-            items: [
-              { id: 'g_main_hub', path: '/events/manage', icon: 'dashboard', label: 'Mi Panel' },
-              { id: 'g_create', path: '/events/create', icon: 'plus', label: 'Crear Evento' },
-              { id: 'g_events', path: '/events/manage?tab=list', icon: 'calendar', label: 'Mis Eventos' },
-              { id: 'g_historical', path: '/events/history', icon: 'history', label: 'Historial' },
-              { id: 'g_venue_map', path: '/events/manage?tab=venues', icon: 'map', label: 'Diseñar Lugar' },
-              { id: 'g_stats', path: '/manager/analytics', icon: 'chart', label: 'Analíticas' },
-              { id: 'g_transactions', path: '/manager/transactions', icon: 'dollarSign', label: 'Ventas' },
-              { id: 'g_attendees', path: '/manager/attendees', icon: 'users', label: 'Asistentes' },
-              { id: 'g_ads', path: '/manager/ads', icon: 'image', label: 'Anuncios' },
-              { id: 'g_merchandise', path: '/manager/merchandise', icon: 'shoppingBag', label: 'Tienda / Souvenirs' }
-            ]
-          }
-        ],
+        gestor: gestorItems,
+        manager: gestorItems,
+        organizador: gestorItems,
         operador: [
           {
             id: 'o_main',
@@ -169,7 +173,7 @@ const DashboardLayout = () => {
           }
         ]
       }
-      return roleItems[user.role] || []
+      return roleItems[user.role] || gestorItems
     }
 
     // Para Admin, inyectamos las secciones de "Supervisión" al final (Ven lo que los roles ven)

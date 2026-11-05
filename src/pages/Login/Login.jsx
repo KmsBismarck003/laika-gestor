@@ -17,8 +17,10 @@ const DECOUPLED_PORTS = {
 
 // Mapa de redirección por rol
 const roleRedirectMap = {
-  admin: '/admin',
+  admin: '/events/manage',
   gestor: '/events/manage',
+  manager: '/events/manage',
+  organizador: '/events/manage',
   operador: '/staff/dashboard',
   usuario: '/user/dashboard'
 }
@@ -35,16 +37,17 @@ const handleRoleRedirection = (userObj, navigate, from = null) => {
     const targetPort = DECOUPLED_PORTS[userRole]
     const currentPort = window.location.port ? parseInt(window.location.port, 10) : 80
 
-    if (targetPort && currentPort !== targetPort) {
+    // Solo sincronizar si es un puerto desacoplado diferente y válido (excluyendo admin si ya está en gestor)
+    if (targetPort && currentPort !== targetPort && userRole !== 'admin') {
       const token = localStorage.getItem('token') || sessionStorage.getItem('token')
       const b64User = btoa(encodeURIComponent(JSON.stringify(userObj)))
-      const targetPath = roleRedirectMap[userRole] || '/'
+      const targetPath = roleRedirectMap[userRole] || '/events/manage'
       window.location.href = `http://localhost:${targetPort}/auth-sync?token=${token}&user=${b64User}&redirect=${encodeURIComponent(targetPath)}`
       return true
     }
   }
 
-  const targetPath = from || (userRole === 'gestor' || userRole === 'admin' ? '/events/manage' : '/')
+  const targetPath = from || '/events/manage'
   navigate(targetPath)
   return false
 }
