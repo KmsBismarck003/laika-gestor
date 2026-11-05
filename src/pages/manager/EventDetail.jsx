@@ -9,6 +9,7 @@ import RevenuePanel from './RevenuePanel';
 import CancelEventModal from './CancelEventModal';
 import LiveMapViewer from './LiveMapViewer';
 import MerchandisePanel from './MerchandisePanel';
+import CourtesyDashboard from './views/CourtesyManager/CourtesyDashboard';
 import '../../styles/manager.css';
 
 const EventDetail = () => {
@@ -135,6 +136,12 @@ const EventDetail = () => {
                     Boletos y Accesos
                 </button>
                 <button
+                    className={`tab-button ${activeTab === 'courtesies' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('courtesies')}
+                >
+                    Cortesías
+                </button>
+                <button
                     className={`tab-button ${activeTab === 'revenue' ? 'active' : ''}`}
                     onClick={() => setActiveTab('revenue')}
                 >
@@ -237,6 +244,14 @@ const EventDetail = () => {
                     ) : (
                         <TicketOverview eventId={id} />
                     )
+                )}
+
+                {activeTab === 'courtesies' && (
+                    <CourtesyDashboard
+                        eventId={id}
+                        event={event}
+                        onNotify={showNotification}
+                    />
                 )}
 
                 {activeTab === 'revenue' && (

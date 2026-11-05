@@ -12,6 +12,7 @@ import { managerAPI, venueAPI } from './managerService';
 import { statsAPI, achievementsAPI, analyticsAPI } from './miscService';
 import { merchService } from './merch.service';
 import { b2bAPI } from './b2bService';
+import { courtesyAPI } from './courtesyService';
 
 // Exportar servicios individuales
 export {
@@ -37,7 +38,8 @@ export {
   achievementsAPI,
   analyticsAPI,
   merchService,
-  b2bAPI
+  b2bAPI,
+  courtesyAPI
 };
 
 // Objeto API consolidado para retrocompatibilidad
@@ -64,7 +66,8 @@ const api = {
   achievements: achievementsAPI,
   analytics: analyticsAPI,
   merch: merchService,
-  b2b: b2bAPI
+  b2b: b2bAPI,
+  courtesy: courtesyAPI
 };
 
 export default api;

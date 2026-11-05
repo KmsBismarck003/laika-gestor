@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNotification } from '../../context/NotificationContext';
-import { Card, Button, Modal, Input } from '../../components';
+import { Modal } from '../../components';
 import { merchService } from '../../services/merch.service';
 import api from '../../services/api';
-import { Edit, Plus, Trash, ExternalLink, Info, ShoppingBag } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import '../EventManagerDashboard/EventManagerDashboard.css';
+import './ManagerMerchandise.css';
 
 const ManagerMerchandise = () => {
     const navigate = useNavigate();
@@ -416,7 +415,7 @@ const ManagerMerchandise = () => {
         return ev ? ev.name : `Evento #${id}`;
     };
 
-    if (settingsLoading) return <div className="p-8 text-white">Cargando estado de la tienda...</div>;
+    if (settingsLoading) return <div className="merch-loading">Cargando estado de la tienda...</div>;
 
     const hasGlobalEnabled = settings?.is_enabled;
     const hasAnyEventEnabled = myEvents.some(ev => ev.merch_enabled);
@@ -424,126 +423,99 @@ const ManagerMerchandise = () => {
 
     if (!isAllowed) {
         return (
-            <div className="p-8 text-center text-gray-400 border border-dashed border-gray-700 rounded-lg mt-8 bg-gray-900 max-w-2xl mx-auto">
-                <h3 className="font-bold text-xl mb-2 text-white">Modulo de Mercancia Desactivado</h3>
-                <p className="mb-4">Tu cuenta no tiene habilitada la venta de mercancia o no tienes eventos con esta funcion desbloqueada.</p>
+            <div className="merch-disabled">
+                <h3 className="merch-disabled-title">Modulo de Mercancia Desactivado</h3>
+                <p>Tu cuenta no tiene habilitada la venta de mercancia o no tienes eventos con esta funcion desbloqueada.</p>
                 <p>Por favor contacta al administrador del sistema.</p>
             </div>
         );
     }
 
     return (
-        <div className="bento-dashboard-container">
-            <header className="bento-header" style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                <div>
-                    <h1 className="bento-welcome-title">Constructor de Mercancía</h1>
-                    <p className="bento-date-subtitle">Crea y administra los productos oficiales de todos tus eventos en un solo lugar.</p>
+        <div className="merch-page">
+            <header className="merch-header">
+                <div className="merch-header-group">
+                    <button type="button" className="merch-back-btn" onClick={() => navigate(-1)}>
+                        VOLVER
+                    </button>
+                    <h1 className="merch-title">Constructor de Mercancía</h1>
+                    <p className="merch-subtitle">Crea y administra los productos oficiales de todos tus eventos en un solo lugar.</p>
                 </div>
-                <Button variant="primary" onClick={() => { resetForm(); setShowModal(true); }} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    <Plus size={16} /> Crear Producto
-                </Button>
+                <button type="button" className="merch-create-btn" onClick={() => { resetForm(); setShowModal(true); }}>
+                    Crear Producto
+                </button>
             </header>
 
             {!settings?.is_enabled && (
-                <div className="bento-alert bento-alert-info">
-                    <Info size={20} style={{ color: '#a855f7', marginTop: '2px', flexShrink: 0 }} />
-                    <div>
-                        <h4 className="bento-alert-title">Acceso Parcial por Evento</h4>
-                        <p className="bento-alert-desc">
-                            Tu cuenta no tiene habilitado el módulo de mercancía general, pero el administrador ha desbloqueado esta función para eventos específicos. Podrás crear y gestionar productos únicamente para esos eventos autorizados.
-                        </p>
-                    </div>
+                <div className="merch-alert">
+                    <h4 className="merch-alert-title">Acceso Parcial por Evento</h4>
+                    <p className="merch-alert-text">
+                        Tu cuenta no tiene habilitado el modulo de mercancia general, pero el administrador ha desbloqueado esta funcion para eventos especificos. Podrás crear y gestionar productos unicamente para esos eventos autorizados.
+                    </p>
                 </div>
             )}
 
             {loading ? (
-                <div className="loading-placeholder">Cargando catálogo...</div>
+                <div className="merch-loading">Cargando catalogo...</div>
             ) : merchItems.length === 0 ? (
-                <div className="bento-card" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '4rem 2rem', textAlign: 'center' }}>
-                    <ShoppingBag size={48} style={{ color: '#a855f7', marginBottom: '1rem' }} />
-                    <h3 style={{ fontSize: '1.2rem', fontWeight: 700, margin: '0 0 0.5rem 0', color: 'var(--text-primary)' }}>No tienes productos en tu catálogo</h3>
-                    <p style={{ color: 'var(--text-muted)', marginBottom: '1.5rem', maxWidth: '400px' }}>Empieza agregando tu primer playera, gorra, hoodie o accesorio para tus eventos.</p>
-                    <Button variant="primary" onClick={() => { resetForm(); setShowModal(true); }}>Agregar Producto</Button>
+                <div className="merch-empty">
+                    <h3 className="merch-empty-title">No tienes productos en tu catalogo</h3>
+                    <p className="merch-empty-text">Empieza agregando tu primer playera, gorra, hoodie o accesorio para tus eventos.</p>
+                    <button type="button" className="merch-create-btn merch-create-btn--outline" onClick={() => { resetForm(); setShowModal(true); }}>
+                        Crear mi primer producto
+                    </button>
                 </div>
             ) : (
-                <div className="bento-grid-venues">
+                <div className="merch-grid">
                     {merchItems.map(item => (
-                        <div key={item.id} className="bento-event-card">
+                        <article key={item.id} className="merch-item-card">
                             {item.image_url ? (
-                                <div className="bento-event-cover" style={{ backgroundImage: `url(${item.image_url.split(',')[0]})` }} />
+                                <div className="merch-item-image" style={{ backgroundImage: `url(${item.image_url.split(',')[0]})` }} />
                             ) : (
-                                <div className="bento-event-cover-empty">Sin Imagen</div>
+                                <div className="merch-item-image merch-item-image--empty">Sin Imagen</div>
                             )}
-                            <div className="bento-event-body">
-                                <div className="bento-event-tags">
-                                    <span className="bento-tag bento-tag-primary">
-                                        {item.category || 'General'}
-                                    </span>
-                                    <div>
-                                        {item.admin_status === 'approved' && <span className="bento-tag bento-tag-success">Aprobado</span>}
-                                        {item.admin_status === 'pending_review' && <span className="bento-tag bento-tag-warning">En Revisión</span>}
-                                        {item.admin_status === 'rejected' && <span className="bento-tag bento-tag-danger">Rechazado</span>}
-                                    </div>
-                                </div>
-                                
-                                <h3 className="bento-event-title">{item.name}</h3>
-                                <p className="bento-event-desc">{item.description}</p>
-                                
-                                <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginBottom: '1rem', background: 'var(--bg-tertiary)', padding: '0.5rem', borderRadius: '4px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                    <span>Evento:</span>
-                                    <span style={{ fontWeight: 600, color: 'var(--text-primary)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '150px' }} title={getEventName(item.event_id)}>
-                                        {getEventName(item.event_id)}
-                                    </span>
+                            <div className="merch-item-body">
+                                <div className="merch-item-tags">
+                                    <span className="merch-pill">{item.category || 'General'}</span>
+                                    {item.admin_status === 'approved' && <span className="merch-pill merch-pill--approved">Aprobado</span>}
+                                    {item.admin_status === 'pending_review' && <span className="merch-pill merch-pill--pending">En Revision</span>}
+                                    {item.admin_status === 'rejected' && <span className="merch-pill merch-pill--rejected">Rechazado</span>}
                                 </div>
 
-                                <div className="bento-event-footer bento-event-row">
+                                <h3 className="merch-item-name">{item.name}</h3>
+                                <p className="merch-item-desc">{item.description}</p>
+
+                                <div className="merch-item-event">
+                                    <span>Evento:</span>
+                                    <strong title={getEventName(item.event_id)}>{getEventName(item.event_id)}</strong>
+                                </div>
+
+                                <div className="merch-item-meta">
                                     <div>
-                                        <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', display: 'block' }}>Precio</span>
-                                        <span style={{ fontWeight: 800, fontSize: '1.25rem', color: 'var(--text-primary)' }}>
+                                        <span className="merch-item-meta-label">Precio</span>
+                                        <span className="merch-item-price">
                                             ${item.variants && item.variants.length > 0 
                                                 ? Math.min(...item.variants.map(v => parseFloat(v.price) || 0)).toFixed(2) 
                                                 : '0.00'}
                                         </span>
                                     </div>
-                                    <div style={{ textAlign: 'right' }}>
-                                        <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', display: 'block' }}>Total Stock</span>
-                                        <span style={{ fontWeight: 700, color: 'var(--text-primary)' }}>
+                                    <div className="merch-center">
+                                        <span className="merch-item-meta-label">Total Stock</span>
+                                        <span className="merch-item-stock">
                                             {item.variants ? item.variants.reduce((acc, v) => acc + (v.stock || 0), 0) : 0} pzas
                                         </span>
                                     </div>
                                 </div>
 
-                                <div className="bento-btn-group">
-                                    <Button 
-                                        variant="outline" 
-                                        size="small" 
-                                        onClick={() => handleEditClick(item)}
-                                        style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', fontSize: '0.75rem' }}
-                                    >
-                                        <Edit size={12} /> Editar
-                                    </Button>
-                                    <Button 
-                                        variant="danger" 
-                                        size="small" 
-                                        onClick={() => handleDeleteClick(item.id)}
-                                        style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', fontSize: '0.75rem', background: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', border: '1px solid rgba(239, 68, 68, 0.2)' }}
-                                    >
-                                        <Trash size={12} /> Eliminar
-                                    </Button>
+                                <div className="merch-item-actions">
+                                    <button type="button" className="merch-action-btn" onClick={() => handleEditClick(item)}>Editar</button>
+                                    <button type="button" className="merch-action-btn merch-action-btn--danger" onClick={() => handleDeleteClick(item.id)}>Eliminar</button>
                                 </div>
-                                <div style={{ marginTop: '0.5rem', display: 'flex', gap: '0.5rem' }}>
-                                    <Button 
-                                        variant="outline" 
-                                        size="small" 
-                                        fullWidth 
-                                        onClick={() => navigate(`/events/manage/${item.event_id}?tab=merch`)}
-                                        style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', fontSize: '0.75rem' }}
-                                    >
-                                        <ExternalLink size={12} /> Ir al Evento
-                                    </Button>
-                                </div>
+                                <button type="button" className="merch-action-btn merch-action-btn--ghost" onClick={() => navigate(`/events/manage/${item.event_id}?tab=merch`)}>
+                                    Ir al Evento
+                                </button>
                             </div>
-                        </div>
+                        </article>
                     ))}
                 </div>
             )}
@@ -555,15 +527,15 @@ const ManagerMerchandise = () => {
                     setEditingId(null);
                     resetForm();
                 }} 
-                title={editingId ? "Editar Mercancía" : "Añadir Mercancía"} 
+                title={editingId ? "Editar Mercancia" : "Añadir Mercancia"} 
                 size="large"
+                className="merch-form-modal"
             >
-                <form onSubmit={handleCreateMerch} className="bento-modal-body">
-                    <div className="bento-grid-2">
-                        <div className="bento-form-group">
-                            <label className="bento-label">Seleccionar Evento</label>
+                <form onSubmit={handleCreateMerch} className="merch-form">
+                    <div className="merch-form-grid">
+                        <div>
+                            <label className="merch-field-label">Seleccionar Evento</label>
                             <select
-                                className="bento-select"
                                 value={formData.event_id}
                                 onChange={(e) => setFormData({...formData, event_id: e.target.value})}
                                 required
@@ -574,84 +546,86 @@ const ManagerMerchandise = () => {
                                 ))}
                             </select>
                         </div>
-                        <Input 
-                            label="Nombre del Producto"
-                            value={formData.name}
-                            onChange={(e) => setFormData({...formData, name: e.target.value})}
+                        <div>
+                            <label className="merch-field-label">Nombre del Producto</label>
+                            <input
+                                type="text"
+                                value={formData.name}
+                                onChange={(e) => setFormData({...formData, name: e.target.value})}
+                                required
+                            />
+                        </div>
+                    </div>
+
+                    <div>
+                        <label className="merch-field-label">Descripcion</label>
+                        <textarea 
+                            rows="2"
+                            value={formData.description}
+                            onChange={(e) => setFormData({...formData, description: e.target.value})}
                             required
-                            fullWidth
                         />
                     </div>
 
-                    <Input 
-                        label="Descripción"
-                        textarea
-                        value={formData.description}
-                        onChange={(e) => setFormData({...formData, description: e.target.value})}
-                        required
-                        fullWidth
-                    />
-
-                    <div className="bento-grid-3">
-                        <Input 
-                            label="Categoría"
-                            value={formData.category}
-                            onChange={(e) => setFormData({...formData, category: e.target.value})}
-                            placeholder="Ej. Playeras, Gorras"
-                            required
-                            fullWidth
-                        />
-                        <Input 
-                            label="Precio Base ($)"
-                            type="number" 
-                            min="0" 
-                            step="0.01"
-                            value={formData.price}
-                            onChange={(e) => setFormData({...formData, price: e.target.value})}
-                            required={variants.length === 0}
-                            fullWidth
-                        />
-                        <Input 
-                            label="Stock Base"
-                            type="number" 
-                            min="0"
-                            value={formData.stock}
-                            onChange={(e) => setFormData({...formData, stock: e.target.value})}
-                            required={variants.length === 0}
-                            fullWidth
-                        />
+                    <div className="merch-form-grid merch-form-grid--3">
+                        <div>
+                            <label className="merch-field-label">Categoria</label>
+                            <input
+                                type="text"
+                                value={formData.category}
+                                onChange={(e) => setFormData({...formData, category: e.target.value})}
+                                placeholder="Ej. Playeras, Gorras"
+                                required
+                            />
+                        </div>
+                        <div>
+                            <label className="merch-field-label">Precio Base ($)</label>
+                            <input
+                                type="number" 
+                                min="0" 
+                                step="0.01"
+                                value={formData.price}
+                                onChange={(e) => setFormData({...formData, price: e.target.value})}
+                                required={variants.length === 0}
+                            />
+                        </div>
+                        <div>
+                            <label className="merch-field-label">Stock Base</label>
+                            <input
+                                type="number" 
+                                min="0"
+                                value={formData.stock}
+                                onChange={(e) => setFormData({...formData, stock: e.target.value})}
+                                required={variants.length === 0}
+                            />
+                        </div>
                     </div>
 
                     {/* CONFIGURACIÓN RÁPIDA DE TALLAS */}
-                    <div className="bento-wizard-container">
-                        <div>
-                            <h4 className="bento-wizard-title">Asistente Rápido de Tallas</h4>
-                            <p className="bento-wizard-subtitle">Activa las tallas disponibles y define el número de unidades en stock para cada una.</p>
-                        </div>
-                        
-                        <div className="bento-wizard-grid">
+                    <div className="merch-box">
+                        <h4 className="merch-box-title">Asistente Rapido de Tallas</h4>
+                        <p className="merch-box-sub">Activa las tallas disponibles y define el número de unidades en stock para cada una.</p>
+
+                        <div className="merch-size-grid">
                             {['XS', 'S', 'M', 'L', 'XL', 'XXL'].map(size => {
                                 const isChecked = variants.some(v => v.attributes && v.attributes.talla && v.attributes.talla.toUpperCase() === size.toUpperCase());
                                 const matchedVar = variants.find(v => v.attributes && v.attributes.talla && v.attributes.talla.toUpperCase() === size.toUpperCase());
                                 const stockVal = matchedVar ? matchedVar.stock : '';
                                 
                                 return (
-                                    <div key={size} className={`bento-wizard-card ${isChecked ? 'active' : ''}`}>
-                                        <label className="bento-wizard-label">
+                                    <div key={size} className="merch-size-tile">
+                                        <label>
                                             <input 
                                                 type="checkbox" 
                                                 checked={isChecked} 
                                                 onChange={(e) => handleSizeCheckboxChange(size, e.target.checked)}
-                                                style={{ cursor: 'pointer' }}
                                             />
                                             Talla {size}
                                         </label>
                                         {isChecked && (
-                                            <div style={{ marginTop: '0.5rem' }}>
-                                                <span style={{ fontSize: '0.65rem', color: 'var(--text-muted)', display: 'block', marginBottom: '2px' }}>Unidades</span>
+                                            <div className="merch-tile-stock">
+                                                <span className="merch-unit-label">Unidades</span>
                                                 <input 
-                                                    className="bento-input"
-                                                    style={{ padding: '0.25rem 0.5rem', fontSize: '0.8rem', minHeight: 'auto' }}
                                                     type="number"
                                                     min="0"
                                                     placeholder="Ej. 10"
@@ -668,135 +642,129 @@ const ManagerMerchandise = () => {
                     </div>
 
                     {/* DYNAMIC ATTRIBUTED CONFIGURATION */}
-                    <div className="bento-wizard-container">
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <h4 className="bento-wizard-title">Definición de Opciones (Tallas/Colores/Modelos)</h4>
-                            <Button
-                                variant="outline"
-                                size="small"
-                                onClick={handleAddAttributeRow}
-                            >
-                                + Agregar Atributo
-                            </Button>
-                        </div>
+                    <div className="merch-box">
+                        <h4 className="merch-box-title">Definicion de Opciones (Tallas/Colores/Modelos)</h4>
+                        <p className="merch-box-sub">Agrega atributos con sus valores separados por coma.</p>
+                        <button
+                            type="button"
+                            className="merch-chip-btn merch-chip-btn--accent"
+                            onClick={handleAddAttributeRow}
+                        >
+                            Agregar Atributo
+                        </button>
                         
                         {formAttributes.map((attr, idx) => (
-                            <div key={idx} style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                            <div key={idx} className="merch-attr-row">
                                 <input
                                     type="text"
-                                    className="bento-input"
-                                    style={{ flex: 1 }}
+                                    className="merch-flex-1"
                                     placeholder="Nombre: Ej. talla, color"
                                     value={attr.name}
                                     onChange={(e) => handleAttributeRowChange(idx, 'name', e.target.value)}
                                 />
                                 <input
                                     type="text"
-                                    className="bento-input"
-                                    style={{ flex: 2 }}
+                                    className="merch-flex-2"
                                     placeholder="Valores: Ej. S, M, L (Separados por coma)"
                                     value={attr.values}
                                     onChange={(e) => handleAttributeRowChange(idx, 'values', e.target.value)}
                                 />
-                                <Button
-                                    variant="danger"
-                                    size="small"
+                                <button
+                                    type="button"
+                                    className="merch-row-remove"
                                     onClick={() => handleRemoveAttributeRow(idx)}
                                 >
-                                    <Trash size={16} />
-                                </Button>
+                                    Eliminar
+                                </button>
                             </div>
                         ))}
                     </div>
 
                     {/* DYNAMIC VARIANTS GENERATION AND EDITING */}
-                    <div className="bento-wizard-container">
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem' }}>
+                    <div className="merch-box">
+                        <div className="merch-variants-header">
                             <div>
-                                <h4 className="bento-wizard-title">Variantes del Producto</h4>
-                                <p className="bento-wizard-subtitle">Define stock y precio específico por combinación de atributos.</p>
+                                <h4 className="merch-box-title">Variantes del Producto</h4>
+                                <p className="merch-box-sub">Define stock y precio especifico por combinacion de atributos.</p>
                             </div>
-                            <div style={{ display: 'flex', gap: '0.5rem' }}>
-                                <Button
-                                    variant="primary"
-                                    size="small"
+                            <div className="merch-variants-actions">
+                                <button
+                                    type="button"
+                                    className="merch-chip-btn merch-chip-btn--accent"
                                     onClick={handleGenerateVariants}
                                 >
                                     Generar Variantes
-                                </Button>
-                                <Button
-                                    variant="outline"
-                                    size="small"
+                                </button>
+                                <button
+                                    type="button"
+                                    className="merch-chip-btn"
                                     onClick={handleAddManualVariant}
                                 >
                                     Agregar Manual
-                                </Button>
+                                </button>
                             </div>
                         </div>
 
                         {variants.length > 0 ? (
-                            <div style={{ border: '1px solid var(--border-color)', borderRadius: '8px', overflow: 'hidden', maxHeight: '250px', overflowY: 'auto', background: 'var(--bg-secondary)' }}>
-                                <table style={{ width: '100%', textAlign: 'left', borderCollapse: 'collapse', fontSize: '0.85rem' }}>
-                                    <thead style={{ background: 'var(--bg-tertiary)', borderBottom: '1px solid var(--border-color)' }}>
+                            <div className="merch-box-table">
+                                <table>
+                                    <thead>
                                         <tr>
-                                            <th style={{ padding: '0.75rem' }}>Atributos</th>
-                                            <th style={{ padding: '0.75rem' }}>SKU</th>
-                                            <th style={{ padding: '0.75rem', width: '100px' }}>Precio ($)</th>
-                                            <th style={{ padding: '0.75rem', width: '100px' }}>Stock</th>
-                                            <th style={{ padding: '0.75rem', width: '60px', textAlign: 'center' }}>Acción</th>
+                                            <th>Atributos</th>
+                                            <th>SKU</th>
+                                            <th className="merch-col-price">Precio ($)</th>
+                                            <th className="merch-col-stock">Stock</th>
+                                            <th className="merch-col-action">Accion</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {variants.map((v, idx) => (
-                                            <tr key={idx} style={{ borderBottom: '1px solid var(--border-color)' }}>
-                                                <td style={{ padding: '0.75rem' }}>
+                                            <tr key={idx}>
+                                                <td>
                                                     {v.attributes && Object.keys(v.attributes).length > 0 ? (
                                                         Object.entries(v.attributes).map(([key, val]) => (
-                                                            <span key={key} className="bento-tag bento-tag-primary" style={{ marginRight: '4px', display: 'inline-block', marginBottom: '2px' }}>
+                                                            <span key={key} className="merch-variant-attr">
                                                                 {key}: <strong>{val || 'sin definir'}</strong>
                                                             </span>
                                                         ))
                                                     ) : (
-                                                        <span style={{ color: 'var(--text-muted)' }}>Estándar</span>
+                                                        <span className="merch-muted">Estandar</span>
                                                     )}
                                                 </td>
-                                                <td style={{ padding: '0.5rem' }}>
+                                                <td>
                                                     <input
                                                         type="text"
                                                         value={v.sku}
                                                         onChange={(e) => handleVariantChange(idx, 'sku', e.target.value)}
-                                                        className="bento-input"
-                                                        style={{ padding: '0.25rem 0.5rem', minHeight: 'auto', fontSize: '0.8rem', fontFamily: 'monospace' }}
+                                                        className="merch-table-input"
                                                     />
                                                 </td>
-                                                <td style={{ padding: '0.5rem' }}>
+                                                <td>
                                                     <input
                                                         type="number"
                                                         step="0.01"
                                                         min="0"
                                                         value={v.price}
                                                         onChange={(e) => handleVariantChange(idx, 'price', e.target.value)}
-                                                        className="bento-input"
-                                                        style={{ padding: '0.25rem 0.5rem', minHeight: 'auto', fontSize: '0.8rem' }}
+                                                        className="merch-table-input"
                                                     />
                                                 </td>
-                                                <td style={{ padding: '0.5rem' }}>
+                                                <td>
                                                     <input
                                                         type="number"
                                                         min="0"
                                                         value={v.stock}
                                                         onChange={(e) => handleVariantChange(idx, 'stock', e.target.value)}
-                                                        className="bento-input"
-                                                        style={{ padding: '0.25rem 0.5rem', minHeight: 'auto', fontSize: '0.8rem' }}
+                                                        className="merch-table-input"
                                                     />
                                                 </td>
-                                                <td style={{ padding: '0.5rem', textAlign: 'center' }}>
+                                                <td className="merch-center">
                                                     <button
                                                         type="button"
+                                                        className="merch-row-remove"
                                                         onClick={() => handleRemoveVariant(idx)}
-                                                        style={{ color: '#ef4444', background: 'transparent', border: 'none', cursor: 'pointer', padding: '0.25rem' }}
                                                     >
-                                                        <Trash size={16} />
+                                                        Eliminar
                                                     </button>
                                                 </td>
                                             </tr>
@@ -805,81 +773,81 @@ const ManagerMerchandise = () => {
                                 </table>
                             </div>
                         ) : (
-                            <div className="loading-placeholder" style={{ padding: '1.5rem', fontSize: '0.8rem' }}>
-                                Sin variantes definidas. Se usará el Precio y Stock Base de arriba.
+                            <div className="merch-box-empty">
+                                Sin variantes definidas. Se usara el Precio y Stock Base de arriba.
                             </div>
                         )}
                     </div>
 
-                    <div className="bento-grid-2" style={{ borderTop: '1px solid var(--border-color)', paddingTop: '1rem', marginTop: '1rem' }}>
-                        <Input 
-                            label="Límite por persona"
-                            type="number" 
-                            min="1"
-                            value={formData.max_per_person}
-                            onChange={(e) => setFormData({...formData, max_per_person: e.target.value})}
-                            fullWidth
-                        />
-                        <div className="bento-form-group">
-                            <label className="bento-label">Métodos de Entrega</label>
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                                <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-primary)', fontSize: '0.85rem' }}>
+                    <div className="merch-form-grid merch-form-grid--border-top">
+                        <div>
+                            <label className="merch-field-label">Limite por persona</label>
+                            <input
+                                type="number" 
+                                min="1"
+                                value={formData.max_per_person}
+                                onChange={(e) => setFormData({...formData, max_per_person: e.target.value})}
+                            />
+                        </div>
+                        <div>
+                            <label className="merch-field-label">Metodos de Entrega</label>
+                            <div className="merch-check-list">
+                                <label className="merch-check-label">
                                     <input type="checkbox" checked={formData.delivery_pickup} onChange={(e) => setFormData({...formData, delivery_pickup: e.target.checked})} />
                                     Recoger en Stand del Evento
                                 </label>
-                                <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-primary)', fontSize: '0.85rem' }}>
+                                <label className="merch-check-label">
                                     <input type="checkbox" checked={formData.delivery_home} onChange={(e) => setFormData({...formData, delivery_home: e.target.checked})} />
-                                    Envío a Domicilio
+                                    Envio a Domicilio
                                 </label>
                             </div>
                         </div>
                     </div>
 
-                    <div className="bento-form-group">
-                        <label className="bento-label">Imagen del Producto</label>
-                        <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.5rem' }}>
-                            <Button
-                                variant={uploadType === 'file' ? 'primary' : 'outline'}
-                                size="small"
+                    <div>
+                        <label className="merch-field-label">Imagen del Producto</label>
+                        <div className="merch-tabs">
+                            <button
+                                type="button"
+                                className={`merch-chip-btn ${uploadType === 'file' ? 'merch-chip-btn--active' : ''}`}
                                 onClick={() => setUploadType('file')}
                             >
                                 Subir Archivo
-                            </Button>
-                            <Button
-                                variant={uploadType === 'url' ? 'primary' : 'outline'}
-                                size="small"
+                            </button>
+                            <button
+                                type="button"
+                                className={`merch-chip-btn ${uploadType === 'url' ? 'merch-chip-btn--active' : ''}`}
                                 onClick={() => setUploadType('url')}
                             >
                                 Enlace URL
-                            </Button>
+                            </button>
                         </div>
                         {uploadType === 'file' ? (
                             <label 
                                 htmlFor="global-merch-file-upload" 
-                                style={{ display: 'block', border: '1px dashed var(--border-color)', borderRadius: '8px', padding: '1.5rem', textAlign: 'center', background: 'var(--bg-secondary)', cursor: 'pointer', transition: 'all 0.2s' }}
+                                className="merch-dropzone"
                             >
                                 <input
                                     type="file"
                                     accept="image/*"
                                     onChange={handleImageUpload}
                                     disabled={uploading}
-                                    style={{ position: 'absolute', width: '1px', height: '1px', padding: 0, margin: '-1px', overflow: 'hidden', clip: 'rect(0, 0, 0, 0)', whiteSpace: 'nowrap', borderWidth: 0 }}
+                                    className="hidden"
                                     id="global-merch-file-upload"
                                 />
-                                <span style={{ display: 'block', color: '#a855f7', fontWeight: 700, marginBottom: '0.25rem' }}>
+                                <span className="merch-dropzone-title">
                                     {uploading ? 'Subiendo...' : 'Añadir nueva imagen'}
                                 </span>
-                                <span style={{ display: 'block', fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Puedes subir múltiples imágenes una por una para el carrusel</span>
+                                <span className="merch-dropzone-hint">Puedes subir multiples imagenes una por una para el carrusel</span>
                             </label>
                         ) : (
-                            <div style={{ display: 'flex', gap: '0.5rem' }}>
+                            <div className="merch-url-row">
                                 <input
                                     type="url"
                                     id="url-input-temp"
                                     placeholder="https://ejemplo.com/imagen.jpg"
-                                    className="bento-input"
                                 />
-                                <Button type="button" onClick={() => {
+                                <button type="button" className="merch-chip-btn merch-chip-btn--accent" onClick={() => {
                                     const input = document.getElementById('url-input-temp');
                                     if(input && input.value) {
                                         const currentImages = formData.image_url ? formData.image_url.split(',') : [];
@@ -887,20 +855,20 @@ const ManagerMerchandise = () => {
                                         setFormData(prev => ({ ...prev, image_url: currentImages.join(',') }));
                                         input.value = '';
                                     }
-                                }}>Añadir</Button>
+                                }}>Añadir</button>
                             </div>
                         )}
                         
                         {formData.image_url && (
-                            <div style={{ marginTop: '1rem' }}>
-                                <p style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '0.5rem', textTransform: 'uppercase' }}>Imágenes en el carrusel ({formData.image_url.split(',').length})</p>
-                                <div style={{ display: 'flex', gap: '0.5rem', overflowX: 'auto', paddingBottom: '0.5rem' }}>
+                            <div className="merch-thumbs-wrap">
+                                <p className="merch-field-label">Imagenes en el carrusel ({formData.image_url.split(',').length})</p>
+                                <div className="merch-thumbs">
                                     {formData.image_url.split(',').map((url, idx) => (
-                                        <div key={idx} style={{ position: 'relative', flexShrink: 0, border: '1px solid var(--border-color)', borderRadius: '4px', padding: '4px', background: 'var(--bg-tertiary)' }}>
-                                            <img src={url} alt={`Preview ${idx}`} style={{ height: '64px', width: '64px', objectFit: 'cover', borderRadius: '4px' }} />
+                                        <div key={idx} className="merch-thumb">
+                                            <img src={url} alt={`Preview ${idx}`} />
                                             <button 
                                                 type="button" 
-                                                style={{ position: 'absolute', top: '-8px', right: '-8px', background: '#ef4444', color: 'white', border: 'none', borderRadius: '50%', width: '20px', height: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.7rem', fontWeight: 'bold', cursor: 'pointer' }}
+                                                className="merch-thumb-remove"
                                                 onClick={(e) => {
                                                     e.preventDefault();
                                                     const imgs = formData.image_url.split(',');
@@ -915,10 +883,10 @@ const ManagerMerchandise = () => {
                         )}
                     </div>
 
-                    <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.5rem', borderTop: '1px solid var(--border-color)', paddingTop: '1rem', marginTop: '1rem' }}>
-                        <Button 
-                            type="button" 
-                            variant="ghost" 
+                    <div className="merch-modal-actions">
+                        <button
+                            type="button"
+                            className="merch-modal-cancel"
                             onClick={() => {
                                 setShowModal(false);
                                 setEditingId(null);
@@ -926,10 +894,10 @@ const ManagerMerchandise = () => {
                             }}
                         >
                             Cancelar
-                        </Button>
-                        <Button type="submit" variant="primary" disabled={submitting || uploading}>
-                            {submitting ? 'Guardando...' : editingId ? 'Guardar Cambios' : 'Enviar a Revisión'}
-                        </Button>
+                        </button>
+                        <button type="submit" className="merch-modal-submit" disabled={submitting || uploading}>
+                            {submitting ? 'Guardando...' : editingId ? 'Guardar Cambios' : 'Enviar a Revision'}
+                        </button>
                     </div>
                 </form>
             </Modal>
